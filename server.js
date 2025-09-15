@@ -40,10 +40,63 @@ async function sendLeadNotification(userEmail, conversationHistory) {
     }
 
     try {
-        // Create conversation summary
+        // Create conversation summary and extract key request
         const conversationSummary = conversationHistory
             .map(msg => `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`)
             .join('\n\n');
+            
+        // Get their main request (first user message)
+        const userMessages = conversationHistory.filter(msg => msg.role === 'user');
+        const mainRequest = userMessages[0]?.content || 'No specific request captured';
+        
+        // Extract what they're looking for
+        const allUserText = userMessages.map(msg => msg.content).join(' ');
+        let projectSummary = '';
+        if (allUserText.length > 50) {
+            projectSummary = allUserText.substring(0, 200) + (allUserText.length > 200 ? '...' : '');
+        } else {
+            projectSummary = mainRequest;
+        }
+
+        // Generate AI proposal using Claude
+        let aiProposal = '';
+        try {
+            const axios = require('axios');
+            
+            const proposalPrompt = `Based on this conversation with a potential client, create a professional project proposal. Be specific about deliverables, timeline, and approach. Keep it concise but comprehensive.
+
+Conversation:
+${conversationSummary}
+
+Create a proposal that includes:
+1. Project Overview
+2. Key Deliverables
+3. Recommended Approach
+4. Estimated Timeline
+5. Next Steps
+
+Make it professional but engaging. Address their specific needs mentioned in the conversation.`;
+
+            const proposalResponse = await axios.post('https://api.anthropic.com/v1/messages', {
+                model: 'claude-3-5-sonnet-20241022',
+                max_tokens: 1000,
+                messages: [{ role: 'user', content: proposalPrompt }]
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': process.env.CLAUDE_API_KEY,
+                    'anthropic-version': '2023-06-01'
+                },
+                timeout: 30000
+            });
+
+            aiProposal = proposalResponse.data.content[0].text;
+            console.log('✅ AI proposal generated successfully');
+            
+        } catch (proposalError) {
+            console.error('⚠️ Could not generate AI proposal:', proposalError.message);
+            aiProposal = `Based on your inquiry about ${projectSummary}, we recommend a custom AI solution tailored to your specific needs. Our team will analyze your requirements and provide a detailed technical approach, implementation timeline, and cost estimate. We specialize in delivering scalable AI solutions that drive real business value.`;
+        }
 
         // Email to company
         const companyMailOptions = {
@@ -51,23 +104,49 @@ async function sendLeadNotification(userEmail, conversationHistory) {
             to: process.env.COMPANY_EMAIL || process.env.ZOHO_EMAIL,
             subject: '🔥 New AI Consultation Lead',
             html: `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                    <h2 style="color: #6366f1;">New Lead from Nazarban AI Chatbot</h2>
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: white;">
                     
-                    <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <!-- Header -->
+                    <div style="text-align: center; padding: 20px; border-bottom: 2px solid #6366f1;">
+                        <h2 style="color: #6366f1; margin: 10px 0;">New Lead from AI Chatbot</h2>
+                    </div>
+                    
+                    <!-- Contact Info -->
+                    <div style="background: #f8fafc; padding: 20px; margin: 20px 0; border-left: 4px solid #6366f1;">
                         <h3 style="color: #1e293b; margin-top: 0;">Contact Information</h3>
                         <p><strong>Email:</strong> ${userEmail}</p>
-                        <p><strong>Timestamp:</strong> ${new Date().toLocaleString()}</p>
+                        <p><strong>Time:</strong> ${new Date().toLocaleString()}</p>
                     </div>
                     
-                    <div style="background: #f1f5f9; padding: 20px; border-radius: 8px;">
-                        <h3 style="color: #1e293b; margin-top: 0;">Conversation Summary</h3>
-                        <div style="white-space: pre-wrap; font-size: 14px; line-height: 1.6;">${conversationSummary}</div>
+                    <!-- Their Request Summary -->
+                    <div style="background: #fff7ed; padding: 20px; margin: 20px 0; border-left: 4px solid #f59e0b;">
+                        <h3 style="color: #92400e; margin-top: 0;">What They Want</h3>
+                        <p style="color: #374151; font-size: 16px; line-height: 1.6;">${projectSummary}</p>
                     </div>
                     
-                    <p style="margin-top: 20px; color: #64748b; font-size: 14px;">
-                        Follow up with this lead within 24-48 hours for best conversion rates.
-                    </p>
+                    <!-- AI Generated Proposal -->
+                    <div style="background: #f0f9ff; padding: 20px; margin: 20px 0; border-left: 4px solid #0ea5e9;">
+                        <h3 style="color: #0c4a6e; margin-top: 0;">AI-Generated Proposal Draft</h3>
+                        <div style="background: white; padding: 15px; border-radius: 5px; color: #374151; font-size: 14px; line-height: 1.6; white-space: pre-wrap;">${aiProposal}</div>
+                    </div>
+                    
+                    <!-- Full Conversation -->
+                    <div style="background: #f1f5f9; padding: 20px; margin: 20px 0;">
+                        <h3 style="color: #1e293b; margin-top: 0;">Full Conversation</h3>
+                        <div style="background: white; padding: 15px; border-radius: 5px; white-space: pre-wrap; font-size: 14px; line-height: 1.5; max-height: 300px; overflow-y: auto;">${conversationSummary}</div>
+                    </div>
+                    
+                    <!-- Next Steps -->
+                    <div style="background: #ecfdf5; padding: 20px; margin: 20px 0; border-left: 4px solid #10b981;">
+                        <h3 style="color: #065f46; margin-top: 0;">Action Required</h3>
+                        <ul style="color: #065f46;">
+                            <li>Review the AI-generated proposal above</li>
+                            <li>Customize and refine based on your expertise</li>
+                            <li>Follow up within 24-48 hours</li>
+                            <li>Schedule a consultation call</li>
+                        </ul>
+                    </div>
+                    
                 </div>
             `
         };
@@ -76,35 +155,51 @@ async function sendLeadNotification(userEmail, conversationHistory) {
         const userMailOptions = {
             from: process.env.ZOHO_EMAIL,
             to: userEmail,
-            subject: 'Thank you for your interest in Nazarban AI Services',
+            subject: 'Your AI Project Proposal - Nazarban Analytics',
             html: `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                    <div style="text-align: center; padding: 20px 0;">
-                        <h2 style="color: #6366f1;">Thank You!</h2>
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: white;">
+                    
+                    <!-- Header -->
+                    <div style="text-align: center; padding: 20px; border-bottom: 2px solid #6366f1;">
+                        <h2 style="color: #6366f1; margin: 10px 0;">Your AI Project Proposal</h2>
+                        <p style="color: #64748b; margin: 5px 0;">Nazarban Analytics-FZCO</p>
                     </div>
                     
-                    <p>Dear Valued Client,</p>
-                    
-                    <p>Thank you for your interest in Nazarban Analytics-FZCO AI services. We've received your consultation request and our team will review your requirements.</p>
-                    
-                    <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                        <h3 style="color: #1e293b; margin-top: 0;">What's Next?</h3>
-                        <ul style="color: #475569;">
-                            <li>Our AI specialists will analyze your requirements</li>
-                            <li>We'll prepare a customized proposal for your project</li>
-                            <li>You'll receive a detailed follow-up within 24-48 hours</li>
-                        </ul>
+                    <!-- Content -->
+                    <div style="padding: 30px 20px;">
+                        <p style="font-size: 16px; line-height: 1.6; color: #374151;">Dear Valued Client,</p>
+                        
+                        <p style="font-size: 16px; line-height: 1.6; color: #374151;">Thank you for your interest in <strong>Nazarban Analytics-FZCO</strong> AI services! Based on our conversation, we've prepared an initial project proposal for your review.</p>
+                        
+                        <!-- AI Generated Proposal -->
+                        <div style="background: #f0f9ff; padding: 25px; margin: 25px 0; border-left: 4px solid #0ea5e9; border-radius: 8px;">
+                            <h3 style="color: #0c4a6e; margin-top: 0; margin-bottom: 15px;">Project Proposal</h3>
+                            <div style="background: white; padding: 20px; border-radius: 5px; color: #374151; font-size: 15px; line-height: 1.7; white-space: pre-wrap; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">${aiProposal}</div>
+                        </div>
+                        
+                        <!-- What's Next -->
+                        <div style="background: #f0fdf4; padding: 20px; margin: 20px 0; border-left: 4px solid #22c55e;">
+                            <h3 style="color: #15803d; margin-top: 0;">What's Next?</h3>
+                            <ul style="color: #15803d; line-height: 1.8;">
+                                <li>Our team will refine this proposal based on your specific requirements</li>
+                                <li>We'll prepare detailed technical specifications and cost estimates</li>
+                                <li>You'll receive a follow-up call within <strong>24-48 hours</strong></li>
+                                <li>We'll schedule a consultation to discuss implementation details</li>
+                            </ul>
+                        </div>
+                        
+                        <p style="font-size: 16px; line-height: 1.6; color: #374151;">This proposal is our initial assessment based on our conversation. We'll work closely with you to refine and customize it to perfectly match your needs.</p>
+                        
+                        <p style="font-size: 16px; line-height: 1.6; color: #374151;">If you have any questions or would like to discuss this proposal, feel free to reply to this email. We're excited to help bring your AI vision to life!</p>
                     </div>
                     
-                    <p>If you have any urgent questions, feel free to reply to this email.</p>
-                    
-                    <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
-                        <p style="color: #64748b; font-size: 14px;">
-                            <strong>Nazarban Analytics-FZCO</strong><br>
-                            AI Solutions & Consulting<br>
-                            <a href="mailto:${process.env.ZOHO_EMAIL}" style="color: #6366f1;">${process.env.ZOHO_EMAIL}</a>
-                        </p>
+                    <!-- Footer -->
+                    <div style="background: #f8fafc; text-align: center; padding: 20px; border-top: 1px solid #e5e7eb;">
+                        <p style="margin: 0; font-weight: 600; color: #1e293b;">Nazarban Analytics-FZCO</p>
+                        <p style="margin: 5px 0; color: #64748b;">AI Solutions & Consulting</p>
+                        <a href="mailto:${process.env.ZOHO_EMAIL}" style="color: #6366f1; text-decoration: none;">${process.env.ZOHO_EMAIL}</a>
                     </div>
+                    
                 </div>
             `
         };
