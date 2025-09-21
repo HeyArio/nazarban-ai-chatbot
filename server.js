@@ -32,6 +32,40 @@ function setupEmailTransporter() {
     }
 }
 
+// Claude API retry function
+async function callClaudeWithRetry(requestData, maxRetries = 3) {
+    const axios = require('axios');
+    
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+            console.log(`🤖 Claude API attempt ${attempt}/${maxRetries}...`);
+            
+            const response = await axios.post('https://api.anthropic.com/v1/messages', requestData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': process.env.CLAUDE_API_KEY,
+                    'anthropic-version': '2023-06-01'
+                },
+                timeout: 90000 // 90 seconds
+            });
+            
+            console.log('✅ Claude API success! Response length:', response.data.content[0].text.length);
+            return response.data.content[0].text;
+            
+        } catch (error) {
+            console.log(`❌ Claude API attempt ${attempt} failed:`, error.message);
+            
+            if (attempt === maxRetries) {
+                console.log('❌ All Claude API attempts failed');
+                throw error;
+            }
+            
+            // Wait before retry (exponential backoff)
+            await new Promise(resolve => setTimeout(resolve, attempt * 2000));
+        }
+    }
+}
+
 // Email sending function
 async function sendLeadNotification(userEmail, conversationHistory) {
     if (!emailTransporter) {
@@ -58,11 +92,9 @@ async function sendLeadNotification(userEmail, conversationHistory) {
             projectSummary = mainRequest;
         }
 
-        // Generate AI proposal using Claude
+        // Generate AI proposal using Claude with retry
         let aiProposal = '';
         try {
-            const axios = require('axios');
-            
             const proposalPrompt = `Based on this conversation with a potential client, create a professional project proposal. Be specific about deliverables, timeline, and approach. Keep it concise but comprehensive.
 
 Conversation:
@@ -77,20 +109,12 @@ Create a proposal that includes:
 
 Make it professional but engaging. Address their specific needs mentioned in the conversation.`;
 
-            const proposalResponse = await axios.post('https://api.anthropic.com/v1/messages', {
+            aiProposal = await callClaudeWithRetry({
                 model: 'claude-3-5-sonnet-20241022',
                 max_tokens: 1000,
                 messages: [{ role: 'user', content: proposalPrompt }]
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-api-key': process.env.CLAUDE_API_KEY,
-                    'anthropic-version': '2023-06-01'
-                },
-                timeout: 30000
             });
 
-            aiProposal = proposalResponse.data.content[0].text;
             console.log('✅ AI proposal generated successfully');
             
         } catch (proposalError) {
@@ -266,12 +290,10 @@ app.post('/api/chat', async (req, res) => {
             });
         }
 
-        // Try to get Claude response
+        // Try to get Claude response with retry logic
         let responseMessage = '';
         
         try {
-            const axios = require('axios');
-            
             // Prepare messages for Claude API
             let claudeMessages = [];
             
@@ -298,22 +320,12 @@ Example topics to discuss: chatbot development, machine learning models, data an
             console.log('🤖 Calling Claude API with', claudeMessages.length, 'messages...');
             console.log('🔑 API Key starts with:', process.env.CLAUDE_API_KEY?.substring(0, 20) + '...');
             
-            const claudeResponse = await axios.post('https://api.anthropic.com/v1/messages', {
+            responseMessage = await callClaudeWithRetry({
                 model: 'claude-3-5-sonnet-20241022',
                 max_tokens: 800,
                 system: systemPrompt,
                 messages: claudeMessages
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-api-key': process.env.CLAUDE_API_KEY,
-                    'anthropic-version': '2023-06-01'
-                },
-                timeout: 30000
             });
-
-            responseMessage = claudeResponse.data.content[0].text;
-            console.log('✅ Claude API success! Response length:', responseMessage.length);
 
             // After several messages, suggest getting email
             if (conversationHistory.length >= 4 && !userEmail && conversationStage === 'initial') {
@@ -323,10 +335,8 @@ Example topics to discuss: chatbot development, machine learning models, data an
             }
 
         } catch (claudeError) {
-            console.error('❌ Claude API Error Details:');
-            console.error('Status:', claudeError.response?.status);
-            console.error('Error Data:', claudeError.response?.data);
-            console.error('Error Message:', claudeError.message);
+            console.error('❌ All Claude API attempts failed');
+            console.error('Final error:', claudeError.message);
             
             // More specific fallback responses based on the user's message
             const userMessage = message.toLowerCase();
