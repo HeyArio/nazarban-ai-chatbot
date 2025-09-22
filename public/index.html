@@ -57,7 +57,7 @@
       background: var(--panel);
       border-bottom:1px solid rgba(148,163,184,.12);
       padding:18px 24px;
-      display:flex; justify-content:center;
+      display:flex; justify-content:center; align-items:center;
     }
     .logo-section { display:flex; align-items:center; gap:14px; }
     .logo-badge{
@@ -66,10 +66,20 @@
       background: var(--logo-tile-bg);
       border:1px solid var(--logo-tile-border);
       box-shadow: var(--logo-glow);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .logo-badge.expanded{
+      width:115px; height:115px; border-radius:28px;
+      box-shadow: 0 12px 40px rgba(99,102,241,.5), inset 0 1px 0 rgba(255,255,255,.3);
     }
     .logo{
       width:36px; height:auto;
       filter: saturate(1.05) contrast(1.1) drop-shadow(0 1px 6px rgba(0,0,0,.18));
+      transition: all 0.3s ease;
+    }
+    .logo-badge.expanded .logo{
+      width:83px;
     }
     .brand-text{ display:flex; flex-direction:column; gap:2px; }
     .brand-name{
@@ -180,13 +190,38 @@
     #sendButton:disabled{ opacity:.6; cursor:not-allowed; }
     .send-icon{ width:20px; height:20px; display:block; }
 
+    /* CONTACT SECTION */
+    .contact-section{
+      max-width:900px; margin:16px auto 0; text-align:center;
+    }
+    .contact-links{
+      display:flex; justify-content:center; gap:32px; align-items:center;
+    }
+    .contact-link{
+      display:flex; align-items:center; gap:8px; padding:8px 12px;
+      color:var(--muted); text-decoration:none; font-size:14px; font-weight:500;
+      border-radius:10px; transition:all .2s ease;
+      border:1px solid transparent;
+    }
+    .contact-link:hover{
+      color:var(--ink); background:rgba(148,163,184,.08);
+      border-color:rgba(148,163,184,.15); transform:translateY(-1px);
+    }
+    .contact-icon{
+      width:16px; height:16px; opacity:.8;
+      transition:opacity .2s ease;
+    }
+    .contact-link:hover .contact-icon{ opacity:1; }
+
     @media (max-width:768px){
       .logo-badge{ width:44px; height:44px; border-radius:12px }
-      .logo{ width:30px }
+      .logo{ width:34px }
       .brand-name{ font-size:18px }
       .welcome-title{ font-size:36px }
       .input-container{ padding-right:60px }
       #messageInput{ font-size:16px } /* prevents iOS zoom */
+      .contact-links{ flex-direction:column; gap:16px; }
+      .contact-link{ font-size:13px; }
     }
   </style>
 </head>
@@ -227,6 +262,25 @@
           </svg>
         </button>
       </div>
+      
+      <!-- Contact Section -->
+      <div class="contact-section">
+        <div class="contact-links">
+          <a href="mailto:info@nazarbanai.com" class="contact-link email-link">
+            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.5"/>
+              <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            info@nazarbanai.com
+          </a>
+          <a href="tel:+19165870145" class="contact-link phone-link">
+            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            +1 (916) 587-0145
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -254,6 +308,12 @@
     });
 
     sendButton.addEventListener('click', sendMessage);
+
+    // Logo click to expand
+    const logoBadge = document.querySelector('.logo-badge');
+    logoBadge.addEventListener('click', function() {
+      this.classList.toggle('expanded');
+    });
 
     function addMessage(content, isUser = false) {
       const row = document.createElement('div');
@@ -355,7 +415,7 @@
       } catch (err) {
         hideTyping();
         console.error('Chat Error:', err);
-        addMessage("I'm sorry — connection issue. Please try again.", false);
+        addMessage("I'm sorry – connection issue. Please try again.", false);
       }
 
       sendButton.disabled = false;
