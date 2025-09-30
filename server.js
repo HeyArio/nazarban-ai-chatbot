@@ -35,24 +35,25 @@ function setupEmailTransporter() {
 
 // Google Gemini API function
 async function callGoogleGeminiWithRetry(messages, systemPrompt = '', maxRetries = 3) {
-    // Use the model name we confirmed from your API key's list
-    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GOOGLE_API_KEY}`;
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GOOGLE_API_KEY}`;
 
-    // Convert message format to the Gemini format
     const contents = messages.map(msg => ({
-        role: msg.role === 'assistant' ? 'model' : msg.role, // 'assistant' role is called 'model'
+        role: msg.role === 'assistant' ? 'model' : msg.role,
         parts: [{ text: msg.content }]
     }));
 
     const requestData = {
         contents: contents,
-        systemInstruction: {
-            parts: [{ text: systemPrompt }]
-        },
         generationConfig: {
             maxOutputTokens: 1024,
         }
     };
+    
+    if (systemPrompt) {
+        requestData.systemInstruction = {
+            parts: [{ text: systemPrompt }]
+        };
+    }
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
         try {
@@ -62,10 +63,16 @@ async function callGoogleGeminiWithRetry(messages, systemPrompt = '', maxRetries
                 headers: { 'Content-Type': 'application/json' },
                 timeout: 60000 // 60 second timeout
             });
-
-            const responseMessage = response.data.candidates[0].content.parts[0].text;
-            console.log('✅ Google Gemini API success! Response length:', responseMessage.length);
-            return responseMessage;
+            
+            // SAFE WAY: Check if candidates array exists and is not empty
+            if (response.data && response.data.candidates && response.data.candidates.length > 0) {
+                const responseMessage = response.data.candidates[0].content.parts[0].text;
+                console.log('✅ Google Gemini API success! Response length:', responseMessage.length);
+                return responseMessage;
+            } else {
+                // This handles cases where the API returns a response with no candidates (e.g., safety filters)
+                throw new Error('API response received, but it contains no valid candidates.');
+            }
 
         } catch (error) {
             if (error.response) {
@@ -95,10 +102,25 @@ async function sendLeadNotification(userEmail, conversationHistory) {
         const conversationSummary = conversationHistory
             .map(msg => `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`)
             .join('\n\n');
-            
-        const userMessages = conversationHistory.filter(msg => msg.role === 'user');
-        const allUserText = userMessages.map(msg => msg.content).join(' ');
-        let projectSummary = allUserText.length > 200 ? allUserText.substring(0, 200) + '...' : allUserText;
+
+        let projectSummary = '';
+        try {
+            // NEW: AI-powered summary generation
+            console.log('🤖 Generating AI summary of user request...');
+            const summaryPrompt = `Based on the following conversation, please summarize the user's core request into a concise, professional paragraph. Focus on their main goal and the key requirements they mentioned.
+
+Conversation:
+${conversationSummary}`;
+            const summaryMessages = [{ role: 'user', content: summaryPrompt }];
+            projectSummary = await callGoogleGeminiWithRetry(summaryMessages);
+            console.log('✅ AI summary generated successfully');
+        } catch (summaryError) {
+            // Fallback to simple truncation if AI summary fails
+            console.error('⚠️ Could not generate AI summary, falling back to simple summary.', summaryError.message);
+            const userMessages = conversationHistory.filter(msg => msg.role === 'user');
+            const allUserText = userMessages.map(msg => msg.content).join(' ');
+            projectSummary = allUserText.length > 200 ? allUserText.substring(0, 200) + '...' : allUserText;
+        }
 
         let aiProposal = '';
         try {
@@ -123,6 +145,7 @@ Make it professional but engaging. Address their specific needs mentioned in the
             
         } catch (proposalError) {
             console.error('⚠️ Could not generate AI proposal:', proposalError.message);
+            // Updated fallback uses the (potentially AI-generated) summary
             aiProposal = `Based on your inquiry about ${projectSummary}, we recommend a custom AI solution tailored to your specific needs. Our team will analyze your requirements and provide a detailed technical approach, implementation timeline, and cost estimate. We specialize in delivering scalable AI solutions that drive real business value.`;
         }
 
@@ -142,7 +165,7 @@ Make it professional but engaging. Address their specific needs mentioned in the
                         <p><strong>Time:</strong> ${new Date().toLocaleString()}</p>
                     </div>
                     <div style="background: #fff7ed; padding: 20px; margin: 20px 0; border-left: 4px solid #f59e0b;">
-                        <h3 style="color: #92400e; margin-top: 0;">What They Want</h3>
+                        <h3 style="color: #92400e; margin-top: 0;">What They Want (AI Summary)</h3>
                         <p style="color: #374151; font-size: 16px; line-height: 1.6;">${projectSummary}</p>
                     </div>
                     <div style="background: #f0f9ff; padding: 20px; margin: 20px 0; border-left: 4px solid #0ea5e9;">
@@ -306,5 +329,5 @@ app.use((error, req, res, next) => {
 app.listen(PORT, () => {
     console.log(`\n🚀 Nazarban AI Chatbot Server Started on port ${PORT}`);
     console.log(`🔑 Google API Key: ${process.env.GOOGLE_API_KEY ? '✅ Found' : '❌ Missing'}`);
-    console.log(`📧 Zoho Email: ${process.env.ZOHO_EMAIL ? '✅ Found' : '❌ Missing'}`);
+    console.log(`📧 Zoho Email: ${process.env.ZOHO_EMAIL && process.env.ZOHO_APP_PASSWORD ? '✅ Found' : '❌ Missing'}`);
 });

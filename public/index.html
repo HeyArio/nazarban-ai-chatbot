@@ -4,8 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nazarban AI Consultation</title>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-9QERGW4E3H"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9QERGW4E3H"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -14,44 +13,56 @@
   gtag('config', 'G-9QERGW4E3H');
 </script>
 
-  <!-- Favicons -->
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
   <link rel="icon" href="favicon.ico" />
   <link rel="icon" type="image/png" href="logo.png" />
   <link rel="apple-touch-icon" href="logo.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+  <link rel="icon" href="favicon.ico" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
 
     /* THEME TOKENS */
     :root{
-      --bg:#0b1020;
-      --panel:rgba(6,10,24,.9);
-      --ink:#f9fbff;
-      --muted:#a8b3bf;
+      --bg:#020617; /* Deeper space blue */
+      --panel:rgba(15, 23, 42, 0.75); /* Glassmorphism panel */
+      --ink:#f8fafc;
+      --muted:#94a3b8;
+      --shadow-color: rgba(129, 140, 248, 0.4); /* Centralized glow color */
 
-      --brand1:#6366f1; --brand2:#8b5cf6; --brand3:#f472b6;
+      --brand1:#818cf8; --brand2:#c084fc; --brand3:#fb7185;
 
-      /* Critical: bright tile behind the logo so it always pops */
       --logo-tile-bg:#ffffff;
       --logo-tile-border:rgba(71,85,105,.28);
-      --logo-glow:0 6px 24px rgba(99,102,241,.30), inset 0 1px 0 rgba(255,255,255,.25);
+      --logo-glow:0 6px 24px rgba(129, 140, 248, .30), inset 0 1px 0 rgba(255,255,255,.25);
     }
-    /* Optional themes (switch by changing body class) */
-    body.theme-graphite{
-      --bg:#0e1116; --panel:rgba(17,20,26,.9);
-      --ink:#eef2f6; --muted:#a1aab6;
-      --logo-tile-bg:#f3f5f8; --logo-tile-border:rgba(99,107,120,.28);
+    
+    /* Animated Aurora Background */
+    @keyframes move-aurora {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
-    body.theme-ivory{
-      --bg:#f8fafc; --panel:#ffffff;
-      --ink:#0f172a; --muted:#475569;
-      --logo-tile-bg:#ffffff; --logo-tile-border:rgba(15,23,42,.1);
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: radial-gradient(ellipse at top, #1e1b4b 0%, transparent 50%),
+                    radial-gradient(ellipse at bottom, #4c1d95 0%, transparent 50%);
+        opacity: 0.3;
+        z-index: -1;
+        animation: move-aurora 20s infinite linear;
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Inter, sans-serif;
-      background: var(--bg);
+      font-family: 'Space Grotesk', sans-serif;
+      background-color: var(--bg);
       color: var(--ink);
       min-height:100vh;
       overflow:hidden;
@@ -62,103 +73,93 @@
     /* HEADER */
     .header {
       position:sticky; top:0; z-index:10;
-      backdrop-filter: blur(16px);
+      backdrop-filter: blur(20px);
       background: var(--panel);
       border-bottom:1px solid rgba(148,163,184,.12);
-      padding:18px 24px;
+      padding:16px;
       display:flex; justify-content:center; align-items:center;
     }
     .logo-section { display:flex; align-items:center; gap:14px; }
     .logo-badge{
-      width:52px; height:52px; border-radius:14px;
+      width:48px; height:48px; border-radius:14px;
       display:grid; place-items:center;
       background: var(--logo-tile-bg);
       border:1px solid var(--logo-tile-border);
       box-shadow: var(--logo-glow);
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .logo-badge.expanded{
-      width:115px; height:115px; border-radius:28px;
-      box-shadow: 0 12px 40px rgba(99,102,241,.5), inset 0 1px 0 rgba(255,255,255,.3);
-    }
-    .logo{
-      width:36px; height:auto;
-      filter: saturate(1.05) contrast(1.1) drop-shadow(0 1px 6px rgba(0,0,0,.18));
-      transition: all 0.3s ease;
-    }
-    .logo-badge.expanded .logo{
-      width:83px;
-    }
+    .logo{ width:34px; }
     .brand-text{ display:flex; flex-direction:column; gap:2px; }
     .brand-name{
-      font-size:22px; font-weight:800; letter-spacing:.02em;
+      font-size:20px; font-weight:800;
       background: linear-gradient(135deg,var(--brand1),var(--brand2),var(--brand3));
       -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
     }
-    .brand-tagline{ font-size:12px; color:var(--muted); letter-spacing:.12em; font-weight:600; }
+    .brand-tagline{ font-size:12px; color:var(--muted); letter-spacing:.1em; font-weight:600; }
 
     /* MESSAGES AREA */
     .messages-container{
-      flex:1; overflow-y:auto; padding:0 16px 28px;
+      flex:1; overflow-y:auto; padding:16px;
       display:flex; flex-direction:column; align-items:center;
       scroll-behavior:smooth;
     }
     .messages-container::-webkit-scrollbar{ width:4px }
     .messages-container::-webkit-scrollbar-thumb{ background:rgba(148,163,184,.28); border-radius:2px }
 
-    .welcome-section{ text-align:center; padding:80px 20px; margin:auto 0; max-width:900px; }
+    .welcome-section{ text-align:center; padding:40px 20px; margin:auto 0; max-width:900px; }
     .welcome-title{
-      font-size:48px; font-weight:900; letter-spacing:-.02em; margin-bottom:16px;
+      font-size:clamp(2rem, 5vw, 3rem); /* Responsive font size */
+      font-weight:900; letter-spacing:-.02em; margin-bottom:16px;
       background:linear-gradient(135deg,#fff,#cbd5e1);
       -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
     }
-    .welcome-subtitle{ font-size:18px; color:var(--muted); line-height:1.7; max-width:680px; margin:0 auto; }
+    .welcome-subtitle{ font-size:clamp(1rem, 2.5vw, 1.125rem); color:var(--muted); line-height:1.7; max-width:680px; margin:0 auto; }
 
-    /* ROWS (GRID for perfect alignment) */
-    .message{ width:100%; display:flex; justify-content:center; margin:18px 0; }
+    /* ROWS */
+    .message{ width:100%; display:flex; justify-content:center; margin:16px 0; }
     .bubble-row{
       width:100%; max-width:900px; display:grid; align-items:start;
-      gap:14px;
+      gap:12px;
     }
-    /* Bot row: [avatar][gap][bubble] */
-    .bot .bubble-row{ grid-template-columns: 40px 14px minmax(0,1fr); }
+    .bot .bubble-row{ grid-template-columns: 38px 1fr; }
     .bot .avatar{ grid-column:1; }
-    .bot .message-content{ grid-column:3; }
+    .bot .message-content{ grid-column:2; }
 
-    /* User row (right aligned): [bubble][gap][avatar] */
-    .user .bubble-row{ grid-template-columns: minmax(0,1fr) 14px 40px; }
-    .user .avatar{ grid-column:3; justify-self:end; }
+    .user .bubble-row{ grid-template-columns: 1fr 38px; }
+    .user .avatar{ grid-column:2; }
     .user .message-content{ grid-column:1; justify-self:end; }
 
     .avatar{
       width:38px; height:38px; border-radius:50%;
       display:grid; place-items:center; font-size:12px; font-weight:700; color:#fff;
     }
-    .bot .avatar{ background:linear-gradient(135deg,#6366f1,#8b5cf6); box-shadow:0 6px 22px rgba(99,102,241,.45); }
-    .user .avatar{ background:linear-gradient(135deg,#06b6d4,#3b82f6); box-shadow:0 6px 22px rgba(59,130,246,.35); }
+    .bot .avatar{ background:linear-gradient(135deg,#6366f1,#8b5cf6); box-shadow:0 4px 16px var(--shadow-color); }
+    .user .avatar{ background:linear-gradient(135deg,#06b6d4,#3b82f6); box-shadow:0 4px 16px rgba(59,130,246,.35); }
 
     .message-content{
-      max-width:100%;
-      padding:18px 20px; border-radius:18px; font-size:16px; line-height:1.7; white-space:pre-wrap;
-      animation:fadeIn .25s ease-out;
+      max-width:95%;
+      padding:16px 20px; border-radius:18px; font-size:16px; line-height:1.7; white-space:pre-wrap;
+      animation:slideInFade .4s cubic-bezier(0.25, 1, 0.5, 1);
     }
-    @keyframes fadeIn{ from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none} }
+    @keyframes slideInFade{ 
+      from{opacity:0; transform:translateY(10px) scale(0.98);} 
+      to{opacity:1; transform:none} 
+    }
     .bot .message-content{
-      background: rgba(15,23,42,.7);
-      border:1px solid rgba(99,102,241,.22);
+      background: rgba(30, 41, 59, 0.9);
+      border:1px solid rgba(129, 140, 248, 0.2);
       box-shadow:0 10px 30px rgba(0,0,0,.35);
     }
     .user .message-content{
-      background: linear-gradient(135deg, rgba(59,130,246,.92), rgba(99,102,241,.86));
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
       color:#fff; box-shadow:0 10px 32px rgba(59,130,246,.35);
     }
 
     /* TYPING INDICATOR */
     .typing-indicator{
       padding:18px 20px; border-radius:18px; max-width:86px;
-      background: rgba(15,23,42,.7); border:1px solid rgba(99,102,241,.22);
-      display:block;
+      background: rgba(30, 41, 59, 0.9); border:1px solid rgba(129, 140, 248, 0.2);
     }
     .typing-dots{ display:flex; gap:6px; justify-content:center; }
     .dot{ width:8px; height:8px; border-radius:50%; background:linear-gradient(135deg,#6366f1,#8b5cf6); animation:typing 1.4s infinite; }
@@ -167,77 +168,78 @@
 
     /* INPUT BAR */
     .input-section{
-      padding:22px 16px 26px; backdrop-filter: blur(14px);
+      padding:16px; backdrop-filter: blur(20px);
       background: var(--panel); border-top:1px solid rgba(148,163,184,.1);
     }
     .input-container{
       max-width:900px; margin:0 auto; position:relative;
-      display:flex; align-items:flex-end; padding:8px 64px 8px 10px;
-      border-radius:22px; background: rgba(30,41,59,.8);
+      display:flex; align-items:flex-end; padding:6px 56px 6px 8px; /* Adjusted padding for button */
+      border-radius:20px; background: rgba(30,41,59,.8);
       border:1px solid rgba(148,163,184,.2); box-shadow:0 10px 30px rgba(0,0,0,.35);
+      transition: box-shadow .2s ease;
+    }
+    .input-container:focus-within {
+      box-shadow: 0 0 0 3px var(--shadow-color); /* Enhanced focus glow */
     }
     #messageInput{
-      width:100%; min-height:52px; max-height:140px; resize:none; outline:none; border:none;
-      background: rgba(51,65,85,.82); color:var(--ink); border-radius:16px; padding:14px 16px;
+      width:100%; min-height:48px; max-height:140px; resize:none; outline:none; border:none;
+      background: rgba(51,65,85,.82); color:var(--ink); border-radius:14px; padding:12px 16px;
       font-size:16px; font-family:inherit; transition:background .2s ease;
     }
-    #messageInput:focus{ background: rgba(51,65,85,1); box-shadow:0 0 0 3px rgba(99,102,241,.22); }
+    #messageInput:focus{ background: rgba(51,65,85,1); }
     #messageInput::placeholder{ color:#94a3b8; }
 
-    /* Icon-only send button */
+    /* Send button */
     #sendButton{
-      position:absolute; right:10px; bottom:10px;
-      width:44px; height:44px; min-width:44px; padding:0;
+      position:absolute; right:8px; bottom:8px;
+      width:40px; height:40px;
       border:none; border-radius:50%;
       background: linear-gradient(135deg,#6366f1,#8b5cf6);
       color:#fff; cursor:pointer; display:grid; place-items:center;
-      box-shadow:0 8px 26px rgba(99,102,241,.45);
+      box-shadow:0 6px 20px var(--shadow-color);
       transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
     }
-    #sendButton:hover:not(:disabled){ transform: translateY(-2px); box-shadow:0 12px 30px rgba(99,102,241,.55); }
-    #sendButton:active:not(:disabled){ transform:none; }
-    #sendButton:disabled{ opacity:.6; cursor:not-allowed; }
-    .send-icon{ width:20px; height:20px; display:block; }
+    #sendButton:hover:not(:disabled){ transform: translateY(-2px); box-shadow:0 10px 24px rgba(99,102,241,.55); }
+    #sendButton:active:not(:disabled) .send-icon { transform: scale(0.9) rotate(5deg); } /* SPICY: Click animation */
+    #sendButton:disabled{ opacity:.5; cursor:not-allowed; }
+    .send-icon{ width:18px; height:18px; transition: transform .2s cubic-bezier(0.4, 0, 0.2, 1); }
 
     /* CONTACT SECTION */
     .contact-section{
-      max-width:900px; margin:16px auto 0; text-align:center;
+      max-width:900px; margin:12px auto 0; padding: 0 16px;
     }
     .contact-links{
-      display:flex; justify-content:center; gap:32px; align-items:center;
+      display:flex; justify-content:center; gap:24px; align-items:center; flex-wrap: wrap; /* responsive wrapping */
     }
     .contact-link{
       display:flex; align-items:center; gap:8px; padding:8px 12px;
       color:var(--muted); text-decoration:none; font-size:14px; font-weight:500;
       border-radius:10px; transition:all .2s ease;
       border:1px solid transparent;
-      white-space: nowrap;
-      min-height: 40px;
     }
     .contact-link:hover{
       color:var(--ink); background:rgba(148,163,184,.08);
       border-color:rgba(148,163,184,.15); transform:translateY(-1px);
     }
-    .contact-icon{
-      width:16px; height:16px; opacity:.8;
-      transition:opacity .2s ease;
-    }
+    .contact-icon{ width:16px; height:16px; opacity:.8; transition:opacity .2s ease; }
     .contact-link:hover .contact-icon{ opacity:1; }
 
+    /* Responsive adjustments */
     @media (max-width:768px){
-      .logo-badge{ width:44px; height:44px; border-radius:12px }
-      .logo{ width:34px }
-      .brand-name{ font-size:18px }
-      .welcome-title{ font-size:36px }
-      .input-container{ padding-right:60px }
+      body::before { display: none; } /* Disable aurora on mobile for performance */
+      .header { padding: 12px 16px; }
+      .brand-name { font-size: 18px; }
+      .brand-tagline { display: none; } /* Hide tagline on small screens */
+      .messages-container { padding: 12px; }
+      .message-content { padding: 14px 18px; }
+      .input-section { padding: 12px; }
       #messageInput{ font-size:16px } /* prevents iOS zoom */
-      .contact-links{ flex-direction:column; gap:16px; }
-      .contact-link{ font-size:13px; }
+      .contact-links { gap: 12px; }
+      .contact-link { font-size: 13px; padding: 10px; } /* larger tap targets */
     }
   </style>
 </head>
 
-<!-- Switch theme here: theme-ocean (default), theme-graphite, theme-ivory -->
 <body class="theme-ocean">
   <div class="chat-container">
     <header class="header">
@@ -266,7 +268,6 @@
       <div class="input-container">
         <textarea id="messageInput" rows="1" placeholder="Type your message…"></textarea>
         <button id="sendButton" aria-label="Send message" title="Send">
-          <!-- Paper plane icon -->
           <svg class="send-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M3.4 11.2l15.1-6.7c1.3-.6 2.6.8 2 2.1l-6.7 15.1c-.5 1.2-2.2 1.1-2.6-.2l-1.6-5.1-5.1-1.6c-1.3-.4-1.4-2.1-.1-2.6z" stroke="currentColor" stroke-width="1.4" />
             <path d="M10.5 13.5l6.1-6.1" stroke="currentColor" stroke-width="1.4" />
@@ -274,7 +275,6 @@
         </button>
       </div>
       
-      <!-- Contact Section -->
       <div class="contact-section">
         <div class="contact-links">
           <a href="mailto:info@nazarbanai.com" class="contact-link email-link">
@@ -288,7 +288,7 @@
             <svg class="contact-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.5"/>
             </svg>
-            <span>(916) 587-0145</span>
+            <span>+1 (916) 587 0145</span>
           </a>
         </div>
       </div>
@@ -320,11 +320,11 @@
 
     sendButton.addEventListener('click', sendMessage);
 
-    // Logo click to expand
-    const logoBadge = document.querySelector('.logo-badge');
-    logoBadge.addEventListener('click', function() {
-      this.classList.toggle('expanded');
-    });
+    // DEPRECATED LOGO EXPAND
+    // const logoBadge = document.querySelector('.logo-badge');
+    // logoBadge.addEventListener('click', function() {
+    //   this.classList.toggle('expanded');
+    // });
 
     function addMessage(content, isUser = false) {
       const row = document.createElement('div');
@@ -339,9 +339,8 @@
 
       const bubble = document.createElement('div');
       bubble.className = 'message-content';
-      bubble.textContent = content;
 
-      // Structure depends on side; grid handles placement
+      // Structure depends on side
       inner.appendChild(avatar);
       inner.appendChild(bubble);
       row.appendChild(inner);
@@ -350,7 +349,32 @@
       if (welcome) welcome.remove();
 
       messagesContainer.appendChild(row);
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      
+      // Typewriter effect for bot messages
+      if (!isUser) {
+        bubble.textContent = '▋'; // Initial cursor
+        typeMessage(bubble, content);
+      } else {
+        bubble.textContent = content;
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+    }
+
+    // Typewriter function
+    function typeMessage(element, text) {
+        const words = text.split(' ');
+        let i = 0;
+        element.textContent = '';
+
+        function type() {
+            if (i < words.length) {
+                element.textContent += (i > 0 ? ' ' : '') + words[i];
+                i++;
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                setTimeout(type, 60); // Adjust speed here (milliseconds per word)
+            }
+        }
+        type();
     }
 
     function showTyping() {
