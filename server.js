@@ -91,6 +91,7 @@ async function callGoogleGeminiWithRetry(messages, systemPrompt = '', maxRetries
 
 
 // Email sending function
+// Email sending function
 async function sendLeadNotification(userEmail, conversationHistory) {
     if (!emailTransporter) {
         console.log('⚠️ Email transporter not available');
@@ -101,12 +102,12 @@ async function sendLeadNotification(userEmail, conversationHistory) {
         const conversationSummary = conversationHistory
             .map(msg => `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`)
             .join('\n\n');
-
+            
         let projectSummary = '';
         try {
             // NEW: AI-powered summary generation
             console.log('🤖 Generating AI summary of user request...');
-            const summaryPrompt = `Based on the following conversation, please summarize the user's core request into a concise, professional paragraph. Focus on their main goal and the key requirements they mentioned.
+            const summaryPrompt = `Based on the following conversation, please summarize the user's core request into a concise, professional paragraph. Focus on their main goal and the key requirements they mentioned. This summary will be used internally.
 
 Conversation:
 ${conversationSummary}`;
@@ -144,7 +145,6 @@ Make it professional but engaging. Address their specific needs mentioned in the
             
         } catch (proposalError) {
             console.error('⚠️ Could not generate AI proposal:', proposalError.message);
-            // Updated fallback uses the (potentially AI-generated) summary
             aiProposal = `Based on your inquiry about ${projectSummary}, we recommend a custom AI solution tailored to your specific needs. Our team will analyze your requirements and provide a detailed technical approach, implementation timeline, and cost estimate. We specialize in delivering scalable AI solutions that drive real business value.`;
         }
 
@@ -164,7 +164,7 @@ Make it professional but engaging. Address their specific needs mentioned in the
                         <p><strong>Time:</strong> ${new Date().toLocaleString()}</p>
                     </div>
                     <div style="background: #fff7ed; padding: 20px; margin: 20px 0; border-left: 4px solid #f59e0b;">
-                        <h3 style="color: #92400e; margin-top: 0;">What They Want (AI Summary)</h3>
+                        <h3 style="color: #92400e; margin-top: 0;">Our Understanding of Their Request</h3>
                         <p style="color: #374151; font-size: 16px; line-height: 1.6;">${projectSummary}</p>
                     </div>
                     <div style="background: #f0f9ff; padding: 20px; margin: 20px 0; border-left: 4px solid #0ea5e9;">
@@ -273,17 +273,16 @@ app.post('/api/chat', async (req, res) => {
         try {
             let apiMessages = conversationHistory.length > 0 ? conversationHistory.slice(-8) : [];
             
-            const systemPrompt = `You are an AI consultation assistant for Nazarban Analytics-FZCO.
+            const systemPrompt = `You are a friendly and expert AI solutions consultant for Nazarban Analytics-FZCO. Your goal is to understand a potential client's needs and guide them toward a solution.
 
-**IMPORTANT: Your very first response to the user must be ONLY this sentence: "Ready to build? Tell me about your AI project or the business challenge you're facing."**
+Your personality is: professional, knowledgeable, consultative, and genuinely helpful.
 
-After the first message, your role is to:
-1. Understand the user's specific AI needs and business challenges.
-2. Ask relevant follow-up questions about their requirements.
-3. Provide helpful, genuine insights about AI technologies like machine learning, NLP, and computer vision.
-4. After understanding their needs well (usually after 3-4 exchanges), naturally ask for their email to continue the consultation.
-
-Be professional, knowledgeable, and genuinely helpful. Keep responses conversational but informative (2-3 sentences).`;
+Conversation Flow:
+1.  **Initiate:** Start the conversation with a welcoming, open-ended question about the user's project or business challenge. Vary your opening slightly.
+2.  **Explore:** Ask insightful follow-up questions to clarify their requirements, goals, and any existing systems. Dig deeper into their needs.
+3.  **Educate:** Provide valuable insights about relevant AI technologies (ML, NLP, computer vision, etc.) as they relate to the user's problem.
+4.  **Transition:** Once you have a clear understanding of their primary goal, smoothly transition to asking for their email address to provide a detailed, personalized proposal and connect them with a specialist.
+5.  **Tone:** Keep responses conversational but informative (2-4 sentences is ideal). Avoid being robotic.`;
 
             console.log('🤖 Calling Google Gemini API with', apiMessages.length, 'messages...');
             
