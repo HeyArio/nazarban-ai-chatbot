@@ -35,29 +35,25 @@ function setupEmailTransporter() {
 
 // Google Gemini API function
 // Google Gemini API function
+// Google Gemini API function
 async function callGoogleGeminiWithRetry(messages, systemPrompt = '', maxRetries = 3) {
-    const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-latest:generateContent?key=${process.env.GOOGLE_API_KEY}`;
+    // Use the model name we confirmed from your API key's list
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GOOGLE_API_KEY}`;
 
     // Convert message format to the Gemini format
     const contents = messages.map(msg => ({
-        role: msg.role === 'assistant' ? 'model' : msg.role,
+        role: msg.role === 'assistant' ? 'model' : msg.role, // 'assistant' role is called 'model'
         parts: [{ text: msg.content }]
     }));
 
-    // NEW: For v1 API, the system prompt is part of the 'contents'
-    if (systemPrompt) {
-        contents.unshift(
-            { role: 'user', parts: [{ text: systemPrompt }] },
-            { role: 'model', parts: [{ text: 'Understood.' }] } // Acknowledge the instruction
-        );
-    }
-
     const requestData = {
         contents: contents,
+        systemInstruction: {
+            parts: [{ text: systemPrompt }]
+        },
         generationConfig: {
             maxOutputTokens: 1024,
         }
-        // REMOVED: The invalid "systemInstruction" field
     };
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
@@ -69,19 +65,17 @@ async function callGoogleGeminiWithRetry(messages, systemPrompt = '', maxRetries
                 timeout: 60000 // 60 second timeout
             });
 
-            // SAFE WAY: Check if candidates array exists and is not empty
-            if (response.data && response.data.candidates && response.data.candidates.length > 0) {
-                const responseMessage = response.data.candidates[0].content.parts[0].text;
-                console.log('✅ Google Gemini API success! Response length:', responseMessage.length);
-                return responseMessage;
-            } else {
-                // This handles cases where the API returns a response with no candidates (e.g., safety filters)
-                throw new Error('API response received, but it contains no valid candidates.');
-            }
+            const responseMessage = response.data.candidates[0].content.parts[0].text;
+            console.log('✅ Google Gemini API success! Response length:', responseMessage.length);
+            return responseMessage;
 
         } catch (error) {
             if (error.response) {
-                console.error(`❌ Google Gemini API attempt ${attempt} failed with status ${error.response.status}:`, error.response.data);
+                // Add a defensive check for error.response.data before logging
+                const errorData = error.response.data ? JSON.stringify(error.response.data) : 'No response data';
+                console.error(`❌ Google Gemini API attempt ${attempt} failed with status ${error.response.status}:`, errorData);
+            } else if (error.request) {
+                console.error(`❌ Google Gemini API attempt ${attempt} failed: No response received.`, error.message);
             } else {
                 console.error(`❌ Google Gemini API attempt ${attempt} failed:`, error.message);
             }
