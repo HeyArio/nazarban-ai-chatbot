@@ -34,26 +34,31 @@ function setupEmailTransporter() {
 }
 
 // Google Gemini API function
+// Google Gemini API function
 async function callGoogleGeminiWithRetry(messages, systemPrompt = '', maxRetries = 3) {
-    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GOOGLE_API_KEY}`;
+    const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-latest:generateContent?key=${process.env.GOOGLE_API_KEY}`;
 
+    // Convert message format to the Gemini format
     const contents = messages.map(msg => ({
         role: msg.role === 'assistant' ? 'model' : msg.role,
         parts: [{ text: msg.content }]
     }));
+
+    // NEW: For v1 API, the system prompt is part of the 'contents'
+    if (systemPrompt) {
+        contents.unshift(
+            { role: 'user', parts: [{ text: systemPrompt }] },
+            { role: 'model', parts: [{ text: 'Understood.' }] } // Acknowledge the instruction
+        );
+    }
 
     const requestData = {
         contents: contents,
         generationConfig: {
             maxOutputTokens: 1024,
         }
+        // REMOVED: The invalid "systemInstruction" field
     };
-    
-    if (systemPrompt) {
-        requestData.systemInstruction = {
-            parts: [{ text: systemPrompt }]
-        };
-    }
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
         try {
@@ -63,7 +68,7 @@ async function callGoogleGeminiWithRetry(messages, systemPrompt = '', maxRetries
                 headers: { 'Content-Type': 'application/json' },
                 timeout: 60000 // 60 second timeout
             });
-            
+
             // SAFE WAY: Check if candidates array exists and is not empty
             if (response.data && response.data.candidates && response.data.candidates.length > 0) {
                 const responseMessage = response.data.candidates[0].content.parts[0].text;
@@ -80,7 +85,7 @@ async function callGoogleGeminiWithRetry(messages, systemPrompt = '', maxRetries
             } else {
                 console.error(`❌ Google Gemini API attempt ${attempt} failed:`, error.message);
             }
-            
+
             if (attempt === maxRetries) {
                 console.log('❌ All Google Gemini API attempts failed');
                 throw error;
