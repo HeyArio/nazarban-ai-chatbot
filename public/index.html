@@ -168,18 +168,20 @@
 
     /* INPUT BAR */
     .input-section{
-      padding:16px; backdrop-filter: blur(20px);
+      /* MODIFIED: Added more padding to the bottom */
+      padding: 16px 16px 24px 16px; 
+      backdrop-filter: blur(20px);
       background: var(--panel); border-top:1px solid rgba(148,163,184,.1);
     }
     .input-container{
       max-width:900px; margin:0 auto; position:relative;
-      display:flex; align-items:flex-end; padding:6px 56px 6px 8px; /* Adjusted padding for button */
+      display:flex; align-items:flex-end; padding:6px 56px 6px 8px;
       border-radius:20px; background: rgba(30,41,59,.8);
       border:1px solid rgba(148,163,184,.2); box-shadow:0 10px 30px rgba(0,0,0,.35);
       transition: box-shadow .2s ease;
     }
     .input-container:focus-within {
-      box-shadow: 0 0 0 3px var(--shadow-color); /* Enhanced focus glow */
+      box-shadow: 0 0 0 3px var(--shadow-color);
     }
     #messageInput{
       width:100%; min-height:48px; max-height:140px; resize:none; outline:none; border:none;
@@ -200,16 +202,19 @@
       transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
     }
     #sendButton:hover:not(:disabled){ transform: translateY(-2px); box-shadow:0 10px 24px rgba(99,102,241,.55); }
-    #sendButton:active:not(:disabled) .send-icon { transform: scale(0.9) rotate(5deg); } /* SPICY: Click animation */
+    #sendButton:active:not(:disabled) .send-icon { transform: scale(0.9) rotate(5deg); }
     #sendButton:disabled{ opacity:.5; cursor:not-allowed; }
     .send-icon{ width:18px; height:18px; transition: transform .2s cubic-bezier(0.4, 0, 0.2, 1); }
 
     /* CONTACT SECTION */
     .contact-section{
-      max-width:900px; margin:12px auto 0; padding: 0 16px;
+      max-width:900px; 
+      /* MODIFIED: Increased top margin for more space */
+      margin: 20px auto 0; 
+      padding: 0 16px;
     }
     .contact-links{
-      display:flex; justify-content:center; gap:24px; align-items:center; flex-wrap: wrap; /* responsive wrapping */
+      display:flex; justify-content:center; gap:24px; align-items:center; flex-wrap: wrap;
     }
     .contact-link{
       display:flex; align-items:center; gap:8px; padding:8px 12px;
@@ -226,21 +231,22 @@
 
     /* Responsive adjustments */
     @media (max-width:768px){
-      body::before { display: none; } /* Disable aurora on mobile for performance */
+      body::before { display: none; }
       .header { padding: 12px 16px; }
       .brand-name { font-size: 18px; }
-      .brand-tagline { display: none; } /* Hide tagline on small screens */
+      .brand-tagline { display: none; }
       .messages-container { padding: 12px; }
       .message-content { padding: 14px 18px; }
-      .input-section { padding: 12px; }
-      #messageInput{ font-size:16px } /* prevents iOS zoom */
+      /* MODIFIED: Added more bottom padding for mobile */
+      .input-section { padding: 12px 12px 20px 12px; } 
+      #messageInput{ font-size:16px }
       .contact-links { gap: 12px; }
-      .contact-link { font-size: 13px; padding: 10px; } /* larger tap targets */
+      .contact-link { font-size: 13px; padding: 10px; }
     }
   </style>
 </head>
 
-<body class="theme-ocean">
+<body>
   <div class="chat-container">
     <header class="header">
       <div class="logo-section">
@@ -296,6 +302,7 @@
   </div>
 
   <script>
+    // Javascript remains unchanged
     let conversationHistory = [];
     let userEmail = null;
     let conversationStage = 'initial';
@@ -319,12 +326,6 @@
     });
 
     sendButton.addEventListener('click', sendMessage);
-
-    // DEPRECATED LOGO EXPAND
-    // const logoBadge = document.querySelector('.logo-badge');
-    // logoBadge.addEventListener('click', function() {
-    //   this.classList.toggle('expanded');
-    // });
 
     function addMessage(content, isUser = false) {
       const row = document.createElement('div');
@@ -350,9 +351,8 @@
 
       messagesContainer.appendChild(row);
       
-      // Typewriter effect for bot messages
       if (!isUser) {
-        bubble.textContent = '▋'; // Initial cursor
+        bubble.textContent = '▋';
         typeMessage(bubble, content);
       } else {
         bubble.textContent = content;
@@ -360,7 +360,6 @@
       }
     }
 
-    // Typewriter function
     function typeMessage(element, text) {
         const words = text.split(' ');
         let i = 0;
@@ -371,7 +370,7 @@
                 element.textContent += (i > 0 ? ' ' : '') + words[i];
                 i++;
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                setTimeout(type, 60); // Adjust speed here (milliseconds per word)
+                setTimeout(type, 60);
             }
         }
         type();

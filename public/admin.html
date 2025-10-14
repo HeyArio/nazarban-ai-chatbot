@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Prompt Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #020617;
+            --panel: #0f172a;
+            --ink: #f8fafc;
+            --muted: #94a3b8;
+            --brand1: #818cf8;
+            --border: rgba(148, 163, 184, .2);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--bg);
+            color: var(--ink);
+            padding: 2rem;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--brand1), #c084fc);
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        p { color: var(--muted); margin-bottom: 2rem; }
+        .form-group { margin-bottom: 2rem; }
+        label { display: block; font-weight: 600; margin-bottom: 0.75rem; }
+        textarea, input[type="password"] {
+            width: 100%;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: var(--ink);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color .2s, box-shadow .2s;
+        }
+        textarea { resize: vertical; min-height: 200px; }
+        textarea:focus, input:focus {
+            outline: none;
+            border-color: var(--brand1);
+            box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.4);
+        }
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1rem;
+            background: var(--panel);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            background: var(--brand1);
+            color: var(--ink);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform .15s, opacity .15s;
+        }
+        button:hover { transform: translateY(-2px); }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        #status { font-size: 0.9rem; transition: color .3s; }
+        .success { color: #4ade80; }
+        .error { color: #f87171; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Prompt Management</h1>
+        <p>Edit the prompts used by the AI chatbot. Your changes will be applied immediately after saving.</p>
+
+        <div class="form-group">
+            <label for="mainSystemPrompt">Main Chatbot System Prompt</label>
+            <textarea id="mainSystemPrompt"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="summaryPrompt">Conversation Summary Prompt</label>
+            <textarea id="summaryPrompt"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="proposalPrompt">Proposal Generation Prompt</label>
+            <textarea id="proposalPrompt"></textarea>
+        </div>
+
+        <div class="controls">
+            <input type="password" id="adminPassword" placeholder="Admin Password" required style="flex: 1; max-width: 250px;">
+            <button id="saveButton">Save Prompts</button>
+            <span id="status"></span>
+        </div>
+    </div>
+
+    <script>
+        const mainSystemPromptEl = document.getElementById('mainSystemPrompt');
+        const summaryPromptEl = document.getElementById('summaryPrompt');
+        const proposalPromptEl = document.getElementById('proposalPrompt');
+        const passwordEl = document.getElementById('adminPassword');
+        const saveButton = document.getElementById('saveButton');
+        const statusEl = document.getElementById('status');
+
+        // Fetch and display current prompts on page load
+        async function loadPrompts() {
+            try {
+                const response = await fetch('/api/prompts');
+                if (!response.ok) throw new Error('Failed to fetch prompts');
+                const prompts = await response.json();
+                mainSystemPromptEl.value = prompts.mainSystemPrompt;
+                summaryPromptEl.value = prompts.summaryPrompt;
+                proposalPromptEl.value = prompts.proposalPrompt;
+            } catch (error) {
+                showStatus(error.message, true);
+            }
+        }
+        
+        // Handle save button click
+        saveButton.addEventListener('click', async () => {
+            const password = passwordEl.value;
+            if (!password) {
+                showStatus('Password is required.', true);
+                return;
+            }
+
+            saveButton.disabled = true;
+            showStatus('Saving...', false);
+
+            const updatedPrompts = {
+                mainSystemPrompt: mainSystemPromptEl.value,
+                summaryPrompt: summaryPromptEl.value,
+                proposalPrompt: proposalPromptEl.value,
+                password: password,
+            };
+
+            try {
+                const response = await fetch('/api/prompts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedPrompts)
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.message);
+                showStatus(result.message, false);
+            } catch (error) {
+                showStatus(error.message, true);
+            } finally {
+                saveButton.disabled = false;
+            }
+        });
+
+        function showStatus(message, isError) {
+            statusEl.textContent = message;
+            statusEl.className = isError ? 'error' : 'success';
+            setTimeout(() => statusEl.textContent = '', 4000);
+        }
+
+        // Load prompts when the page is ready
+        document.addEventListener('DOMContentLoaded', loadPrompts);
+    </script>
+</body>
+</html>
