@@ -157,12 +157,12 @@ body {
 
 /* Mobile Navigation Overlay - Hidden by default */
 .nav-mobile-overlay {
-  /* FIX: Use display: flex, and control visibility with opacity */
+  /* Use display: flex, and control visibility with opacity */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  
+
   position: fixed;
   top: 0;
   left: 0;
@@ -171,8 +171,8 @@ body {
   background: var(--bg); /* Solid background */
   z-index: 1000; /* High z-index to cover everything */
   list-style: none; /* Remove bullet points */
-  
-  /* FIX: Control with visibility, opacity, and pointer-events */
+
+  /* Control with visibility, opacity, and pointer-events */
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -182,7 +182,7 @@ body {
 
 /* Styles when the mobile menu is active */
 .nav-mobile-overlay.active {
-  /* FIX: Show the overlay */
+  /* Show the overlay */
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
@@ -577,30 +577,47 @@ body.chat-page {
 
 /* --- 5. PDF Viewer & Download Button (About Page) --- */
 
+
 .download-button-wrapper {
   text-align: center;
   margin: 2.5rem 0;
 }
 
 .download-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
+  display: inline-flex; 
+  align-items: center;    /* Vertically center */
+  /* FIX: Horizontally center the single item (the text span) */
+  justify-content: center; 
+  /* FIX: Removed gap as there's no icon */
+  /* gap: 0.75rem; */ 
   background: var(--brand1);
-  color: var(--ink);
+  color: var(--ink);      
   text-decoration: none;
   font-weight: 600;
-  font-size: 1rem;
-  padding: 0.75rem 1.5rem;
+  font-size: 1rem; 
+  /* FIX: Ensure padding is symmetrical for centering */
+  padding: 0.75rem 1.5rem; 
   border-radius: var(--radius-md);
   box-shadow: 0 6px 20px var(--shadow-color);
   transition: all 0.2s ease;
+  border: none; 
+  cursor: pointer;
+  /* Add min-width if needed to ensure button isn't too small */
+  /* min-width: 150px; */ 
 }
 
-.download-button svg {
-  width: 20px;
-  height: 20px;
+/* Target the span directly */
+.download-button .button-text {
+  display: inline; /* Should flow naturally */
+  line-height: 1;   /* Match line height closely to font size */
+  color: var(--ink); /* Explicitly set color again */
+  visibility: visible; /* Ensure it's not hidden */
+  opacity: 1;        /* Ensure it's not transparent */
+  text-align: center; /* Ensure text itself is centered */
 }
+
+/* FIX: Removed SVG styles as it's gone */
+/* .download-button svg { ... } */
 
 .download-button:hover {
   transform: translateY(-2px);
