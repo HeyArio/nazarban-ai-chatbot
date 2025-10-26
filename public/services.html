@@ -3,61 +3,62 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Services - Nazarban AI Consultation</title>
+  <title>Services - Nazarban Analytics</title>
   
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
   <link rel="icon" href="favicon.ico" />
-  <link rel="icon" type="image/png" href="logo.png" />
   <link rel="apple-touch-icon" href="logo.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-  <div class="site-container main-content-wrapper">
-    <header class="header">
-      <a href="index.html" class="logo-section">
-        <div class="logo-badge">
-          <img class="logo" src="logo.png" alt="Nazarban" onerror="this.style.display='none'"/>
-        </div>
-        <div class="brand-text">
-          <div class="brand-name">NAZARBAN</div>
-          <div class="brand-tagline">ANALYTICS · FZCO</div>
-        </div>
-      </a>
 
-      <nav class="navigation" id="main-nav">
-        <a href="index.html" class="nav-link">Chat</a>
-        <a href="about.html" class="nav-link">About</a>
-        <a href="whitepaper.html" class="nav-link">White Paper</a>
-        <a href="blog.html" class="nav-link">Blog</a>
-        <a href="services.html" class="nav-link active">Services</a> <!-- Set active class -->
-      </nav>
-
-      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">
-        <svg class="menu-toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
-    </header>
-
-    <!-- Main content for this page -->
-    <div class="main-content">
-      <div id="services-page" class="page content-page active">
-        <h1>Our Services</h1>
-        <p class="placeholder-text">
-          A detailed breakdown of our AI consulting and implementation services is coming soon.
-        </p>
+  <header class="header">
+    <a href="index.html" class="logo-section">
+      <div class="logo-badge">
+        <img class="logo" src="logo.png" alt="Nazarban Logo" />
       </div>
-    </div>
-    <!-- End main content -->
+      <div class="brand-text">
+        <div class="brand-name">NAZARBAN</div>
+        <div class="brand-tagline">ANALYTICS · FZCO</div>
+      </div>
+    </a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Chat</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="services.html" class="active-page">Services</a></li>
+        <li><a href="whitepaper.html">White Paper</a></li>
+      </ul>
+    </nav>
+    <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+  </header>
 
-  </div>
+  <main class="content-wrapper">
+    <h1>Our Services</h1>
+    <p>This page is currently under construction. Our full list of services will be available here shortly.</p>
+    
+    <h2>Our Core Offerings Include:</h2>
+    <ul>
+      <li>AI Strategy & Consulting</li>
+      <li>Data Readiness Audits</li>
+      <li>Custom Machine Learning Model Development</li>
+      <li>Computer Vision & NLP Solutions</li>
+      <li>AI Proof of Concept (PoC) Development</li>
+    </ul>
 
-  <script src="js/main.js" defer></script>
+    <p>For immediate inquiries, please <a href="index.html">chat with our AI assistant</a> or email us at <a href="mailto:info@nazarbanai.com">info@nazarbanai.com</a>.</p>
+  </main>
+  
+  <script src="js/main.js"></script>
 </body>
 </html>

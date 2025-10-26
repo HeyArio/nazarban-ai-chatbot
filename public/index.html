@@ -4,61 +4,46 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nazarban AI Consultation</title>
-  <script async src="https://www.goog.com/gtag/js?id=G-9QERGW4E3H"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-9QERGW4E3H');
-  </script>
-
+  
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
   <link rel="icon" href="favicon.ico" />
-  <link rel="icon" type="image/png" href="logo.png" />
   <link rel="apple-touch-icon" href="logo.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Link to the single, shared stylesheet -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
+<body class="chat-page">
 
-<body>
-  <!-- The site container now holds the chat page structure directly -->
-  <div class="site-container" id="chat-page-container">
-    <header class="header">
-      <!-- Logo remains on the left, links to this page -->
-      <a href="index.html" class="logo-section">
-        <div class="logo-badge">
-          <img class="logo" src="logo.png" alt="Nazarban" onerror="this.style.display='none'"/>
-        </div>
-        <div class="brand-text">
-          <div class="brand-name">NAZARBAN</div>
-          <div class="brand-tagline">ANALYTICS · FZCO</div>
-        </div>
-      </a>
+  <header class="header">
+    <a href="index.html" class="logo-section">
+      <div class="logo-badge">
+        <img class="logo" src="logo.png" alt="Nazarban Logo" />
+      </div>
+      <div class="brand-text">
+        <div class="brand-name">NAZARBAN</div>
+        <div class="brand-tagline">ANALYTICS · FZCO</div>
+      </div>
+    </a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active-page">Chat</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="whitepaper.html">White Paper</a></li>
+      </ul>
+    </nav>
+    <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+  </header>
 
-      <!-- Updated Navigation -->
-      <nav class="navigation" id="main-nav">
-        <a href="index.html" class="nav-link active">Chat</a> <!-- Set active class -->
-        <a href="about.html" class="nav-link">About</a>
-        <a href="whitepaper.html" class="nav-link">White Paper</a>
-        <a href="blog.html" class="nav-link">Blog</a>
-        <a href="services.html" class="nav-link">Services</a>
-      </nav>
-
-      <!-- Mobile Menu Button -->
-      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">
-        <svg class="menu-toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
-    </header>
-
-    <!-- ==== CHAT PAGE CONTENT ==== -->
-    <!-- This structure is from the original file, now as the main content -->
+  <div class="chat-container">
     <div class="messages-container" id="messages">
       <div class="welcome-section">
         <h1 class="welcome-title">AI Consultation</h1>
@@ -67,7 +52,7 @@
           Our specialists will help you find the perfect solution.
         </p>
       </div>
-    </div>
+      </div>
 
     <div class="input-section">
       <div class="input-container">
@@ -93,13 +78,7 @@
         </div>
       </div>
     </div>
-    <!-- ==== END CHAT PAGE CONTENT ==== -->
-
   </div>
 
-  <!-- Link to site-wide JS (for mobile menu) -->
-  <script src="js/main.js" defer></script>
-  <!-- Link to chat-specific JS -->
-  <script src="js/chat.js" defer></script>
-</body>
+  <script src="js/main.js"></script> <script src="js/chat.js"></script> </body>
 </html>

@@ -1,4 +1,11 @@
-// --- ORIGINAL CHATBOT SCRIPT ---
+/*
+  Nazarban Analytics - Chat Page JavaScript
+  Handles:
+  - Sending/Receiving Messages
+  - Typing Indicator
+  - Message Bubbles
+*/
+
 let conversationHistory = [];
 let userEmail = null;
 let conversationStage = 'initial';
@@ -28,6 +35,7 @@ if (sendButton) {
 }
 
 function addMessage(content, isUser = false) {
+  if (!messagesContainer) return; // Safety check
   const row = document.createElement('div');
   row.className = `message ${isUser ? 'user' : 'bot'}`;
 
@@ -61,6 +69,7 @@ function addMessage(content, isUser = false) {
 
 // Typewriter function
 function typeMessage(element, text) {
+  if (!messagesContainer) return; // Safety check
   const words = text.split(' ');
   let i = 0;
   element.textContent = '';
@@ -77,6 +86,7 @@ function typeMessage(element, text) {
 }
 
 function showTyping() {
+  if (!messagesContainer) return; // Safety check
   const row = document.createElement('div');
   row.className = 'message bot';
   row.id = 'typing';

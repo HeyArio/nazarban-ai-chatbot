@@ -1,20 +1,44 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const mainNav = document.getElementById('main-nav');
-  const menuToggle = document.getElementById('menu-toggle');
+/*
+  Nazarban Analytics - Site-wide JavaScript
+  Handles:
+  - Mobile Menu Toggle
+*/
 
-  if (menuToggle) {
-    // Handle mobile menu toggle
+document.addEventListener('DOMContentLoaded', () => {
+  const menuToggle = document.querySelector('.menu-toggle');
+  const navLinks = document.querySelector('.nav-links');
+
+  if (menuToggle && navLinks) {
     menuToggle.addEventListener('click', () => {
-      const isOpen = mainNav.classList.toggle('mobile-open');
-      const icon = menuToggle.querySelector('.menu-toggle-icon');
-      if (isOpen) {
-        // "X" icon
-        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />';
+      // Toggle the 'active' class on the nav links to show/hide
+      navLinks.classList.toggle('active');
+      
+      // Toggle the 'active' class on the button for the 'X' animation
+      menuToggle.classList.toggle('active');
+
+      // Toggle ARIA attribute for accessibility
+      const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+      menuToggle.setAttribute('aria-expanded', !isExpanded);
+
+      // Prevent body scrolling when menu is open
+      if (navLinks.classList.contains('active')) {
+        // Use a class to prevent scrolling, which is easier to manage
+        document.body.style.overflow = 'hidden';
       } else {
-        // "Hamburger" icon
-        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />';
+        document.body.style.overflow = '';
       }
+    });
+
+    // Close menu when a link is clicked
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (navLinks.classList.contains('active')) {
+          navLinks.classList.remove('active');
+          menuToggle.classList.remove('active');
+          menuToggle.setAttribute('aria-expanded', 'false');
+          document.body.style.overflow = '';
+        }
+      });
     });
   }
 });
-
