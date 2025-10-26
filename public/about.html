@@ -5,17 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About Nazarban Analytics</title>
   
-  <!-- Icons -->
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
   <link rel="icon" href="favicon.ico" />
   <link rel="apple-touch-icon" href="logo.png" />
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Main Stylesheet -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -30,21 +27,29 @@
         <div class="brand-tagline">ANALYTICS · FZCO</div>
       </div>
     </a>
-    <nav>
-      <ul class="nav-links">
-        <li><a href="index.html">Chat</a></li>
-        <li><a href="about.html" class="active-page">About</a></li>
-        <li><a href="blog.html">Blog</a></li>
-        <li><a href="services.html">Services</a></li>
-        <li><a href="whitepaper.html">White Paper</a></li>
-      </ul>
+    
+    <nav class="nav-desktop">
+      <a href="index.html">Chat</a>
+      <a href="about.html" class="active-page">About</a>
+      <a href="blog.html">Blog</a>
+      <a href="services.html">Services</a>
+      <a href="whitepaper.html">White Paper</a>
     </nav>
+    
     <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
       <span class="bar"></span>
       <span class="bar"></span>
       <span class="bar"></span>
     </button>
   </header>
+
+  <ul class="nav-mobile-overlay">
+      <li><a href="index.html">Chat</a></li>
+      <li><a href="about.html" class="active-page">About</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="whitepaper.html">White Paper</a></li>
+  </ul>
 
   <main class="content-wrapper">
     <h1>About Nazarban Analytics</h1>
@@ -53,12 +58,9 @@
     <h2>Our Mission</h2>
     <p>Our mission is to accelerate the transition of businesses to data-driven decision-making and the effective use of artificial intelligence in daily operations. We focus on delivering fast, cost-effective, and localized solutions that are fully compatible with the economic and technical conditions of our clients.</p>
 
-    <!-- 
-      FIX: Removed the <span> tag wrapper from the text.
-    -->
     <div class="download-button-wrapper">
       <a href="nazarban_doc.pdf" download="Nazarban_Analytics_PRD.pdf" class="download-button">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v5.69L7.97 11.22a.75.75 0 00-1.06 1.06l3.5 3.5a.75.75 0 001.06 0l3.5-3.5a.75.75 0 10-1.06-1.06l-1.72 1.72V6.75z" clip-rule="evenodd" /></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v5.69L7.97 11.22a.75.75 0 00-1.06 1.06l3.5 3.5a.75.75 0 001.06 0l3.5-3.5a.75.75 0 10-1.06-1.06l-1.72 1.72V6.75z" clip-rule="evenodd" /></svg>
         Download PDF
       </a>
     </div>
@@ -73,4 +75,3 @@
   <script src="js/main.js"></script>
 </body>
 </html>
-

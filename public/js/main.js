@@ -6,12 +6,13 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   const menuToggle = document.querySelector('.menu-toggle');
-  const navLinks = document.querySelector('.nav-links');
+  // FIX: Target the mobile overlay UL specifically
+  const mobileNavOverlay = document.querySelector('.nav-mobile-overlay'); 
 
-  if (menuToggle && navLinks) {
+  if (menuToggle && mobileNavOverlay) {
     menuToggle.addEventListener('click', () => {
-      // Toggle the 'active' class on the nav links to show/hide
-      navLinks.classList.toggle('active');
+      // Toggle the 'active' class on the overlay to show/hide
+      mobileNavOverlay.classList.toggle('active');
       
       // Toggle the 'active' class on the button for the 'X' animation
       menuToggle.classList.toggle('active');
@@ -21,24 +22,25 @@ document.addEventListener('DOMContentLoaded', () => {
       menuToggle.setAttribute('aria-expanded', !isExpanded);
 
       // Prevent body scrolling when menu is open
-      if (navLinks.classList.contains('active')) {
-        // Use a class to prevent scrolling, which is easier to manage
-        document.body.style.overflow = 'hidden';
+      if (mobileNavOverlay.classList.contains('active')) {
+        document.body.style.overflow = 'hidden'; // Prevent scroll
       } else {
-        document.body.style.overflow = '';
+        document.body.style.overflow = ''; // Allow scroll
       }
     });
 
-    // Close menu when a link is clicked
-    navLinks.querySelectorAll('a').forEach(link => {
+    // Close menu when a link inside the overlay is clicked
+    mobileNavOverlay.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
-        if (navLinks.classList.contains('active')) {
-          navLinks.classList.remove('active');
-          menuToggle.classList.remove('active');
+        // Only run if the menu is actually active (visible)
+        if (mobileNavOverlay.classList.contains('active')) {
+          mobileNavOverlay.classList.remove('active');
+          menuToggle.classList.remove('active'); // Turn X back to hamburger
           menuToggle.setAttribute('aria-expanded', 'false');
-          document.body.style.overflow = '';
+          document.body.style.overflow = ''; // Re-enable scrolling
         }
       });
     });
   }
 });
+
