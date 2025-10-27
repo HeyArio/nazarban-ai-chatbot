@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Main Chat Page -->
+  <url>
+    <loc>https://nazarbanai.com/</loc> 
+    <lastmod>2025-10-26</lastmod> 
+    <changefreq>monthly</changefreq> 
+    <priority>1.0</priority> 
+  </url>
+
+  <!-- About Page -->
+  <url>
+    <loc>https://nazarbanai.com/about.html</loc> 
+    <lastmod>2025-10-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog Page -->
+  <url>
+    <loc>https://nazarbanai.com/blog.html</loc> 
+    <lastmod>2025-10-26</lastmod>
+    <changefreq>weekly</changefreq> 
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Services Page -->
+  <url>
+    <loc>https://nazarbanai.com/services.html</loc> 
+    <lastmod>2025-10-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- White Paper Page -->
+  <url>
+    <loc>https://nazarbanai.com/whitepaper.html</loc> 
+    <lastmod>2025-10-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+</urlset>

@@ -1,0 +1,8 @@
+Allow all web crawlers access to all content
+
+User-agent: *
+Allow: /
+
+Location of the sitemap file
+
+Sitemap: https://www.google.com/search?q=https://nazarba
