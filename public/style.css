@@ -854,3 +854,44 @@ html[dir="rtl"] [data-lang-key="contact_phone"] {
     margin: 0;
   }
 }
+
+/* --- Mobile Language Switcher Fix --- */
+@media (max-width: 768px) {
+  /* Hide language switcher from header on mobile */
+  .header .language-switcher {
+    display: none;
+  }
+
+  /* Add language switcher to mobile menu */
+  .nav-mobile-overlay {
+    gap: 0.5rem; /* Add spacing between items */
+  }
+
+  /* Mobile menu language switcher styling */
+  .nav-mobile-overlay .language-switcher {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Make the buttons slightly larger in mobile menu */
+  .nav-mobile-overlay .language-switcher a {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+/* Keep hamburger menu always on the right side */
+html[dir="rtl"] .menu-toggle {
+  order: 999; /* Force it to be last in flex order */
+}
+
+/* Also ensure header-right-group doesn't reverse on mobile RTL */
+@media (max-width: 768px) {
+  html[dir="rtl"] .header-right-group {
+    margin-left: auto;
+    margin-right: 0;
+  }
+}
