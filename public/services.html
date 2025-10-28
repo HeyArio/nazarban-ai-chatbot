@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Services - Nazarban Analytics</title>
-  
+  <title>Nazarban AI Consultation</title>
+
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
   <link rel="icon" href="favicon.ico" />
   <link rel="apple-touch-icon" href="logo.png" />
@@ -12,6 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -19,54 +20,58 @@
 
   <header class="header">
     <a href="index.html" class="logo-section">
-      <div class="logo-badge">
-        <img class="logo" src="logo.png" alt="Nazarban Logo" />
-      </div>
+      <div class="logo-badge"> <img class="logo" src="logo.png" alt="Nazarban Logo" /> </div>
       <div class="brand-text">
         <div class="brand-name">NAZARBAN</div>
         <div class="brand-tagline">ANALYTICS · FZCO</div>
       </div>
     </a>
-    
-    <nav class="nav-desktop">
-      <a href="index.html">Chat</a>
-      <a href="about.html">About</a>
-      <a href="blog.html">Blog</a>
-      <a href="services.html" class="active-page">Services</a>
-      <a href="whitepaper.html">White Paper</a>
-    </nav>
-    
-    <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
-      <span class="bar"></span>
-      <span class="bar"></span>
-      <span class="bar"></span>
-    </button>
-  </header>
+
+    <div class="header-right-group">
+        <nav class="nav-desktop">
+          <a href="index.html" data-lang-key="nav_chat">Chat</a>
+          <a href="about.html" data-lang-key="nav_about">About</a>
+          <a href="blog.html" data-lang-key="nav_blog">Blog</a>
+          <a href="services.html" class="active-page" data-lang-key="nav_services">Services</a>
+          <a href="whitepaper.html" data-lang-key="nav_whitepaper">White Paper</a>
+        </nav>
+
+        <div class="language-switcher">
+          <a href="#" data-lang="en" class="active" data-lang-key="lang_en">EN</a>
+          <a href="#" data-lang="fa" data-lang-key="lang_fa">FA</a>
+        </div>
+
+        <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+          <span class="bar"></span> <span class="bar"></span> <span class="bar"></span>
+        </button>
+    </div> </header>
 
   <ul class="nav-mobile-overlay">
-      <li><a href="index.html">Chat</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="blog.html">Blog</a></li>
-      <li><a href="services.html" class="active-page">Services</a></li>
-      <li><a href="whitepaper.html">White Paper</a></li>
-  </ul>
-
+      <li><a href="index.html" data-lang-key="nav_chat">Chat</a></li>
+      <li><a href="about.html" data-lang-key="nav_about">About</a></li>
+      <li><a href="blog.html" data-lang-key="nav_blog">Blog</a></li>
+      <li><a href="services.html" class="active-page" data-lang-key="nav_services">Services</a></li>
+      <li><a href="whitepaper.html" data-lang-key="nav_whitepaper">White Paper</a></li>
+  </ul>   
+  
   <main class="content-wrapper">
-    <h1>Our Services</h1>
-    <p>This page is currently under construction. Our full list of services will be available here shortly.</p>
+    <h1 data-lang-key="services_title"></h1>
+    <p data-lang-key="services_wip"></p>
     
-    <h2>Our Core Offerings Include:</h2>
+    <h2 data-lang-key="services_core_title"></h2>
     <ul>
-      <li>AI Strategy & Consulting</li>
-      <li>Data Readiness Audits</li>
-      <li>Custom Machine Learning Model Development</li>
-      <li>Computer Vision & NLP Solutions</li>
-      <li>AI Proof of Concept (PoC) Development</li>
+      <li data-lang-key="services_li1"></li>
+      <li data-lang-key="services_li2"></li>
+      <li data-lang-key="services_li3"></li>
+      <li data-lang-key="services_li4"></li>
+      <li data-lang-key="services_li5"></li>
     </ul>
 
-    <p>For immediate inquiries, please <a href="index.html">chat with our AI assistant</a> or email us at <a href="mailto:info@nazarbanai.com">info@nazarbanai.com</a>.</p>
+    <p data-lang-key="services_contact"></p>
   </main>
   
   <script src="js/main.js"></script>
+  <script src="js/translations.js"></script> 
+  <script src="js/language.js"></script> 
 </body>
 </html>

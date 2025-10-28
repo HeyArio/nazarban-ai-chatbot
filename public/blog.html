@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Blog - Nazarban Analytics</title>
-  
+  <title>Nazarban AI Consultation</title>
+
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
   <link rel="icon" href="favicon.ico" />
   <link rel="apple-touch-icon" href="logo.png" />
@@ -12,6 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -19,81 +20,84 @@
 
   <header class="header">
     <a href="index.html" class="logo-section">
-      <div class="logo-badge">
-        <img class="logo" src="logo.png" alt="Nazarban Logo" />
-      </div>
+      <div class="logo-badge"> <img class="logo" src="logo.png" alt="Nazarban Logo" /> </div>
       <div class="brand-text">
         <div class="brand-name">NAZARBAN</div>
         <div class="brand-tagline">ANALYTICS · FZCO</div>
       </div>
     </a>
-    
-    <nav class="nav-desktop">
-      <a href="index.html">Chat</a>
-      <a href="about.html">About</a>
-      <a href="blog.html" class="active-page">Blog</a>
-      <a href="services.html">Services</a>
-      <a href="whitepaper.html">White Paper</a>
-    </nav>
-    
-    <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
-      <span class="bar"></span>
-      <span class="bar"></span>
-      <span class="bar"></span>
-    </button>
-  </header>
+
+    <div class="header-right-group">
+        <nav class="nav-desktop">
+          <a href="index.html" data-lang-key="nav_chat">Chat</a>
+          <a href="about.html" data-lang-key="nav_about">About</a>
+          <a href="blog.html" class="active-page" data-lang-key="nav_blog">Blog</a>
+          <a href="services.html" data-lang-key="nav_services">Services</a>
+          <a href="whitepaper.html" data-lang-key="nav_whitepaper">White Paper</a>
+        </nav>
+
+        <div class="language-switcher">
+          <a href="#" data-lang="en" class="active" data-lang-key="lang_en">EN</a>
+          <a href="#" data-lang="fa" data-lang-key="lang_fa">FA</a>
+        </div>
+
+        <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+          <span class="bar"></span> <span class="bar"></span> <span class="bar"></span>
+        </button>
+    </div> </header>
 
   <ul class="nav-mobile-overlay">
-      <li><a href="index.html">Chat</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="blog.html" class="active-page">Blog</a></li>
-      <li><a href="services.html">Services</a></li>
-      <li><a href="whitepaper.html">White Paper</a></li>
+      <li><a href="index.html" data-lang-key="nav_chat">Chat</a></li>
+      <li><a href="about.html" data-lang-key="nav_about">About</a></li>
+      <li><a href="blog.html" class="active-page" data-lang-key="nav_blog">Blog</a></li>
+      <li><a href="services.html" data-lang-key="nav_services">Services</a></li>
+      <li><a href="whitepaper.html" data-lang-key="nav_whitepaper">White Paper</a></li>
   </ul>
 
   <main class="content-wrapper">
-    <h1>The AI Revolution: What Can It Do For Your Business?</h1>
-    <p><em>October 26, 2025</em></p>
+    <h1 data-lang-key="blog_title"></h1>
+    <p><em data-lang-key="blog_date"></em></p>
 
-    <p>Artificial Intelligence (AI) is no longer a futuristic buzzword; it's a practical tool that's actively reshaping industries. From manufacturing and retail to finance and healthcare, AI is moving from a niche technology to a core business driver. But what can it *actually* do, and how can it help your specific business?</p>
+    <p data-lang-key="blog_p1"></p>
+    <p data-lang-key="blog_p2"></p>
+
+    <h2 data-lang-key="blog_h2_automation"></h2>
+    <p data-lang-key="blog_automation_p1"></p>
+    <ul>
+      <li data-lang-key="blog_automation_li1"></li>
+      <li data-lang-key="blog_automation_li2"></li>
+      <li data-lang-key="blog_automation_li3"></li>
+    </ul>
+
+    <h2 data-lang-key="blog_h2_insight"></h2>
+    <p data-lang-key="blog_insight_p1"></p>
+    <ul>
+      <li data-lang-key="blog_insight_li1"></li>
+      <li data-lang-key="blog_insight_li2"></li>
+      <li data-lang-key="blog_insight_li3"></li>
+    </ul>
+
+    <h2 data-lang-key="blog_h2_interaction"></h2>
+    <p data-lang-key="blog_interaction_p1"></p>
+    <ul>
+      <li data-lang-key="blog_interaction_li1"></li>
+      <li data-lang-key="blog_interaction_li2"></li>
+      <li data-lang-key="blog_interaction_li3"></li>
+    </ul>
+
+    <h2 data-lang-key="blog_h2_how"></h2>
+    <p data-lang-key="blog_how_p1"></p>
+    <ul>
+      <li data-lang-key="blog_how_li1"></li>
+      <li data-lang-key="blog_how_li2"></li>
+      <li data-lang-key="blog_how_li3"></li>
+    </ul>
     
-    <p>Let's break down the tangible benefits of AI into three main categories: Automation, Insight, and Interaction.</p>
-
-    <h2>1. Automation: Doing More with Less</h2>
-    <p>This is the most straightforward application of AI. It involves teaching machines to perform repetitive, rules-based tasks that humans currently handle. This frees up your team to focus on strategic work, creativity, and customer relationships.</p>
-    <ul>
-      <li><strong>Manufacturing:</strong> AI-powered computer vision (CV) can inspect products on an assembly line for defects with superhuman speed and accuracy, 24/7.</li>
-      <li><strong>Finance:</strong> AI can automate data entry from invoices, process loan applications based on set criteria, and flag suspicious transactions for fraud detection.</li>
-      <li><strong>Logistics:</strong> AI helps automate warehouse operations, from sorting packages with robots to planning the most efficient delivery routes for drivers.</li>
-    </ul>
-
-    <h2>2. Insight: Finding the "Why" in Your Data</h2>
-    <p>Your business generates a massive amount of data every day (sales, user behavior, inventory, etc.). Most of this data sits unused. AI, specifically machine learning (ML), excels at finding complex patterns in this data that no human analyst could ever spot.</p>
-    <ul>
-      <li><strong>Retail & E-commerce:</strong> AI can predict demand for specific products, helping you optimize inventory and avoid costly stockouts or overstocking. It also powers recommendation engines ("Customers who bought this also liked...").</li>
-      <li><strong>Marketing:</strong> AI models can analyze customer data to identify your most valuable segments, predict which customers are at risk of churning, and determine the optimal price for your products.</li>
-      <li><strong>Operations:</strong> ML is used for "predictive maintenance"—analyzing sensor data from machinery to predict when a part will fail *before* it breaks, saving millions in downtime.</li>
-    </ul>
-
-    <h2>3. Interaction: A New Way to Engage</h2>
-    <p>This is the category you're interacting with right now. AI, through Natural Language Processing (NLP), has become incredibly adept at understanding and generating human language. This opens up entirely new ways to engage with your customers and empower your employees.</p>
-    <ul>
-      <li><strong>Customer Service:</strong> Intelligent chatbots (like this one!) can answer common questions, book appointments, and guide users to solutions instantly, any time of day.</li>
-      <li><strong>Sales:</strong> AI assistants can summarize sales calls, draft follow-up emails, and provide real-time information to sales reps while they're on a call.</li>
-      <li><strong>Internal Knowledge:</strong> AI can power internal "search" engines that allow your employees to ask questions in plain English (e.g., "What is our travel policy for international flights?") and get precise answers from company documents.</li>
-    </ul>
-
-    <h2>How AI Can Help Your Business</h2>
-    <p>The key is to not think of "getting AI" as a single product. Instead, think of a specific business problem you want to solve:</p>
-    <ul>
-      <li>"I am spending too much on manual quality control." (→ **Automation** with Computer Vision)</li>
-      <li>"I don't know why my sales are dropping in this region." (→ **Insight** with Predictive Analytics)</li>
-      <li>"My customer service team is overwhelmed with simple questions." (→ **Interaction** with an AI Chatbot)</li>
-    </ul>
-    
-    <p>By starting with a clear, measurable problem, you can apply the right AI solution to achieve a tangible return on investment. The future isn't about just *having* AI; it's about *using* it to make smarter, faster, and more efficient decisions.</p>
+    <p data-lang-key="blog_how_p2"></p>
   </main>
   
   <script src="js/main.js"></script>
+  <script src="js/translations.js"></script> 
+  <script src="js/language.js"></script> 
 </body>
 </html>

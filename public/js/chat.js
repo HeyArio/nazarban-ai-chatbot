@@ -130,6 +130,11 @@ async function sendMessage() {
 
   showTyping();
 
+  // --- THIS IS THE NEW CODE ---
+  // 1. Get the current language from localStorage
+  const currentLanguage = localStorage.getItem('preferredLanguage') || 'en';
+  // --- END OF NEW CODE ---
+
   try {
     const response = await fetch('/api/chat', {
       method: 'POST',
@@ -138,7 +143,8 @@ async function sendMessage() {
         message,
         conversationHistory,
         conversationStage,
-        userEmail
+        userEmail,
+        language: currentLanguage // 2. Add the language to the request body
       })
     });
 

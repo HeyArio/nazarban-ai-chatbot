@@ -5,13 +5,14 @@
   - Chat Page
   - Content Pages (About, Blog, etc.)
   - PDF Viewer
+  - RTL Adjustments
 */
 
 /* --- 1. Base & Variables --- */
 :root {
-  --bg: #020617; /* Deep space blue */
-  --panel: #0f172a; /* Darker panel */
-  --panel-glass: rgba(15, 23, 42, 0.75); /* Glassmorphism panel */
+  --bg: #020617;
+  --panel: #0f172a;
+  --panel-glass: rgba(15, 23, 42, 0.75);
   --ink: #f8fafc;
   --muted: #94a3b8;
   --border: rgba(148, 163, 184, 0.15);
@@ -25,6 +26,9 @@
 
   --radius-md: 12px;
   --radius-lg: 18px;
+
+  --font-en: 'Space Grotesk', sans-serif;
+  --font-fa: 'Cairo', 'Space Grotesk', sans-serif;
 }
 
 * {
@@ -34,24 +38,25 @@
 }
 
 html {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: var(--font-en);
   color: var(--ink);
   background-color: var(--bg);
   scroll-behavior: smooth;
-  height: 100%; /* Ensure HTML takes full height */
+  height: 100%;
 }
 
 body {
-  min-height: 100%; /* Ensure body takes full height */
+  min-height: 100%;
   display: flex;
   flex-direction: column;
+  text-align: left;
 }
 
 /* --- 2. Site-wide Navigation --- */
 .header {
   position: sticky;
   top: 0;
-  z-index: 900; /* Ensure header is above content but below mobile menu overlay */
+  z-index: 900;
   backdrop-filter: blur(20px);
   background: var(--panel-glass);
   border-bottom: 1px solid var(--border);
@@ -107,10 +112,17 @@ body {
   font-weight: 600;
 }
 
+.header-right-group {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
 /* Desktop Navigation */
 .nav-desktop {
-  display: flex; /* Displayed by default */
-  gap: 2rem;
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
 }
 
 .nav-desktop a {
@@ -133,15 +145,47 @@ body {
   font-weight: 700;
 }
 
+/* Language Switcher */
+.language-switcher {
+  display: flex;
+  gap: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.25rem;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.language-switcher a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.3rem 0.6rem;
+  border-radius: 9px;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.language-switcher a:hover {
+  color: var(--ink);
+  background-color: rgba(148, 163, 184, 0.1);
+}
+
+.language-switcher a.active {
+  color: var(--ink);
+  background-color: var(--brand1);
+  font-weight: 700;
+}
+
 /* Mobile Menu Button */
 .menu-toggle {
-  display: none; /* Hidden on desktop */
+  display: none;
   background: none;
   border: none;
   cursor: pointer;
-  z-index: 1001; /* Above overlay */
+  z-index: 1001;
   padding: 10px;
-  width: 44px; /* Good tap size */
+  width: 44px;
   height: 44px;
 }
 
@@ -155,48 +199,42 @@ body {
   transition: all 0.3s ease-in-out;
 }
 
-/* Mobile Navigation Overlay - Hidden by default */
+/* Mobile Navigation Overlay */
 .nav-mobile-overlay {
-  /* Use display: flex, and control visibility with opacity */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--bg); /* Solid background */
-  z-index: 1000; /* High z-index to cover everything */
-  list-style: none; /* Remove bullet points */
-
-  /* Control with visibility, opacity, and pointer-events */
+  background: var(--bg);
+  z-index: 1000;
+  list-style: none;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: translateY(-10px); /* Start slightly up */
+  transform: translateY(-10px);
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, visibility 0.3s;
 }
 
-/* Styles when the mobile menu is active */
 .nav-mobile-overlay.active {
-  /* Show the overlay */
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transform: translateY(0); /* Move into view */
+  transform: translateY(0);
 }
 
 .nav-mobile-overlay li {
-  margin: 1rem 0; /* Spacing between links */
+  margin: 1rem 0;
 }
 
 .nav-mobile-overlay a {
   color: var(--muted);
   text-decoration: none;
-  font-size: 1.75rem; /* Large font size for overlay */
+  font-size: 1.75rem;
   font-weight: 600;
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius-md);
@@ -213,19 +251,15 @@ body {
   font-weight: 700;
 }
 
-
 /* --- 3. Chat Page (index.html) --- */
-
-/* Special body class to fix footer */
 body.chat-page {
-  overflow: hidden; /* Prevent body scroll */
+  overflow: hidden;
 }
 
-/* Full-height container for chat */
 .chat-container {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 75px); /* Full height minus header */
+  height: calc(100vh - 75px);
 }
 
 .messages-container {
@@ -241,6 +275,7 @@ body.chat-page {
 .messages-container::-webkit-scrollbar {
   width: 4px;
 }
+
 .messages-container::-webkit-scrollbar-thumb {
   background: rgba(148, 163, 184, 0.28);
   border-radius: 2px;
@@ -272,7 +307,6 @@ body.chat-page {
   margin: 0 auto;
 }
 
-/* Message Bubbles */
 .message {
   width: 100%;
   display: flex;
@@ -303,9 +337,11 @@ body.chat-page {
 .bot .bubble-row {
   grid-template-columns: 38px 1fr;
 }
+
 .bot .avatar {
   grid-column: 1;
 }
+
 .bot .message-content {
   grid-column: 2;
 }
@@ -313,9 +349,11 @@ body.chat-page {
 .user .bubble-row {
   grid-template-columns: 1fr 38px;
 }
+
 .user .avatar {
   grid-column: 2;
 }
+
 .user .message-content {
   grid-column: 1;
   justify-self: end;
@@ -336,6 +374,7 @@ body.chat-page {
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   box-shadow: 0 4px 16px var(--shadow-color);
 }
+
 .user .avatar {
   background: linear-gradient(135deg, #06b6d4, #3b82f6);
   box-shadow: 0 4px 16px rgba(59, 130, 246, 0.35);
@@ -362,7 +401,6 @@ body.chat-page {
   box-shadow: 0 10px 32px rgba(59, 130, 246, 0.35);
 }
 
-/* Typing Indicator */
 .typing-indicator {
   padding: 18px 20px;
   border-radius: var(--radius-lg);
@@ -370,11 +408,13 @@ body.chat-page {
   background: rgba(30, 41, 59, 0.9);
   border: 1px solid rgba(129, 140, 248, 0.2);
 }
+
 .typing-dots {
   display: flex;
   gap: 6px;
   justify-content: center;
 }
+
 .dot {
   width: 8px;
   height: 8px;
@@ -382,16 +422,17 @@ body.chat-page {
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   animation: typing 1.4s infinite;
 }
+
 .dot:nth-child(2) {
   animation-delay: 0.2s;
 }
+
 .dot:nth-child(3) {
   animation-delay: 0.4s;
 }
+
 @keyframes typing {
-  0%,
-  60%,
-  100% {
+  0%, 60%, 100% {
     opacity: 0.3;
     transform: translateY(0);
   }
@@ -401,13 +442,13 @@ body.chat-page {
   }
 }
 
-/* Input Bar / Footer */
 .input-section {
-  padding: 12px 16px; /* Reduced padding */
+  padding: 12px 16px;
   backdrop-filter: blur(20px);
   background: var(--panel-glass);
   border-top: 1px solid var(--border);
 }
+
 .input-container {
   max-width: 900px;
   margin: 0 auto;
@@ -421,9 +462,11 @@ body.chat-page {
   box-shadow: var(--shadow-lg);
   transition: box-shadow 0.2s ease;
 }
+
 .input-container:focus-within {
   box-shadow: 0 0 0 3px var(--shadow-color);
 }
+
 #messageInput {
   width: 100%;
   min-height: 48px;
@@ -439,9 +482,11 @@ body.chat-page {
   font-family: inherit;
   transition: background 0.2s ease;
 }
+
 #messageInput:focus {
   background: rgba(51, 65, 85, 1);
 }
+
 #messageInput::placeholder {
   color: #94a3b8;
 }
@@ -462,17 +507,21 @@ body.chat-page {
   box-shadow: 0 6px 20px var(--shadow-color);
   transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
 }
+
 #sendButton:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 10px 24px rgba(99, 102, 241, 0.55);
 }
+
 #sendButton:active:not(:disabled) .send-icon {
   transform: scale(0.9) rotate(5deg);
 }
+
 #sendButton:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
 .send-icon {
   width: 18px;
   height: 18px;
@@ -481,9 +530,10 @@ body.chat-page {
 
 .contact-section {
   max-width: 900px;
-  margin: 12px auto 0; /* Reduced top margin */
+  margin: 12px auto 0;
   padding: 0 16px;
 }
+
 .contact-links {
   display: flex;
   justify-content: center;
@@ -491,6 +541,7 @@ body.chat-page {
   align-items: center;
   flex-wrap: wrap;
 }
+
 .contact-link {
   display: flex;
   align-items: center;
@@ -504,26 +555,28 @@ body.chat-page {
   transition: all 0.2s ease;
   border: 1px solid transparent;
 }
+
 .contact-link:hover {
   color: var(--ink);
   background: rgba(148, 163, 184, 0.08);
   border-color: rgba(148, 163, 184, 0.15);
   transform: translateY(-1px);
 }
+
 .contact-icon {
   width: 16px;
   height: 16px;
   opacity: 0.8;
   transition: opacity 0.2s ease;
 }
+
 .contact-link:hover .contact-icon {
   opacity: 1;
 }
 
 /* --- 4. Content Pages (About, Blog, etc.) --- */
-/* Wrapper for static pages */
 .content-wrapper {
-  flex: 1; /* Makes footer stick to bottom */
+  flex: 1;
   max-width: 900px;
   margin: 0 auto;
   padding: 2.5rem 1.5rem;
@@ -575,49 +628,37 @@ body.chat-page {
   text-decoration: underline;
 }
 
-/* --- 5. PDF Viewer & Download Button (About Page) --- */
-
-
+/* --- 5. PDF Viewer & Download Button --- */
 .download-button-wrapper {
   text-align: center;
   margin: 2.5rem 0;
 }
 
 .download-button {
-  display: inline-flex; 
-  align-items: center;    /* Vertically center */
-  /* FIX: Horizontally center the single item (the text span) */
-  justify-content: center; 
-  /* FIX: Removed gap as there's no icon */
-  /* gap: 0.75rem; */ 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: var(--brand1);
-  color: var(--ink);      
+  color: var(--ink);
   text-decoration: none;
   font-weight: 600;
-  font-size: 1rem; 
-  /* FIX: Ensure padding is symmetrical for centering */
-  padding: 0.75rem 1.5rem; 
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
   border-radius: var(--radius-md);
   box-shadow: 0 6px 20px var(--shadow-color);
   transition: all 0.2s ease;
-  border: none; 
+  border: none;
   cursor: pointer;
-  /* Add min-width if needed to ensure button isn't too small */
-  /* min-width: 150px; */ 
 }
 
-/* Target the span directly */
 .download-button .button-text {
-  display: inline; /* Should flow naturally */
-  line-height: 1;   /* Match line height closely to font size */
-  color: var(--ink); /* Explicitly set color again */
-  visibility: visible; /* Ensure it's not hidden */
-  opacity: 1;        /* Ensure it's not transparent */
-  text-align: center; /* Ensure text itself is centered */
+  display: inline;
+  line-height: 1;
+  color: var(--ink);
+  visibility: visible;
+  opacity: 1;
+  text-align: center;
 }
-
-/* FIX: Removed SVG styles as it's gone */
-/* .download-button svg { ... } */
 
 .download-button:hover {
   transform: translateY(-2px);
@@ -628,7 +669,7 @@ body.chat-page {
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 1.5rem; /* The "frame" */
+  padding: 1.5rem;
   box-shadow: var(--shadow-xl);
   margin-top: 1rem;
   transition: all 0.3s ease;
@@ -637,40 +678,110 @@ body.chat-page {
 .pdf-viewer-container object {
   display: block;
   width: 100%;
-  height: 80vh; /* Taller viewer */
-  border-radius: var(--radius-md); /* Rounded corners for the PDF itself */
+  height: 80vh;
+  border-radius: var(--radius-md);
   border: none;
 }
 
-/* --- 6. Mobile & Responsive --- */
+/* --- 6. RTL Adjustments --- */
+/* Force navbar to always stay LTR */
+html[dir="rtl"] .header {
+  direction: ltr;
+  text-align: left;
+}
+
+html[dir="rtl"] .logo-section {
+  direction: ltr;
+}
+
+html[dir="rtl"] .nav-desktop,
+html[dir="rtl"] .nav-mobile-overlay {
+  direction: ltr;
+}
+
+html[dir="rtl"] .language-switcher {
+  direction: ltr;
+}
+
+/* Apply Farsi font to body and header text */
+html[dir="rtl"] body {
+  font-family: var(--font-fa);
+  text-align: right;
+}
+
+html[dir="rtl"] .header,
+html[dir="rtl"] .header * {
+  font-family: var(--font-fa);
+}
+
+html[dir="rtl"] .brand-tagline {
+  letter-spacing: normal;
+}
+
+/* RTL Content Pages */
+html[dir="rtl"] .content-wrapper {
+  text-align: right;
+  direction: rtl;
+}
+
+html[dir="rtl"] .content-wrapper h1,
+html[dir="rtl"] .content-wrapper h2,
+html[dir="rtl"] .content-wrapper h3,
+html[dir="rtl"] .content-wrapper p {
+  text-align: right;
+  direction: rtl;
+}
+
+html[dir="rtl"] .content-wrapper ul {
+  list-style-position: inside;
+  padding-right: 0.5rem;
+  padding-left: 0;
+  text-align: right;
+  direction: rtl;
+}
+
+html[dir="rtl"] .content-wrapper li {
+  text-align: right;
+  direction: rtl;
+}
+
+/* Fix for LTR phone number in RTL mode */
+html[dir="rtl"] [data-lang-key="contact_phone"] {
+  unicode-bidi: embed;
+  direction: ltr;
+  display: inline-block;
+}
+
+/* --- 7. Mobile & Responsive --- */
 @media (max-width: 768px) {
-  /* Hide desktop nav, show mobile button */
   .nav-desktop {
     display: none;
   }
+
   .menu-toggle {
-    display: block; /* Show hamburger */
+    display: block;
   }
 
-  /* Animate hamburger to "X" when overlay is active */
   .menu-toggle.active .bar:nth-child(1) {
     transform: translateY(8px) rotate(45deg);
   }
+
   .menu-toggle.active .bar:nth-child(2) {
     opacity: 0;
   }
+
   .menu-toggle.active .bar:nth-child(3) {
     transform: translateY(-8px) rotate(-45deg);
   }
 
-  /* General Mobile Styles */
   .brand-tagline {
-    display: none; /* Hide tagline on small screens */
+    display: none;
   }
 
   .content-wrapper {
     padding: 2rem 1rem;
   }
+
   .content-wrapper h1 {
     font-size: 2.25rem;
   }
@@ -683,38 +794,63 @@ body.chat-page {
     height: 70vh;
   }
 
-  /* Chat page specifics */
   body.chat-page {
-    overflow: auto; /* Allow body scroll on mobile chat */
+    overflow: auto;
   }
+
   .chat-container {
-    height: auto; /* Let it flow */
-    min-height: calc(100vh - 71px); /* Header height on mobile */
+    height: auto;
+    min-height: calc(100vh - 71px);
   }
+
   .header {
     padding: 12px 16px;
   }
+
   .messages-container {
     padding: 12px;
   }
+
   .message-content {
     padding: 14px 18px;
   }
+
   .input-section {
     padding: 12px;
   }
+
   #messageInput {
-    font-size: 16px; /* prevents iOS zoom */
+    font-size: 16px;
   }
+
   .contact-links {
     gap: 12px;
   }
+
   .contact-link {
     font-size: 13px;
     padding: 10px;
   }
+
   .contact-section {
     margin-top: 16px;
   }
-}
 
+  .header-right-group {
+    margin-left: auto;
+    gap: 0.5rem;
+  }
+
+  html[dir="rtl"] .header-right-group {
+    margin-left: 0;
+    margin-right: auto;
+    flex-direction: row;
+  }
+
+  .language-switcher,
+  html[dir="rtl"] .language-switcher,
+  .menu-toggle,
+  html[dir="rtl"] .menu-toggle {
+    margin: 0;
+  }
+}
