@@ -9,6 +9,22 @@
 */
 
 /* --- 1. Base & Variables --- */
+
+
+/* Custom Font - Taheri Regular */
+@font-face {
+  font-family: 'Taheri';
+  src: url('/fonts/TaheriRegular.eot'); /* IE9 Compat */
+  src: url('/fonts/TaheriRegular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('/fonts/TaheriRegular.woff2') format('woff2'), /* Modern Browsers */
+       url('/fonts/TaheriRegular.woff') format('woff'), /* Modern Browsers */
+       url('/fonts/TaheriRegular.ttf') format('truetype'); /* Safari, Android, iOS */
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* Improves loading performance */
+}
+
+
 :root {
   --bg: #020617;
   --panel: #0f172a;
@@ -27,8 +43,8 @@
   --radius-md: 12px;
   --radius-lg: 18px;
 
-  --font-en: 'Space Grotesk', sans-serif;
-  --font-fa: 'Cairo', 'Space Grotesk', sans-serif;
+  --font-en: 'Taheri';
+  --font-fa: 'Taheri';
 }
 
 * {
