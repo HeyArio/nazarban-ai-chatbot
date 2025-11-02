@@ -11,14 +11,14 @@
 /* --- 1. Base & Variables --- */
 
 
-/* Custom Font - Taheri Regular */
+/* Custom Font - Tahrir Regular */
 @font-face {
-  font-family: 'Taheri';
-  src: url('/fonts/TaheriRegular.eot'); /* IE9 Compat */
-  src: url('/fonts/TaheriRegular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('/fonts/TaheriRegular.woff2') format('woff2'), /* Modern Browsers */
-       url('/fonts/TaheriRegular.woff') format('woff'), /* Modern Browsers */
-       url('/fonts/TaheriRegular.ttf') format('truetype'); /* Safari, Android, iOS */
+  font-family: 'Tahrir';
+  src: url('/fonts/TahrirRegular.eot'); /* IE9 Compat */
+  src: url('/fonts/TahrirRegular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('/fonts/TahrirRegular.woff2') format('woff2'), /* Modern Browsers */
+       url('/fonts/TahrirRegular.woff') format('woff'), /* Modern Browsers */
+       url('/fonts/TahrirRegular.ttf') format('truetype'); /* Safari, Android, iOS */
   font-weight: normal;
   font-style: normal;
   font-display: swap; /* Improves loading performance */
@@ -43,8 +43,8 @@
   --radius-md: 12px;
   --radius-lg: 18px;
 
-  --font-en: 'Taheri';
-  --font-fa: 'Taheri';
+  --font-en: 'Tahrir';
+  --font-fa: 'Tahrir';
 }
 
 * {
