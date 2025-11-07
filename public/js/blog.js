@@ -1,25 +1,15 @@
 /*
-  Nazarban Analytics - Card Deck Blog JavaScript
-  Features:
-  - 🃏 Card deck/stack interface
-  - 👆 Touch swipe gestures
-  - 🖱️ Mouse drag support
-  - ⌨️ Keyboard navigation
-  - 📱 Mobile optimized
-  - 🎨 Smooth animations
+  Nazarban Analytics - Blog Page JavaScript
+  Handles:
+  - Loading blog posts from API
+  - Displaying bilingual content
+  - Post filtering and sorting
 */
 
 document.addEventListener('DOMContentLoaded', async () => {
+  const postsContainer = document.getElementById('postsContainer');
   const loadingIndicator = document.getElementById('loadingIndicator');
   const errorMessage = document.getElementById('errorMessage');
-  
-  let postsData = [];
-  let currentIndex = 0;
-  let isDragging = false;
-  let startX = 0;
-  let startY = 0;
-  let currentX = 0;
-  let currentY = 0;
 
   // Get current language from localStorage
   const getCurrentLanguage = () => {
@@ -27,26 +17,34 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   // Format date based on language
+  // Format date based on language
   const formatDate = (dateString, lang) => {
+    
+    // 1. Check for bad, missing, or null date strings
     if (!dateString || typeof dateString !== 'string') {
       console.error('A post was found with an empty or missing date.');
       return lang === 'fa' ? 'تاریخ نامشخص' : 'Date unavailable';
     }
 
-    const date = new Date(dateString.trim());
+    // 2. Try to create the date. This is where it was crashing.
+    const date = new Date(dateString.trim()); // We add .trim() to fix spaces!
 
+    // 3. Check if the date is invalid after we tried to make it
     if (isNaN(date.getTime())) {
       console.error('INVALID DATE DETECTED! The raw value was:', dateString);
       return lang === 'fa' ? 'تاریخ نامعتبر' : 'Invalid Date';
     }
 
+    // 4. If we get here, the date is valid. Proceed as normal.
     if (lang === 'fa') {
+      // Persian date format
       return new Intl.DateTimeFormat('fa-IR', {
         year: 'numeric',
         month: 'long',
         day: 'numeric'
       }).format(date);
     } else {
+      // English date format
       return new Intl.DateTimeFormat('en-US', {
         year: 'numeric',
         month: 'long',
@@ -56,10 +54,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   // Create a post card element
-  const createPostCard = (post, lang, index) => {
+  const createPostCard = (post, lang) => {
     const card = document.createElement('article');
     card.className = 'blog-post-card';
-    card.dataset.index = index;
     
     const summary = lang === 'fa' ? post.summaryFarsi : post.summaryEnglish;
     const formattedDate = formatDate(post.date, lang);
@@ -90,256 +87,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     return card;
   };
 
-  // Initialize deck container
-  const initDeck = (posts) => {
-    const postsContainer = document.getElementById('postsContainer');
-    postsContainer.innerHTML = '';
-    
-    // Create deck container
-    const deckContainer = document.createElement('div');
-    deckContainer.className = 'posts-deck';
-    deckContainer.id = 'postsDeck';
-    
-    // Create swipe indicators
-    const leftIndicator = document.createElement('div');
-    leftIndicator.className = 'swipe-indicator left';
-    leftIndicator.textContent = '✕';
-    
-    const rightIndicator = document.createElement('div');
-    rightIndicator.className = 'swipe-indicator right';
-    rightIndicator.textContent = '♥';
-    
-    deckContainer.appendChild(leftIndicator);
-    deckContainer.appendChild(rightIndicator);
-    
-    const lang = getCurrentLanguage();
-    
-    // Add all cards (only show first 3 visually)
-    posts.forEach((post, index) => {
-      const card = createPostCard(post, lang, index);
-      deckContainer.appendChild(card);
-    });
-    
-    postsContainer.appendChild(deckContainer);
-    
-    // Add controls
-    const controls = document.createElement('div');
-    controls.className = 'deck-controls';
-    controls.innerHTML = `
-      <button class="deck-btn btn-skip" id="btnSkip" title="${lang === 'fa' ? 'رد کردن' : 'Skip'}">✕</button>
-      <button class="deck-btn btn-like" id="btnLike" title="${lang === 'fa' ? 'دوست دارم' : 'Like'}">♥</button>
-    `;
-    postsContainer.appendChild(controls);
-    
-    // Add progress indicator
-    const progress = document.createElement('div');
-    progress.className = 'deck-progress';
-    progress.id = 'deckProgress';
-    progress.textContent = `1 / ${posts.length}`;
-    postsContainer.appendChild(progress);
-    
-    // Add instructions
-    const instructions = document.createElement('div');
-    instructions.className = 'deck-instructions';
-    instructions.innerHTML = `
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M9 18l6-6-6-6"/>
-      </svg>
-      <span>${lang === 'fa' ? 'برای دیدن بعدی بکشید یا از دکمه‌ها استفاده کنید' : 'Swipe or use buttons to navigate'}</span>
-    `;
-    postsContainer.insertBefore(instructions, deckContainer);
-    
-    // Initialize event listeners
-    initSwipeControls();
-  };
-
-  // Swipe/Drag Controls
-  const initSwipeControls = () => {
-    const deck = document.getElementById('postsDeck');
-    const btnSkip = document.getElementById('btnSkip');
-    const btnLike = document.getElementById('btnLike');
-    const leftIndicator = deck.querySelector('.swipe-indicator.left');
-    const rightIndicator = deck.querySelector('.swipe-indicator.right');
-    
-    // Get current top card
-    const getTopCard = () => {
-      const cards = Array.from(deck.querySelectorAll('.blog-post-card:not(.removed)'));
-      return cards[0];
-    };
-    
-    // Remove top card with animation
-    const removeCard = (direction) => {
-      const card = getTopCard();
-      if (!card) return;
-      
-      card.classList.add(`swiped-${direction}`);
-      
-      setTimeout(() => {
-        card.classList.add('removed');
-        currentIndex++;
-        updateProgress();
-        
-        // Check if deck is complete
-        if (currentIndex >= postsData.length) {
-          showDeckComplete();
-        }
-      }, 600);
-    };
-    
-    // Update progress indicator
-    const updateProgress = () => {
-      const progress = document.getElementById('deckProgress');
-      if (progress && currentIndex < postsData.length) {
-        progress.textContent = `${currentIndex + 1} / ${postsData.length}`;
-      }
-    };
-    
-    // Show deck complete message
-    const showDeckComplete = () => {
-      const deck = document.getElementById('postsDeck');
-      const controls = document.querySelector('.deck-controls');
-      const progress = document.getElementById('deckProgress');
-      const instructions = document.querySelector('.deck-instructions');
-      const lang = getCurrentLanguage();
-      
-      deck.style.display = 'none';
-      controls.style.display = 'none';
-      progress.style.display = 'none';
-      instructions.style.display = 'none';
-      
-      const complete = document.createElement('div');
-      complete.className = 'deck-complete';
-      complete.innerHTML = `
-        <h3>🎉 ${lang === 'fa' ? 'تمام شد!' : 'All Done!'}</h3>
-        <p>${lang === 'fa' ? 'همه مقالات را دیدید' : 'You\'ve seen all the posts'}</p>
-        <button class="btn-restart" onclick="location.reload()">
-          ${lang === 'fa' ? '↻ شروع دوباره' : '↻ Start Over'}
-        </button>
-      `;
-      
-      document.getElementById('postsContainer').appendChild(complete);
-    };
-    
-    // Button controls
-    btnSkip.addEventListener('click', () => removeCard('left'));
-    btnLike.addEventListener('click', () => removeCard('right'));
-    
-    // Keyboard controls
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') {
-        removeCard('left');
-      } else if (e.key === 'ArrowRight') {
-        removeCard('right');
-      } else if (e.key === 'ArrowUp') {
-        removeCard('up');
-      }
-    });
-    
-    // Touch/Mouse drag controls
-    const handleStart = (e) => {
-      const card = getTopCard();
-      if (!card) return;
-      
-      isDragging = true;
-      card.classList.add('swiping');
-      
-      const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
-      const clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
-      
-      startX = clientX;
-      startY = clientY;
-    };
-    
-    const handleMove = (e) => {
-      if (!isDragging) return;
-      
-      const card = getTopCard();
-      if (!card) return;
-      
-      const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
-      const clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
-      
-      currentX = clientX - startX;
-      currentY = clientY - startY;
-      
-      const rotate = currentX / 20;
-      const opacity = 1 - Math.abs(currentX) / 300;
-      
-      card.style.transform = `translate(${currentX}px, ${currentY}px) rotate(${rotate}deg)`;
-      card.style.opacity = opacity;
-      
-      // Show indicators
-      if (currentX < -50) {
-        leftIndicator.classList.add('visible');
-        rightIndicator.classList.remove('visible');
-      } else if (currentX > 50) {
-        rightIndicator.classList.add('visible');
-        leftIndicator.classList.remove('visible');
-      } else {
-        leftIndicator.classList.remove('visible');
-        rightIndicator.classList.remove('visible');
-      }
-    };
-    
-    const handleEnd = () => {
-      if (!isDragging) return;
-      
-      const card = getTopCard();
-      if (!card) return;
-      
-      isDragging = false;
-      card.classList.remove('swiping');
-      
-      leftIndicator.classList.remove('visible');
-      rightIndicator.classList.remove('visible');
-      
-      // Determine if swipe was strong enough
-      if (Math.abs(currentX) > 150) {
-        if (currentX > 0) {
-          removeCard('right');
-        } else {
-          removeCard('left');
-        }
-      } else if (currentY < -150) {
-        removeCard('up');
-      } else {
-        // Reset card position
-        card.style.transform = '';
-        card.style.opacity = '';
-      }
-      
-      currentX = 0;
-      currentY = 0;
-    };
-    
-    // Add event listeners to deck
-    deck.addEventListener('mousedown', handleStart);
-    deck.addEventListener('mousemove', handleMove);
-    deck.addEventListener('mouseup', handleEnd);
-    deck.addEventListener('mouseleave', handleEnd);
-    
-    deck.addEventListener('touchstart', handleStart, { passive: true });
-    deck.addEventListener('touchmove', handleMove, { passive: true });
-    deck.addEventListener('touchend', handleEnd);
-  };
-
   // Load and display posts
   const loadPosts = async () => {
     try {
       loadingIndicator.style.display = 'block';
       errorMessage.style.display = 'none';
+      postsContainer.innerHTML = '';
 
       const response = await fetch('/api/blog/posts');
       const data = await response.json();
 
       if (data.success && data.posts && data.posts.length > 0) {
-        postsData = data.posts;
-        currentIndex = 0;
-        initDeck(postsData);
+        const lang = getCurrentLanguage();
+        
+        data.posts.forEach(post => {
+          const card = createPostCard(post, lang);
+          postsContainer.appendChild(card);
+        });
       } else {
         // No posts available
         const lang = getCurrentLanguage();
-        const postsContainer = document.getElementById('postsContainer');
         const emptyMessage = document.createElement('div');
         emptyMessage.className = 'empty-state';
         emptyMessage.innerHTML = `
@@ -376,11 +143,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // Also listen for custom language change event
+  // Also listen for custom language change event (if language is changed on same page)
   document.addEventListener('languageChanged', () => {
     loadPosts();
   });
-
-  console.log('🃏 Card Deck Blog Initialized!');
-  console.log('👆 Swipe, click buttons, or use arrow keys to navigate');
 });
