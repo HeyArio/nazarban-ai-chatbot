@@ -933,6 +933,7 @@ html[dir="rtl"] .menu-toggle {
   font-size: 3rem;
   font-weight: 700;
   margin-bottom: 1rem;
+  text-align: center !important;  /* ← ADD THIS LINE */
   background: linear-gradient(135deg, #00ffff 0%, #0080ff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -946,6 +947,7 @@ html[dir="rtl"] .menu-toggle {
 .blog-header p {
   font-size: 1.2rem;
   color: rgba(255, 255, 255, 0.7);
+  text-align: center !important;  /* ← ADD THIS LINE */
   max-width: 600px;
   margin: 0 auto;
 }
