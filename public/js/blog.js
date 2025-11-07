@@ -17,8 +17,25 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   // Format date based on language
+  // Format date based on language
   const formatDate = (dateString, lang) => {
-    const date = new Date(dateString);
+    
+    // 1. Check for bad, missing, or null date strings
+    if (!dateString || typeof dateString !== 'string') {
+      console.error('A post was found with an empty or missing date.');
+      return lang === 'fa' ? 'تاریخ نامشخص' : 'Date unavailable';
+    }
+
+    // 2. Try to create the date. This is where it was crashing.
+    const date = new Date(dateString.trim()); // We add .trim() to fix spaces!
+
+    // 3. Check if the date is invalid after we tried to make it
+    if (isNaN(date.getTime())) {
+      console.error('INVALID DATE DETECTED! The raw value was:', dateString);
+      return lang === 'fa' ? 'تاریخ نامعتبر' : 'Invalid Date';
+    }
+
+    // 4. If we get here, the date is valid. Proceed as normal.
     if (lang === 'fa') {
       // Persian date format
       return new Intl.DateTimeFormat('fa-IR', {
