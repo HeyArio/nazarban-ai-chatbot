@@ -90,6 +90,10 @@ whitepaper_cta_text: "Start with a 7-Day Data Readiness Audit and an executable 
     // Contact links
     contact_email: "info@nazarbanai.com",
     contact_phone: "+1 (916) 587 0145",
+    // New Blog Page
+    blog_header_title: "AI Product Highlights",
+    blog_header_subtitle: "Daily insights from Product Hunt's top AI innovations",
+    blog_loading: "Loading posts...",
   },
   // Farsi translations
   fa: {
@@ -181,5 +185,9 @@ whitepaper_cta_text: "با ممیزی آمادگی داده ۷ روزه و اث�
      // Contact links
     contact_email: "info@nazarbanai.com", // Email stays the same
     contact_phone: "+۹۸ ۹۱۲ ۰۴۳ ۷۵۰۲", // Farsi phone number
+    // New Blog Page
+    blog_header_title: "محصولات برجسته هوش مصنوعی",
+    blog_header_subtitle: "بینش‌های روزانه از نوآوری‌های برتر Product Hunt",
+    blog_loading: "در حال بارگذاری...",
   }
 };

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nazarban AI Consultation</title>
+  <title>Blog - Nazarban AI Consultation</title>
 
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
   <link rel="icon" href="favicon.ico" />
@@ -44,7 +44,8 @@
         <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
           <span class="bar"></span> <span class="bar"></span> <span class="bar"></span>
         </button>
-    </div> </header>
+    </div>
+  </header>
 
   <ul class="nav-mobile-overlay">
       <li><a href="index.html" data-lang-key="nav_chat">Chat</a></li>
@@ -54,49 +55,28 @@
       <li><a href="whitepaper.html" data-lang-key="nav_whitepaper">White Paper</a></li>
   </ul>
 
-  <main class="content-wrapper">
-    <h1 data-lang-key="blog_title"></h1>
-    <p><em data-lang-key="blog_date"></em></p>
+  <main class="content-wrapper blog-wrapper">
+    <header class="blog-header">
+      <h1 data-lang-key="blog_header_title">AI Product Highlights</h1>
+      <p data-lang-key="blog_header_subtitle">Daily insights from Product Hunt's top AI innovations</p>
+    </header>
 
-    <p data-lang-key="blog_p1"></p>
-    <p data-lang-key="blog_p2"></p>
+    <div id="loadingIndicator" class="loading-indicator">
+      <div class="spinner"></div>
+      <p data-lang-key="blog_loading">Loading posts...</p>
+    </div>
 
-    <h2 data-lang-key="blog_h2_automation"></h2>
-    <p data-lang-key="blog_automation_p1"></p>
-    <ul>
-      <li data-lang-key="blog_automation_li1"></li>
-      <li data-lang-key="blog_automation_li2"></li>
-      <li data-lang-key="blog_automation_li3"></li>
-    </ul>
+    <div id="errorMessage" class="error-message" style="display: none;">
+      Error loading posts. Please try again.
+    </div>
 
-    <h2 data-lang-key="blog_h2_insight"></h2>
-    <p data-lang-key="blog_insight_p1"></p>
-    <ul>
-      <li data-lang-key="blog_insight_li1"></li>
-      <li data-lang-key="blog_insight_li2"></li>
-      <li data-lang-key="blog_insight_li3"></li>
-    </ul>
-
-    <h2 data-lang-key="blog_h2_interaction"></h2>
-    <p data-lang-key="blog_interaction_p1"></p>
-    <ul>
-      <li data-lang-key="blog_interaction_li1"></li>
-      <li data-lang-key="blog_interaction_li2"></li>
-      <li data-lang-key="blog_interaction_li3"></li>
-    </ul>
-
-    <h2 data-lang-key="blog_h2_how"></h2>
-    <p data-lang-key="blog_how_p1"></p>
-    <ul>
-      <li data-lang-key="blog_how_li1"></li>
-      <li data-lang-key="blog_how_li2"></li>
-      <li data-lang-key="blog_how_li3"></li>
-    </ul>
-    
-    <p data-lang-key="blog_how_p2"></p>
+    <div id="postsContainer" class="posts-grid">
+      <!-- Posts will be dynamically loaded here -->
+    </div>
   </main>
   
   <script src="js/main.js"></script>
+  <script src="js/blog.js"></script>
   <script src="js/translations.js"></script> 
   <script src="js/language.js"></script> 
 </body>
