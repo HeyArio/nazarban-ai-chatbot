@@ -14,6 +14,11 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// --- BLOG POST PATHS ---
+const blogPostsPath = path.join(__dirname, 'blogPosts.json');
+const archivedPostsPath = path.join(__dirname, 'archivedPosts.json');
+// --- END BLOG POST PATHS ---
+
 // --- NEW: Prompt Management ---
 let prompts = {};
 const promptsFilePath = path.join(__dirname, 'prompts.json');
@@ -35,6 +40,58 @@ async function loadPrompts() {
     }
 }
 // --- END: Prompt Management ---
+
+// --- BLOG POST MANAGEMENT FUNCTIONS ---
+// Load blog posts from JSON
+async function loadBlogPosts() {
+    try {
+        const data = await fs.readFile(blogPostsPath, 'utf-8');
+        return JSON.parse(data);
+    } catch (error) {
+        console.log('⚠️ No blog posts file found, creating new one');
+        await fs.writeFile(blogPostsPath, '[]');
+        return [];
+    }
+}
+
+// Save blog posts to JSON
+async function saveBlogPosts(posts) {
+    await fs.writeFile(blogPostsPath, JSON.stringify(posts, null, 2));
+}
+
+// Archive old posts (older than 30 days)
+async function archiveOldPosts() {
+    try {
+        const posts = await loadBlogPosts();
+        const thirtyDaysAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
+        
+        const activePosts = posts.filter(post => new Date(post.date).getTime() > thirtyDaysAgo);
+        const postsToArchive = posts.filter(post => new Date(post.date).getTime() <= thirtyDaysAgo);
+        
+        if (postsToArchive.length > 0) {
+            // Load existing archive
+            let archived = [];
+            try {
+                const archiveData = await fs.readFile(archivedPostsPath, 'utf-8');
+                archived = JSON.parse(archiveData);
+            } catch (error) {
+                // Archive file doesn't exist yet
+            }
+            
+            // Add new archived posts
+            archived = [...archived, ...postsToArchive];
+            await fs.writeFile(archivedPostsPath, JSON.stringify(archived, null, 2));
+            
+            // Save only active posts
+            await saveBlogPosts(activePosts);
+            
+            console.log(`📦 Archived ${postsToArchive.length} old blog posts`);
+        }
+    } catch (error) {
+        console.error('❌ Error archiving posts:', error);
+    }
+}
+// --- END BLOG POST MANAGEMENT FUNCTIONS ---
 
 
 // Email transporter setup
@@ -59,11 +116,7 @@ function setupEmailTransporter() {
 
 // Google Gemini API function
 async function callGoogleGeminiWithRetry(messages, systemPrompt = '', maxRetries = 3) {
-    // --- BUG FIX ---
-    // Changed model name from gemini-1.5-flash back to gemini-2.5-flash
-    // This was the original, working model name.
     const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GOOGLE_API_KEY}`;
-    // --- END BUG FIX ---
 
     const contents = messages.map(msg => ({
         role: msg.role === 'assistant' ? 'model' : msg.role,
@@ -88,21 +141,17 @@ async function callGoogleGeminiWithRetry(messages, systemPrompt = '', maxRetries
                 timeout: 60000
             });
 
-            // Defensive check for valid response
             if (response.data && response.data.candidates && response.data.candidates[0].content && response.data.candidates[0].content.parts[0].text) {
                 const responseMessage = response.data.candidates[0].content.parts[0].text;
                 console.log('✅ Google Gemini API success! Response length:', responseMessage.length);
                 return responseMessage;
             } else {
-                // Handle cases where the response structure is unexpected
                 console.error(`❌ Google Gemini API attempt ${attempt} received an unexpected response structure:`, JSON.stringify(response.data));
                 throw new Error('Unexpected API response structure');
             }
 
         } catch (error) {
-            // --- Improved Error Logging ---
             if (error.response) {
-                // Log the specific error from Google
                 const errorData = error.response.data ? JSON.stringify(error.response.data) : 'No response data';
                 console.error(`❌ Google Gemini API attempt ${attempt} failed with status ${error.response.status}:`, errorData);
             } else if (error.request) {
@@ -110,158 +159,100 @@ async function callGoogleGeminiWithRetry(messages, systemPrompt = '', maxRetries
             } else {
                 console.error(`❌ Google Gemini API attempt ${attempt} failed:`, error.message);
             }
-            // --- End Improved Error Logging ---
 
             if (attempt === maxRetries) {
                 console.log('❌ All Google Gemini API attempts failed');
-                throw error; // This will be caught by the /api/chat endpoint
+                throw error;
             }
-            await new Promise(resolve => setTimeout(resolve, attempt * 1500));
+            await new Promise(resolve => setTimeout(resolve, 2000));
         }
     }
 }
 
-
-// Email sending function
-async function sendLeadNotification(userEmail, conversationHistory) {
+// Send lead notification email
+async function sendLeadNotification(email, conversationHistory) {
     if (!emailTransporter) {
-        console.log('⚠️ Email transporter not available');
+        console.log('⚠️ Email not configured, skipping lead notification');
         return;
     }
 
     try {
-        const conversationSummary = conversationHistory
-            .map(msg => `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`)
-            .join('\n\n');
-            
-        let projectSummary = '';
+        let summaryText = '';
         try {
-            console.log('🤖 Generating AI summary of user request...');
-            const summaryPromptText = prompts.summaryPrompt.replace('{{conversationSummary}}', conversationSummary);
-            const summaryMessages = [{ role: 'user', content: summaryPromptText }];
-            projectSummary = await callGoogleGeminiWithRetry(summaryMessages);
-            console.log('✅ AI summary generated successfully');
+            const conversationSummary = conversationHistory.map(msg => 
+                `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`
+            ).join('\n\n');
+
+            const summaryPrompt = prompts.summaryPrompt.replace('{{conversationSummary}}', conversationSummary);
+            summaryText = await callGoogleGeminiWithRetry([
+                { role: 'user', content: summaryPrompt }
+            ]);
         } catch (summaryError) {
-            console.error('⚠️ Could not generate AI summary, falling back to simple summary.', summaryError.message);
-            const userMessages = conversationHistory.filter(msg => msg.role === 'user');
-            const allUserText = userMessages.map(msg => msg.content).join(' ');
-            projectSummary = allUserText.length > 200 ? allUserText.substring(0, 200) + '...' : allUserText;
+            console.error('❌ Error generating summary:', summaryError);
+            summaryText = 'Summary generation failed';
         }
 
-        let aiProposal = '';
+        let proposalText = '';
         try {
-            const proposalPromptText = prompts.proposalPrompt.replace('{{conversationSummary}}', conversationSummary);
-            const proposalMessages = [{ role: 'user', content: proposalPromptText }];
-            aiProposal = await callGoogleGeminiWithRetry(proposalMessages);
-            console.log('✅ AI proposal generated successfully');
+            const conversationForProposal = conversationHistory.map(msg => 
+                `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`
+            ).join('\n\n');
+
+            const proposalPrompt = prompts.proposalPrompt.replace('{{conversationSummary}}', conversationForProposal);
+            proposalText = await callGoogleGeminiWithRetry([
+                { role: 'user', content: proposalPrompt }
+            ]);
         } catch (proposalError) {
-            console.error('⚠️ Could not generate AI proposal:', proposalError.message);
-            aiProposal = `Based on your inquiry about ${projectSummary}, we recommend a custom AI solution tailored to your specific needs...`;
+            console.error('❌ Error generating proposal:', proposalError);
+            proposalText = 'Proposal generation failed';
         }
 
-        // Email to company
-        const companyMailOptions = {
+        const mailOptions = {
             from: process.env.ZOHO_EMAIL,
-            to: process.env.COMPANY_EMAIL || process.env.ZOHO_EMAIL,
-            subject: '🔥 New AI Consultation Lead',
+            to: process.env.ZOHO_EMAIL,
+            subject: `🔔 New Lead: ${email}`,
             html: `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: white;">
-                    <div style="text-align: center; padding: 20px; border-bottom: 2px solid #6366f1;">
-                        <h2 style="color: #6366f1; margin: 10px 0;">New Lead from AI Chatbot</h2>
-                    </div>
-                    <div style="background: #f8fafc; padding: 20px; margin: 20px 0; border-left: 4px solid #6366f1;">
-                        <h3 style="color: #1e293b; margin-top: 0;">Contact Information</h3>
-                        <p><strong>Email:</strong> ${userEmail}</p>
-                        <p><strong>Time:</strong> ${new Date().toLocaleString()}</p>
-                    </div>
-                    <div style="background: #fff7ed; padding: 20px; margin: 20px 0; border-left: 4px solid #f59e0b;">
-                        <h3 style="color: #92400e; margin-top: 0;">Our Understanding of Their Request</h3>
-                        <p style="color: #374151; font-size: 16px; line-height: 1.6;">${projectSummary}</p>
-                    </div>
-                    <div style="background: #f0f9ff; padding: 20px; margin: 20px 0; border-left: 4px solid #0ea5e9;">
-                        <h3 style="color: #0c4a6e; margin-top: 0;">AI-Generated Proposal Draft</h3>
-                        <div style="background: white; padding: 15px; border-radius: 5px; color: #374151; font-size: 14px; line-height: 1.6; white-space: pre-wrap;">${aiProposal}</div>
-                    </div>
-                    <div style="background: #f1f5f9; padding: 20px; margin: 20px 0;">
-                        <h3 style="color: #1e293b; margin-top: 0;">Full Conversation</h3>
-                        <div style="background: white; padding: 15px; border-radius: 5px; white-space: pre-wrap; font-size: 14px; line-height: 1.5; max-height: 300px; overflow-y: auto;">${conversationSummary}</div>
-                    </div>
-                    <div style="background: #ecfdf5; padding: 20px; margin: 20px 0; border-left: 4px solid #10b981;">
-                        <h3 style="color: #065f46; margin-top: 0;">Action Required</h3>
-                        <ul style="color: #065f46;">
-                            <li>Review the AI-generated proposal above</li>
-                            <li>Customize and refine based on your expertise</li>
-                            <li>Follow up within 24-48 hours</li>
-                            <li>Schedule a consultation call</li>
-                        </ul>
-                    </div>
+                <h2>🎯 New Lead from Nazarban Chatbot</h2>
+                <p><strong>Email:</strong> ${email}</p>
+                
+                <h3>📋 AI-Generated Project Summary</h3>
+                <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 10px 0;">
+                    <pre style="white-space: pre-wrap; font-family: monospace;">${summaryText}</pre>
                 </div>
+
+                <h3>📄 AI-Generated Proposal to Send Client</h3>
+                <div style="background: #e3f2fd; padding: 15px; border-radius: 5px; margin: 10px 0;">
+                    <pre style="white-space: pre-wrap; font-family: monospace;">${proposalText}</pre>
+                </div>
+
+                <h3>💬 Full Conversation History</h3>
+                <div style="background: #fafafa; padding: 15px; border-radius: 5px; margin: 10px 0;">
+                    ${conversationHistory.map(msg => `
+                        <p style="margin: 10px 0;">
+                            <strong style="color: ${msg.role === 'user' ? '#1976d2' : '#388e3c'};">${msg.role === 'user' ? '👤 User' : '🤖 AI'}:</strong><br>
+                            ${msg.content.replace(/\n/g, '<br>')}
+                        </p>
+                    `).join('')}
+                </div>
+
+                <p style="margin-top: 20px; color: #666; font-size: 12px;">
+                    🕒 Received: ${new Date().toLocaleString()}
+                </p>
             `
         };
 
-        // Email to user (confirmation)
-        const userMailOptions = {
-            from: process.env.ZOHO_EMAIL,
-            to: userEmail,
-            subject: 'Your AI Project Proposal - Nazarban Analytics',
-            html: `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: white;">
-                    <div style="text-align: center; padding: 20px; border-bottom: 2px solid #6366f1;">
-                        <h2 style="color: #6366f1; margin: 10px 0;">Your AI Project Proposal</h2>
-                        <p style="color: #64748b; margin: 5px 0;">Nazarban Analytics-FZCO</p>
-                    </div>
-                    <div style="padding: 30px 20px;">
-                        <p style="font-size: 16px; line-height: 1.6; color: #374151;">Dear Valued Client,</p>
-                        <p style="font-size: 16px; line-height: 1.6; color: #374151;">Thank you for your interest in <strong>Nazarban Analytics-FZCO</strong> AI services! Based on our conversation, we've prepared an initial project proposal for your review.</p>
-                        <div style="background: #f0f9ff; padding: 25px; margin: 25px 0; border-left: 4px solid #0ea5e9; border-radius: 8px;">
-                            <h3 style="color: #0c4a6e; margin-top: 0; margin-bottom: 15px;">Project Proposal</h3>
-                            <div style="background: white; padding: 20px; border-radius: 5px; color: #374151; font-size: 15px; line-height: 1.7; white-space: pre-wrap; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">${aiProposal}</div>
-                        </div>
-                        <div style="background: #f0fdf4; padding: 20px; margin: 20px 0; border-left: 4px solid #22c55e;">
-                            <h3 style="color: #15803d; margin-top: 0;">What's Next?</h3>
-                            <ul style="color: #15803d; line-height: 1.8;">
-                                <li>Our team will refine this proposal based on your specific requirements</li>
-                                <li>We'll prepare detailed technical specifications and cost estimates</li>
-                                <li>You'll receive a follow-up call within <strong>24-48 hours</strong></li>
-                                <li>We'll schedule a consultation to discuss implementation details</li>
-                            </ul>
-                        </div>
-                        <p style="font-size: 16px; line-height: 1.6; color: #374151;">This proposal is our initial assessment based on our conversation. We'll work closely with you to refine and customize it to perfectly match your needs.</p>
-                        <p style="font-size: 16px; line-height: 1.6; color: #374151;">If you have any questions or would like to discuss this proposal, feel free to reply to this email. We're excited to help bring your AI vision to life!</p>
-                    </div>
-                    <div style="background: #f8fafc; text-align: center; padding: 20px; border-top: 1px solid #e5e7eb;">
-                        <p style="margin: 0; font-weight: 600; color: #1e293b;">Nazarban Analytics-FZCO</p>
-                        <p style="margin: 5px 0; color: #64748b;">AI Solutions & Consulting</p>
-                        <a href="mailto:${process.env.ZOHO_EMAIL}" style="color: #6366f1; text-decoration: none;">${process.env.ZOHO_EMAIL}</a>
-                    </div>
-                </div>
-            `
-        };
-
-        // Send both emails
-        await emailTransporter.sendMail(companyMailOptions);
-        await emailTransporter.sendMail(userMailOptions);
-        
-        console.log(`📧 Lead notification sent for: ${userEmail}`);
-        
+        await emailTransporter.sendMail(mailOptions);
+        console.log(`✅ Lead notification email sent for: ${email}`);
     } catch (error) {
-        console.error('❌ Email sending failed:', error);
+        console.error('❌ Error sending lead email:', error);
     }
 }
 
-
-// --- NEW: Admin Routes ---
-// Serve the admin page
-app.get('/admin', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'admin.html'));
-});
-
-// API endpoint to GET current prompts
+// --- ADMIN ROUTES ---
 app.get('/api/prompts', (req, res) => {
     res.json(prompts);
 });
 
-// API endpoint to POST updated prompts
 app.post('/api/prompts', async (req, res) => {
     const { password, ...newPrompts } = req.body;
 
@@ -274,7 +265,7 @@ app.post('/api/prompts', async (req, res) => {
 
     try {
         await fs.writeFile(promptsFilePath, JSON.stringify(newPrompts, null, 2));
-        prompts = newPrompts; // Update in-memory prompts
+        prompts = newPrompts;
         console.log('✅ Prompts updated successfully by admin.');
         res.json({ success: true, message: 'Prompts saved successfully!' });
     } catch (error) {
@@ -283,6 +274,94 @@ app.post('/api/prompts', async (req, res) => {
     }
 });
 // --- END: Admin Routes ---
+
+// --- BLOG API ROUTES ---
+// API: POST new blog post (from n8n)
+app.post('/api/blog/post', async (req, res) => {
+    try {
+        const { title, summary, summaryFarsi, votes, url, productId, date } = req.body;
+        
+        console.log('📝 Received blog post request:', { title, productId });
+        
+        // Validation
+        if (!title || !summary || !summaryFarsi || !productId) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Missing required fields: title, summary, summaryFarsi, productId' 
+            });
+        }
+        
+        // Load current posts
+        const posts = await loadBlogPosts();
+        
+        // Check if post already exists (by productId)
+        const existingIndex = posts.findIndex(p => p.productId === productId);
+        
+        const newPost = {
+            id: Date.now().toString(),
+            productId,
+            title,
+            summaryEnglish: summary,  // Store as summaryEnglish for blog.js
+            summaryFarsi,
+            votes: votes || 0,
+            url: url || '',
+            date: date || new Date().toISOString()
+        };
+        
+        if (existingIndex >= 0) {
+            // Update existing post
+            posts[existingIndex] = { ...posts[existingIndex], ...newPost };
+            console.log(`✅ Updated blog post: ${title}`);
+        } else {
+            // Add new post at the beginning
+            posts.unshift(newPost);
+            console.log(`✅ New blog post added: ${title}`);
+        }
+        
+        // Save posts
+        await saveBlogPosts(posts);
+        
+        // Archive old posts if needed
+        await archiveOldPosts();
+        
+        res.json({ 
+            success: true, 
+            message: 'Blog post saved successfully',
+            post: newPost
+        });
+        
+    } catch (error) {
+        console.error('❌ Error saving blog post:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Failed to save blog post',
+            error: error.message
+        });
+    }
+});
+
+// API: GET all active blog posts
+app.get('/api/blog/posts', async (req, res) => {
+    try {
+        const posts = await loadBlogPosts();
+        res.json({ success: true, posts });
+    } catch (error) {
+        console.error('❌ Error loading blog posts:', error);
+        res.status(500).json({ success: false, message: 'Failed to load blog posts' });
+    }
+});
+
+// API: GET archived posts
+app.get('/api/blog/archived', async (req, res) => {
+    try {
+        const data = await fs.readFile(archivedPostsPath, 'utf-8');
+        const archived = JSON.parse(data);
+        res.json({ success: true, posts: archived });
+    } catch (error) {
+        res.json({ success: true, posts: [] });
+    }
+});
+// --- END: BLOG API ROUTES ---
 
 // Initialize email transporter on startup
 setupEmailTransporter();
@@ -305,7 +384,6 @@ app.post('/api/chat', async (req, res) => {
         const emailMatch = message.match(emailRegex);
         
         if (emailMatch && !userEmail) {
-            // We use the *full* conversation history for the email, not just the slice
             await sendLeadNotification(emailMatch[0], conversationHistory);
             return res.json({
                 success: true,
@@ -318,9 +396,8 @@ app.post('/api/chat', async (req, res) => {
 
         let responseMessage = '';
         try {
-            // We still send a slice of history to the API to keep it concise
             let apiMessages = conversationHistory.length > 0 ? conversationHistory.slice(-8) : [];
-            apiMessages.push({ role: 'user', content: message }); // Add current user message
+            apiMessages.push({ role: 'user', content: message });
             
             const systemPrompt = prompts.mainSystemPrompt;
 
@@ -328,7 +405,6 @@ app.post('/api/chat', async (req, res) => {
             
             responseMessage = await callGoogleGeminiWithRetry(apiMessages, systemPrompt);
 
-            // After a few messages, if we don't have an email, prompt for it
             if (conversationHistory.length >= 4 && !userEmail && conversationStage === 'initial') {
                 if (!responseMessage.toLowerCase().includes('email')) {
                     responseMessage += "\n\nI'd love to have our AI specialists prepare a detailed proposal for you. Could you share your email address so we can send you a consultation summary and next steps?";
@@ -337,7 +413,6 @@ app.post('/api/chat', async (req, res) => {
 
         } catch (apiError) {
             console.error('❌ Final Google Gemini API error:', apiError.message);
-            // This is the error message the user is seeing
             responseMessage = "I apologize, but I'm encountering a technical issue and can't process your request right now. Please try again in a few moments.";
         }
 
@@ -360,16 +435,21 @@ app.get('/', (req, res) => {
 });
 
 // 404 and Error handlers
-app.use((req, res) => { res.status(404).json({ error: 'Route not found' }); });
+app.use((req, res) => { 
+    console.log('❌ 404 - Route not found:', req.method, req.url);
+    res.status(404).json({ error: 'Route not found' }); 
+});
+
 app.use((error, req, res, next) => { 
     console.error('❌ Global Server Error:', error);
     res.status(500).json({ error: 'Internal server error' }); 
 });
 
 app.listen(PORT, async () => {
-    await loadPrompts(); // Load prompts on start
-    console.log(`\n🚀 Nazarban AI Chatbot Server Started on port ${PORT}`);
+    await loadPrompts();
+    console.log(`\n🚀 Nazarban AI Server Started on port ${PORT}`);
     console.log(`🔑 Google API Key: ${process.env.GOOGLE_API_KEY ? '✅ Found' : '❌ Missing'}`);
     console.log(`📧 Zoho Email: ${process.env.ZOHO_EMAIL && process.env.ZOHO_APP_PASSWORD ? '✅ Found' : '❌ Missing'}`);
-    console.log(`🔑 Admin Password: ${process.env.ADMIN_PASSWORD ? '✅ Set' : '❌ Missing - Admin panel is disabled'}`);
+    console.log(`🔑 Admin Password: ${process.env.ADMIN_PASSWORD ? '✅ Set' : '❌ Missing'}`);
+    console.log(`📝 Blog API: ✅ Enabled at /api/blog/post`);
 });
