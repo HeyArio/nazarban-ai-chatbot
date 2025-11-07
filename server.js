@@ -4,6 +4,7 @@ const cors = require('cors');
 const nodemailer = require('nodemailer');
 const axios = require('axios');
 const fs = require('fs').promises; // Added for file operations
+const cron = require('node-cron'); // NEW: For scheduling tasks
 require('dotenv').config();
 
 const app = express();
@@ -59,14 +60,15 @@ async function saveBlogPosts(posts) {
     await fs.writeFile(blogPostsPath, JSON.stringify(posts, null, 2));
 }
 
-// Archive old posts (older than 30 days)
+// Archive old posts (configurable via environment variable, defaults to 7 days)
 async function archiveOldPosts() {
     try {
+        const archiveAfterDays = process.env.ARCHIVE_AFTER_DAYS || 7; // Changed default to 7 days
         const posts = await loadBlogPosts();
-        const thirtyDaysAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
+        const cutoffDate = Date.now() - (archiveAfterDays * 24 * 60 * 60 * 1000);
         
-        const activePosts = posts.filter(post => new Date(post.date).getTime() > thirtyDaysAgo);
-        const postsToArchive = posts.filter(post => new Date(post.date).getTime() <= thirtyDaysAgo);
+        const activePosts = posts.filter(post => new Date(post.date).getTime() > cutoffDate);
+        const postsToArchive = posts.filter(post => new Date(post.date).getTime() <= cutoffDate);
         
         if (postsToArchive.length > 0) {
             // Load existing archive
@@ -85,14 +87,40 @@ async function archiveOldPosts() {
             // Save only active posts
             await saveBlogPosts(activePosts);
             
-            console.log(`📦 Archived ${postsToArchive.length} old blog posts`);
+            console.log(`📦 Archived ${postsToArchive.length} old blog posts (older than ${archiveAfterDays} days)`);
+            return postsToArchive.length;
+        } else {
+            console.log('✅ No posts to archive');
+            return 0;
         }
     } catch (error) {
         console.error('❌ Error archiving posts:', error);
+        return 0;
     }
 }
 // --- END BLOG POST MANAGEMENT FUNCTIONS ---
 
+// --- AUTOMATIC WEEKLY ARCHIVING ---
+// Schedule archiving to run every Monday at 2:00 AM
+// Cron format: '0 2 * * 1' = At 02:00 on Monday
+// You can change the time by modifying the cron pattern:
+// '0 2 * * 1' = 2:00 AM every Monday
+// '0 0 * * 1' = Midnight every Monday
+// '0 6 * * 1' = 6:00 AM every Monday
+cron.schedule('25 22 * * 1', async () => {
+    console.log('🕐 Running scheduled weekly archive task...');
+    const archivedCount = await archiveOldPosts();
+    if (archivedCount > 0) {
+        console.log(`✅ Weekly archive complete: ${archivedCount} posts archived`);
+    } else {
+        console.log('✅ Weekly archive check complete: No posts needed archiving');
+    }
+}, {
+    timezone: "Asia/Tehran" // Change this to your timezone if needed
+});
+
+console.log('📅 Automatic weekly archiving scheduled for every Monday at 2:00 AM (Tehran time)');
+// --- END AUTOMATIC WEEKLY ARCHIVING ---
 
 // Email transporter setup
 let emailTransporter = null;
@@ -135,191 +163,115 @@ async function callGoogleGeminiWithRetry(messages, systemPrompt = '', maxRetries
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
         try {
-            console.log(`🤖 Google Gemini API attempt ${attempt}/${maxRetries}...`);
             const response = await axios.post(API_URL, requestData, {
                 headers: { 'Content-Type': 'application/json' },
-                timeout: 60000
+                timeout: 30000
             });
 
-            if (response.data && response.data.candidates && response.data.candidates[0].content && response.data.candidates[0].content.parts[0].text) {
-                const responseMessage = response.data.candidates[0].content.parts[0].text;
-                console.log('✅ Google Gemini API success! Response length:', responseMessage.length);
-                return responseMessage;
+            if (response.data.candidates?.[0]?.content?.parts?.[0]?.text) {
+                const replyText = response.data.candidates[0].content.parts[0].text;
+                return replyText;
             } else {
-                console.error(`❌ Google Gemini API attempt ${attempt} received an unexpected response structure:`, JSON.stringify(response.data));
                 throw new Error('Unexpected API response structure');
             }
-
         } catch (error) {
-            if (error.response) {
-                const errorData = error.response.data ? JSON.stringify(error.response.data) : 'No response data';
-                console.error(`❌ Google Gemini API attempt ${attempt} failed with status ${error.response.status}:`, errorData);
-            } else if (error.request) {
-                console.error(`❌ Google Gemini API attempt ${attempt} failed: No response received.`, error.message);
-            } else {
-                console.error(`❌ Google Gemini API attempt ${attempt} failed:`, error.message);
-            }
-
+            console.error(`⚠️ Google Gemini API attempt ${attempt} failed:`, error.message);
+            
             if (attempt === maxRetries) {
-                console.log('❌ All Google Gemini API attempts failed');
-                throw error;
+                throw new Error(`All ${maxRetries} API attempts failed.`);
             }
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            const backoffTime = 1000 * Math.pow(2, attempt - 1);
+            console.log(`⏳ Waiting ${backoffTime}ms before retry...`);
+            await new Promise(resolve => setTimeout(resolve, backoffTime));
         }
     }
 }
 
-// Send lead notification email
-async function sendLeadNotification(email, conversationHistory) {
+// Function to send email notification
+async function sendLeadNotification(userEmail, conversationHistory) {
     if (!emailTransporter) {
-        console.log('⚠️ Email not configured, skipping lead notification');
+        console.log('⚠️ Email not configured, skipping notification');
         return;
     }
 
     try {
-        let summaryText = '';
-        try {
-            const conversationSummary = conversationHistory.map(msg => 
-                `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`
-            ).join('\n\n');
-
-            const summaryPrompt = prompts.summaryPrompt.replace('{{conversationSummary}}', conversationSummary);
-            summaryText = await callGoogleGeminiWithRetry([
-                { role: 'user', content: summaryPrompt }
-            ]);
-        } catch (summaryError) {
-            console.error('❌ Error generating summary:', summaryError);
-            summaryText = 'Summary generation failed';
-        }
-
-        let proposalText = '';
-        try {
-            const conversationForProposal = conversationHistory.map(msg => 
-                `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`
-            ).join('\n\n');
-
-            const proposalPrompt = prompts.proposalPrompt.replace('{{conversationSummary}}', conversationForProposal);
-            proposalText = await callGoogleGeminiWithRetry([
-                { role: 'user', content: proposalPrompt }
-            ]);
-        } catch (proposalError) {
-            console.error('❌ Error generating proposal:', proposalError);
-            proposalText = 'Proposal generation failed';
-        }
+        const conversationSummary = conversationHistory.slice(-8)
+            .map(msg => `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`)
+            .join('\n\n');
 
         const mailOptions = {
             from: process.env.ZOHO_EMAIL,
             to: process.env.ZOHO_EMAIL,
-            subject: `🔔 New Lead: ${email}`,
+            subject: `🎯 New Lead from Nazarban Website: ${userEmail}`,
             html: `
-                <h2>🎯 New Lead from Nazarban Chatbot</h2>
-                <p><strong>Email:</strong> ${email}</p>
-                
-                <h3>📋 AI-Generated Project Summary</h3>
-                <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 10px 0;">
-                    <pre style="white-space: pre-wrap; font-family: monospace;">${summaryText}</pre>
-                </div>
-
-                <h3>📄 AI-Generated Proposal to Send Client</h3>
-                <div style="background: #e3f2fd; padding: 15px; border-radius: 5px; margin: 10px 0;">
-                    <pre style="white-space: pre-wrap; font-family: monospace;">${proposalText}</pre>
-                </div>
-
-                <h3>💬 Full Conversation History</h3>
-                <div style="background: #fafafa; padding: 15px; border-radius: 5px; margin: 10px 0;">
-                    ${conversationHistory.map(msg => `
-                        <p style="margin: 10px 0;">
-                            <strong style="color: ${msg.role === 'user' ? '#1976d2' : '#388e3c'};">${msg.role === 'user' ? '👤 User' : '🤖 AI'}:</strong><br>
-                            ${msg.content.replace(/\n/g, '<br>')}
-                        </p>
-                    `).join('')}
-                </div>
-
-                <p style="margin-top: 20px; color: #666; font-size: 12px;">
-                    🕒 Received: ${new Date().toLocaleString()}
-                </p>
+                <h2>New Lead Captured!</h2>
+                <p><strong>Email:</strong> ${userEmail}</p>
+                <h3>Conversation History:</h3>
+                <pre style="background-color: #f4f4f4; padding: 15px; border-radius: 5px; white-space: pre-wrap;">${conversationSummary}</pre>
+                <hr>
+                <p style="color: #666; font-size: 0.9em;">Generated by Nazarban AI Assistant</p>
             `
         };
 
         await emailTransporter.sendMail(mailOptions);
-        console.log(`✅ Lead notification email sent for: ${email}`);
+        console.log('✅ Lead notification email sent successfully');
     } catch (error) {
-        console.error('❌ Error sending lead email:', error);
+        console.error('❌ Failed to send lead notification:', error);
     }
 }
 
-// --- ADMIN ROUTES ---
-app.get('/api/prompts', (req, res) => {
-    res.json(prompts);
-});
-
-app.post('/api/prompts', async (req, res) => {
-    const { password, ...newPrompts } = req.body;
-
-    if (!process.env.ADMIN_PASSWORD) {
-        return res.status(500).json({ success: false, message: 'Admin password is not set on the server.' });
-    }
-    if (password !== process.env.ADMIN_PASSWORD) {
-        return res.status(401).json({ success: false, message: 'Invalid password.' });
-    }
-
-    try {
-        await fs.writeFile(promptsFilePath, JSON.stringify(newPrompts, null, 2));
-        prompts = newPrompts;
-        console.log('✅ Prompts updated successfully by admin.');
-        res.json({ success: true, message: 'Prompts saved successfully!' });
-    } catch (error) {
-        console.error('❌ Error saving prompts:', error);
-        res.status(500).json({ success: false, message: 'Failed to save prompts.' });
-    }
-});
-// --- END: Admin Routes ---
-
 // --- BLOG API ROUTES ---
-// API: POST new blog post (from n8n)
+// API: POST a new blog post (for n8n or manual use)
 app.post('/api/blog/post', async (req, res) => {
     try {
-        const { title, summary, summaryFarsi, votes, url, productId, date } = req.body;
+        const { title, summaryEnglish, summaryFarsi, date, url, votes, password } = req.body;
         
-        console.log('📝 Received blog post request:', { title, productId });
-        
-        // Validation
-        if (!title || !summary || !summaryFarsi || !productId) {
-            return res.status(400).json({ 
+        // Simple password protection for the blog API
+        if (password !== process.env.ADMIN_PASSWORD) {
+            return res.status(401).json({ 
                 success: false, 
-                message: 'Missing required fields: title, summary, summaryFarsi, productId' 
+                message: 'Unauthorized: Invalid password' 
             });
         }
         
-        // Load current posts
+        // Validate required fields
+        if (!title || !summaryEnglish || !summaryFarsi || !date) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Missing required fields: title, summaryEnglish, summaryFarsi, date' 
+            });
+        }
+        
         const posts = await loadBlogPosts();
         
-        // Check if post already exists (by productId)
-        const existingIndex = posts.findIndex(p => p.productId === productId);
-        
+        // Create new post object
         const newPost = {
             id: Date.now().toString(),
-            productId,
             title,
-            summaryEnglish: summary,  // Store as summaryEnglish for blog.js
+            summaryEnglish,
             summaryFarsi,
-            votes: votes || 0,
+            date,
             url: url || '',
-            date: date || new Date().toISOString()
+            votes: votes || 0,
+            createdAt: new Date().toISOString()
         };
         
-        if (existingIndex >= 0) {
-            // Update existing post
-            posts[existingIndex] = { ...posts[existingIndex], ...newPost };
-            console.log(`✅ Updated blog post: ${title}`);
-        } else {
-            // Add new post at the beginning
-            posts.unshift(newPost);
-            console.log(`✅ New blog post added: ${title}`);
+        // Add to beginning of posts array (newest first)
+        posts.unshift(newPost);
+        
+        // Check if we need to remove duplicates based on title
+        const uniquePosts = [];
+        const seenTitles = new Set();
+        for (const post of posts) {
+            if (!seenTitles.has(post.title)) {
+                seenTitles.add(post.title);
+                uniquePosts.push(post);
+            }
         }
         
         // Save posts
-        await saveBlogPosts(posts);
+        await saveBlogPosts(uniquePosts);
         
         // Archive old posts if needed
         await archiveOldPosts();
@@ -359,6 +311,37 @@ app.get('/api/blog/archived', async (req, res) => {
         res.json({ success: true, posts: archived });
     } catch (error) {
         res.json({ success: true, posts: [] });
+    }
+});
+
+// API: Manually trigger archiving (optional - for testing or manual use)
+app.post('/api/blog/archive', async (req, res) => {
+    try {
+        const { password } = req.body;
+        
+        // Simple password protection
+        if (password !== process.env.ADMIN_PASSWORD) {
+            return res.status(401).json({ 
+                success: false, 
+                message: 'Unauthorized: Invalid password' 
+            });
+        }
+        
+        const archivedCount = await archiveOldPosts();
+        
+        res.json({ 
+            success: true, 
+            message: `Archiving complete: ${archivedCount} posts archived`,
+            archivedCount
+        });
+        
+    } catch (error) {
+        console.error('❌ Error in manual archive:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Failed to archive posts',
+            error: error.message
+        });
     }
 });
 // --- END: BLOG API ROUTES ---
@@ -452,4 +435,5 @@ app.listen(PORT, async () => {
     console.log(`📧 Zoho Email: ${process.env.ZOHO_EMAIL && process.env.ZOHO_APP_PASSWORD ? '✅ Found' : '❌ Missing'}`);
     console.log(`🔑 Admin Password: ${process.env.ADMIN_PASSWORD ? '✅ Set' : '❌ Missing'}`);
     console.log(`📝 Blog API: ✅ Enabled at /api/blog/post`);
+    console.log(`📅 Automatic archiving: ✅ Scheduled for every Monday at 2:00 AM`);
 });
