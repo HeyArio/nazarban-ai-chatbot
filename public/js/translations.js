@@ -48,13 +48,26 @@ const translations = {
     blog_how_p2: "By starting with a clear, measurable problem, you can apply the right AI solution to achieve a tangible return on investment. The future isn't about just *having* AI; it's about *using* it to make smarter, faster, and more efficient decisions.",
     // Services Page
     services_title: "Our Services",
-    services_wip: "This page is currently under construction. Our full list of services will be available here shortly.",
-    services_core_title: "Our Core Offerings Include:",
-    services_li1: "AI Strategy & Consulting", // From services.html
-    services_li2: "Data Readiness Audits", // From services.html
-    services_li3: "Custom Machine Learning Model Development", // From services.html
-    services_li4: "Computer Vision & NLP Solutions", // From services.html
-    services_li5: "AI Proof of Concept (PoC) Development", // From services.html
+    services_intro: "We deliver end-to-end AI solutions designed for the unique challenges and data realities of the Iranian market. Our services move you from data to decision in record time, focusing on secure, KPI-driven results.",
+    
+    services_strategy_title: "1. AI Strategy & Data Readiness",
+    services_strategy_desc: "Success starts with a clear plan. We map your KPIs, assess data quality, and define a clear path to value, culminating in a 14-Day PoC on your own stack.",
+    services_strategy_li1: "7-Day Data Readiness Audits",
+    services_strategy_li2: "KPI-Driven Problem Definition",
+    services_strategy_li3: "14-Day Proof of Concept (PoC) Development",
+
+    services_dev_title: "2. Custom AI & ML Development",
+    services_dev_desc: "Our expert team builds and deploys high-performance models tailored to your needs. We specialize in 'Secure by Design' solutions, prioritizing On-Premise and Hybrid deployments for data sovereignty.",
+    services_dev_li1: "Custom Machine Learning Models (Forecasting, Optimization)",
+    services_dev_li2: "Persian NLP & Computer Vision (CV) Solutions",
+    services_dev_li3: "Secure On-Premise & Hybrid Deployment",
+
+    services_auto_title: "3. Workflow & Process Automation",
+    services_auto_desc: "An AI model is only powerful if it's connected. Using low-code platforms like n8n, we build robust automation workflows that connect your AI models to your existing apps (ERPs, CRMs, messaging tools) to trigger actions and eliminate manual tasks.",
+    services_auto_li1: "n8n Workflow Integration & Development",
+    services_auto_li2: "Connecting AI Models to Business Systems (API, ERP, CRM)",
+    services_auto_li3: "Automating Repetitive Data Entry & Business Logic",
+    
     services_contact: "For immediate inquiries, please chat with our AI assistant or email us at info@nazarbanai.com.",
     // White Paper Page
     whitepaper_title: "White Paper",
@@ -144,13 +157,26 @@ whitepaper_cta_text: "Start with a 7-Day Data Readiness Audit and an executable 
     blog_how_p2: "با شروع از یک مشکل واضح و قابل اندازه‌گیری، می‌توانید راه‌حل مناسب هوش مصنوعی را برای دستیابی به بازگشت سرمایه ملموس به کار ببرید. آینده فقط در مورد *داشتن* هوش مصنوعی نیست؛ بلکه در مورد *استفاده* از آن برای تصمیم‌گیری هوشمندانه‌تر، سریع‌تر و کارآمدتر است.",
     // Services Page
     services_title: "خدمات ما",
-    services_wip: "این صفحه در حال حاضر در دست ساخت است. لیست کامل خدمات ما به زودی در اینجا در دسترس خواهد بود.",
-    services_core_title: "خدمات اصلی ما شامل:",
-    services_li1: "استراتژی و مشاوره هوش مصنوعی", // Translated from en
-    services_li2: "ممیزی آمادگی داده‌ها", // Translated from en
-    services_li3: "توسعه سفارشی مدل‌های یادگیری ماشین", // Translated from en
-    services_li4: "راه‌حل‌های بینایی کامپیوتر و پردازش زبان طبیعی", // Translated from en
-    services_li5: "توسعه اثبات مفهوم (PoC) هوش مصنوعی", // Translated from en
+    services_intro: "ما راه‌حل‌های هوش مصنوعی end-to-end را ارائه می‌دهیم که برای چالش‌های منحصربه‌فرد و واقعیت‌های داده در بازار ایران طراحی شده‌اند. خدمات ما شما را در زمانی رکوردشکن از داده به تصمیم می‌رساند، با تمرکز بر نتایج امن و مبتنی بر شاخص‌های کلیدی عملکرد (KPI).",
+
+    services_strategy_title: "۱. استراتژی هوش مصنوعی و آمادگی داده",
+    services_strategy_desc: "موفقیت با یک نقشه راه شفاف آغاز می‌شود. ما شاخص‌های کلیدی شما را شناسایی، کیفیت داده را ارزیابی و مسیری شفاف به سوی ارزش‌آفرینی تعریف می‌کنیم که در یک اثبات مفهوم (PoC) ۱۴ روزه بر روی زیرساخت خودتان به اوج می‌رسد.",
+    services_strategy_li1: "ممیزی آمادگی داده ۷ روزه",
+    services_strategy_li2: "تعریف مسئله مبتنی بر شاخص‌های کلیدی (KPI)",
+    services_strategy_li3: "توسعه اثبات مفهوم (PoC) ۱۴ روزه",
+
+    services_dev_title: "۲. توسعه سفارشی هوش مصنوعی و یادگیری ماشین",
+    services_dev_desc: "تیم متخصص ما مدل‌های با کارایی بالا را متناسب با نیازهای شما می‌سازد و مستقر می‌کند. ما در راه‌حل‌های «امن در طراحی» (Secure by Design) تخصص داریم و استقرارهای On-Premise (در محل) و ترکیبی (Hybrid) را برای حفظ حاکمیت داده در اولویت قرار می‌دهیم.",
+    services_dev_li1: "مدل‌های سفارشی یادگیری ماشین (پیش‌بینی، بهینه‌سازی)",
+    services_dev_li2: "راه‌حل‌های پردازش زبان طبیعی فارسی (NLP) و بینایی کامپیوتر (CV)",
+    services_dev_li3: "استقرار امن در محل (On-Premise) و ترکیبی (Hybrid)",
+
+    services_auto_title: "۳. اتوماسیون گردش کار و فرآیند",
+    services_auto_desc: "یک مدل هوش مصنوعی تنها زمانی قدرتمند است که متصل باشد. ما با استفاده از پلتفرم‌های لو-کد (low-code) مانند n8n، گردش‌های کاری اتوماسیون قدرتمندی می‌سازیم که مدل‌های هوش مصنوعی شما را به برنامه‌های موجودتان (ERP، CRM، ابزارهای پیام‌رسان) متصل کرده تا اقدامات را فعال و کارهای دستی را حذف کنند.",
+    services_auto_li1: "توسعه و یکپارچه‌سازی گردش کار با n8n",
+    services_auto_li2: "اتصال مدل‌های هوش مصنوعی به سیستم‌های کسب‌وکار (API, ERP, CRM)",
+    services_auto_li3: "اتوماسیون ورود داده‌های تکراری و منطق تجاری",
+    
     services_contact: "برای سوالات فوری، لطفاً با دستیار هوش مصنوعی ما چت کنید یا به ما ایمیل بزنید info@nazarbanai.com.",
     // White Paper Page
     whitepaper_title: "وایت پیپر",
