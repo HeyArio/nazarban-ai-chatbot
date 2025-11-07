@@ -45,6 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Save preference to localStorage
     localStorage.setItem('preferredLanguage', lang);
+    
+    // ✨ NEW: Dispatch custom event for blog page
+    document.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang } }));
   };
 
   // Add click listeners to language switchers

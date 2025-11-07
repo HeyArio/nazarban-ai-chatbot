@@ -1180,18 +1180,17 @@ html[dir="rtl"] .menu-toggle {
     padding: 2rem 1rem;
   }
 
-  .blog-header {
-    margin-bottom: 2rem;
-  }
+ .blog-header {
+  text-align: center !important;
+}
 
-  .blog-header h1 {
-    font-size: 2rem;
-  }
+.blog-header h1 {
+  text-align: center !important;
+}
 
-  .blog-header p {
-    font-size: 1rem;
-  }
-
+.blog-header p {
+  text-align: center !important;
+}
   .blog-post-card {
     padding: 1.5rem;
   }
@@ -1208,12 +1207,16 @@ html[dir="rtl"] .menu-toggle {
 /* RTL Specific Adjustments */
 [dir="rtl"] .posts-grid {
   direction: rtl;
+  text-align: right;
 }
 
+/* Keep post meta items in correct order for RTL */
 [dir="rtl"] .post-meta {
-  flex-direction: row-reverse;
+  direction: rtl;
+  justify-content: flex-start;
 }
 
+/* Fix link alignment in RTL */
 [dir="rtl"] .post-link {
-  flex-direction: row-reverse;
+  direction: rtl;
 }
