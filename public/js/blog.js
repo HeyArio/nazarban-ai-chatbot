@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const createPostCard = (post, lang) => {
     const card = document.createElement('article');
     card.className = 'blog-post-card';
+    card.dataset.postId = post.id || Math.random().toString(36).substr(2, 9);
     
     const summary = lang === 'fa' ? post.summaryFarsi : post.summaryEnglish;
     const formattedDate = formatDate(post.date, lang);
@@ -74,7 +75,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       </div>
       ${post.url ? `
         <div class="post-footer">
-          <a href="${post.url}" target="_blank" rel="noopener noreferrer" class="post-link">
+          <a href="${post.url}" target="_blank" rel="noopener noreferrer" class="post-link" onclick="event.stopPropagation()">
             ${lang === 'fa' ? 'مشاهده در Product Hunt' : 'View on Product Hunt'}
             <svg class="link-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -84,7 +85,93 @@ document.addEventListener('DOMContentLoaded', async () => {
       ` : ''}
     `;
     
+    // Make card clickable to open modal
+    card.addEventListener('click', () => openModal(post, lang));
+    
     return card;
+  };
+
+  // Create modal HTML element
+  const createModal = () => {
+    const modal = document.createElement('div');
+    modal.className = 'blog-modal';
+    modal.id = 'blogModal';
+    modal.innerHTML = `
+      <div class="modal-content">
+        <button class="modal-close" aria-label="Close modal">&times;</button>
+        <div class="modal-header">
+          <h2 class="modal-title"></h2>
+          <div class="modal-meta"></div>
+        </div>
+        <div class="modal-body"></div>
+        <div class="modal-footer"></div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    
+    // Close modal on background click
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+    
+    // Close modal on close button click
+    modal.querySelector('.modal-close').addEventListener('click', closeModal);
+    
+    // Close modal on ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        closeModal();
+      }
+    });
+    
+    return modal;
+  };
+
+  // Open modal with post content
+  const openModal = (post, lang) => {
+    let modal = document.getElementById('blogModal');
+    if (!modal) {
+      modal = createModal();
+    }
+    
+    const summary = lang === 'fa' ? post.summaryFarsi : post.summaryEnglish;
+    const formattedDate = formatDate(post.date, lang);
+    
+    // Update modal content
+    modal.querySelector('.modal-title').textContent = post.title;
+    modal.querySelector('.modal-meta').innerHTML = `
+      <span class="post-date">${formattedDate}</span>
+      ${post.votes ? `<span class="post-votes">⭐ ${post.votes} ${lang === 'fa' ? 'رأی' : 'upvotes'}</span>` : ''}
+    `;
+    modal.querySelector('.modal-body').innerHTML = summary;
+    
+    if (post.url) {
+      modal.querySelector('.modal-footer').innerHTML = `
+        <a href="${post.url}" target="_blank" rel="noopener noreferrer" class="modal-link">
+          ${lang === 'fa' ? 'مشاهده در Product Hunt' : 'View on Product Hunt'}
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      `;
+    } else {
+      modal.querySelector('.modal-footer').innerHTML = '';
+    }
+    
+    // Show modal
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  };
+
+  // Close modal
+  const closeModal = () => {
+    const modal = document.getElementById('blogModal');
+    if (modal) {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
   };
 
   // Load and display posts

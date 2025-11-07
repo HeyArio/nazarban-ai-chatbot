@@ -925,8 +925,51 @@ html[dir="rtl"] .menu-toggle {
 .blog-header {
   text-align: center;
   margin-bottom: 4rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+  padding: 4rem 2rem;
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  background: linear-gradient(135deg, 
+    rgba(129, 140, 248, 0.1) 0%, 
+    rgba(192, 132, 252, 0.1) 25%,
+    rgba(251, 113, 133, 0.1) 50%,
+    rgba(192, 132, 252, 0.1) 75%,
+    rgba(129, 140, 248, 0.1) 100%);
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease infinite;
+  border: 1px solid rgba(129, 140, 248, 0.2);
+}
+
+.blog-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 50%, 
+    rgba(129, 140, 248, 0.15) 0%, 
+    transparent 70%);
+  animation: pulse 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .blog-header h1 {
@@ -934,7 +977,9 @@ html[dir="rtl"] .menu-toggle {
   font-weight: 700;
   margin-bottom: 1rem;
   text-align: center !important;  /* ← ADD THIS LINE */
-  background: linear-gradient(135deg, #00ffff 0%, #0080ff 100%);
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(135deg, var(--brand1), var(--brand2), var(--brand3));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -950,6 +995,8 @@ html[dir="rtl"] .menu-toggle {
   text-align: center !important;  /* ← ADD THIS LINE */
   max-width: 600px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
 /* Loading and Error States */
@@ -1003,15 +1050,19 @@ html[dir="rtl"] .menu-toggle {
   }
 }
 
-/* Blog Post Card */
+/* Blog Post Card - Glassmorphism */
 .blog-post-card {
-  background: linear-gradient(135deg, rgba(0, 255, 255, 0.05) 0%, rgba(0, 128, 255, 0.05) 100%);
-  border: 1px solid rgba(0, 255, 255, 0.2);
-  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(129, 140, 248, 0.2);
+  border-radius: 20px;
   padding: 2rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 .blog-post-card::before {
@@ -1020,21 +1071,39 @@ html[dir="rtl"] .menu-toggle {
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #00ffff 0%, #0080ff 100%);
+  height: 4px;
+  background: linear-gradient(90deg, var(--brand1), var(--brand2), var(--brand3));
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.blog-post-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(129, 140, 248, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
 }
 
 .blog-post-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(0, 255, 255, 0.4);
-  box-shadow: 0 12px 40px rgba(0, 255, 255, 0.15);
+  transform: translateY(-8px) scale(1.02);
+  border-color: rgba(129, 140, 248, 0.5);
+  box-shadow: 0 20px 60px rgba(129, 140, 248, 0.3);
+  background: rgba(15, 23, 42, 0.8);
 }
 
 .blog-post-card:hover::before {
   transform: scaleX(1);
+}
+
+.blog-post-card:hover::after {
+  opacity: 1;
 }
 
 .post-header {
@@ -1073,9 +1142,11 @@ html[dir="rtl"] .menu-toggle {
   align-items: center;
   gap: 0.4rem;
   padding: 0.25rem 0.75rem;
-  background: rgba(0, 255, 255, 0.1);
+  background: rgba(129, 140, 248, 0.15);
+  backdrop-filter: blur(10px);
   border-radius: 20px;
-  color: #00ffff;
+  border: 1px solid rgba(129, 140, 248, 0.3);
+  color: var(--brand1);
   font-weight: 500;
 }
 
@@ -1124,7 +1195,7 @@ html[dir="rtl"] .menu-toggle {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: #00ffff;
+  color: var(--brand1);
   text-decoration: none;
   font-weight: 500;
   font-size: 0.95rem;
@@ -1132,7 +1203,7 @@ html[dir="rtl"] .menu-toggle {
 }
 
 .post-link:hover {
-  color: #0080ff;
+  color: var(--brand2);
   gap: 0.75rem;
 }
 
@@ -1221,4 +1292,226 @@ html[dir="rtl"] .menu-toggle {
 /* Fix link alignment in RTL */
 [dir="rtl"] .post-link {
   direction: rtl;
+}
+
+/* ========================================
+   BLOG POST MODAL
+   ======================================== */
+
+.blog-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(2, 6, 23, 0.95);
+  backdrop-filter: blur(10px);
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  overflow-y: auto;
+  padding: 2rem;
+}
+
+.blog-modal.active {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  opacity: 1;
+}
+
+.modal-content {
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(129, 140, 248, 0.3);
+  border-radius: 24px;
+  max-width: 900px;
+  width: 100%;
+  margin: 4rem auto;
+  padding: 3rem;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: modalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(129, 140, 248, 0.1);
+  border: 1px solid rgba(129, 140, 248, 0.3);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--ink);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.modal-close:hover {
+  background: rgba(129, 140, 248, 0.2);
+  border-color: rgba(129, 140, 248, 0.5);
+  transform: rotate(90deg);
+}
+
+[dir="rtl"] .modal-close {
+  right: auto;
+  left: 1.5rem;
+}
+
+.modal-header {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(129, 140, 248, 0.2);
+}
+
+.modal-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  padding-right: 3rem;
+}
+
+[dir="rtl"] .modal-title {
+  padding-right: 0;
+  padding-left: 3rem;
+  font-family: 'Cairo', sans-serif;
+}
+
+.modal-meta {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+.modal-body {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+
+[dir="rtl"] .modal-body {
+  font-family: 'Cairo', sans-serif;
+  text-align: right;
+}
+
+.modal-body h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 2rem 0 1rem;
+  color: var(--ink);
+}
+
+.modal-body p {
+  margin-bottom: 1.5rem;
+}
+
+.modal-body strong,
+.modal-body b {
+  color: var(--brand1);
+  font-weight: 600;
+}
+
+.modal-body em,
+.modal-body i {
+  color: var(--brand2);
+  font-style: italic;
+}
+
+.modal-footer {
+  padding-top: 2rem;
+  border-top: 1px solid rgba(129, 140, 248, 0.2);
+  display: flex;
+  justify-content: center;
+}
+
+.modal-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, var(--brand1), var(--brand2));
+  color: white;
+  text-decoration: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(129, 140, 248, 0.3);
+}
+
+.modal-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(129, 140, 248, 0.5);
+  gap: 1rem;
+}
+
+.modal-link svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Responsive Modal */
+@media (max-width: 768px) {
+  .blog-modal {
+    padding: 1rem;
+  }
+
+  .modal-content {
+    margin: 2rem auto;
+    padding: 2rem 1.5rem;
+  }
+
+  .modal-close {
+    top: 1rem;
+    right: 1rem;
+    width: 40px;
+    height: 40px;
+  }
+
+  [dir="rtl"] .modal-close {
+    right: auto;
+    left: 1rem;
+  }
+
+  .modal-title {
+    font-size: 1.75rem;
+    padding-right: 2.5rem;
+  }
+
+  [dir="rtl"] .modal-title {
+    padding-right: 0;
+    padding-left: 2.5rem;
+  }
+
+  .modal-body {
+    font-size: 1rem;
+  }
+
+  .modal-body h2 {
+    font-size: 1.4rem;
+  }
 }
