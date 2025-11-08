@@ -43,6 +43,18 @@ document.addEventListener('DOMContentLoaded', () => {
       sw.classList.toggle('active', sw.getAttribute('data-lang') === lang);
     });
 
+    // Update phone number link based on language
+    const phoneLink = document.getElementById('contactPhone');
+    if (phoneLink) {
+      if (lang === 'fa') {
+        // Farsi: Regular phone call to Persian number
+        phoneLink.href = 'tel:+989120437502';
+      } else {
+        // English: WhatsApp link to US number
+        phoneLink.href = 'https://wa.me/19165870145';
+      }
+    }
+
     // Save preference to localStorage
     localStorage.setItem('preferredLanguage', lang);
     
@@ -68,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Initial language setup: Check localStorage, otherwise default to English
-  const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
+  // Initial language setup: Check localStorage, otherwise default to Farsi
+  const preferredLanguage = localStorage.getItem('preferredLanguage') || 'fa';
   setLanguage(preferredLanguage);
 });

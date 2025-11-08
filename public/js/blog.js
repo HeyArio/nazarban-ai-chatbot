@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Get current language from localStorage
   const getCurrentLanguage = () => {
-    return localStorage.getItem('preferredLanguage') || 'en';
+    return localStorage.getItem('preferredLanguage') || 'fa';
   };
 
   // Format date based on language

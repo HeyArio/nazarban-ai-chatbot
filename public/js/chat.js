@@ -132,7 +132,7 @@ async function sendMessage() {
 
   // --- THIS IS THE NEW CODE ---
   // 1. Get the current language from localStorage
-  const currentLanguage = localStorage.getItem('preferredLanguage') || 'en';
+  const currentLanguage = localStorage.getItem('preferredLanguage') || 'fa';
   // --- END OF NEW CODE ---
 
   try {
