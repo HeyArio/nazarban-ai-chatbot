@@ -63,36 +63,76 @@ async function saveBlogPosts(posts) {
 // Archive old posts (configurable via environment variable, defaults to 7 days)
 async function archiveOldPosts() {
     try {
-        const archiveAfterDays = process.env.ARCHIVE_AFTER_DAYS || 7; // Changed default to 7 days
-        const posts = await loadBlogPosts();
-        const cutoffDate = Date.now() - (archiveAfterDays * 24 * 60 * 60 * 1000);
+        const postsPath = path.join(__dirname, 'blogposts.json');
+        const archivePath = path.join(__dirname, 'archive.json');
         
-        const activePosts = posts.filter(post => new Date(post.date).getTime() > cutoffDate);
-        const postsToArchive = posts.filter(post => new Date(post.date).getTime() <= cutoffDate);
+        // Read current posts
+        const postsData = await fs.readFile(postsPath, 'utf8');
+        const posts = JSON.parse(postsData);
         
-        if (postsToArchive.length > 0) {
-            // Load existing archive
-            let archived = [];
-            try {
-                const archiveData = await fs.readFile(archivedPostsPath, 'utf-8');
-                archived = JSON.parse(archiveData);
-            } catch (error) {
-                // Archive file doesn't exist yet
-            }
-            
-            // Add new archived posts
-            archived = [...archived, ...postsToArchive];
-            await fs.writeFile(archivedPostsPath, JSON.stringify(archived, null, 2));
-            
-            // Save only active posts
-            await saveBlogPosts(activePosts);
-            
-            console.log(`📦 Archived ${postsToArchive.length} old blog posts (older than ${archiveAfterDays} days)`);
-            return postsToArchive.length;
-        } else {
+        // Calculate cutoff date
+        const cutoffDate = new Date();
+        cutoffDate.setDate(cutoffDate.getDate() - (parseInt(process.env.ARCHIVE_AFTER_DAYS) || 7));
+        
+        console.log('🔍 DEBUG INFO:');
+        console.log('📊 Total posts:', posts.length);
+        console.log('📅 Cutoff date:', cutoffDate.toISOString());
+        console.log('');
+        
+        // Check each post
+        posts.forEach((post, index) => {
+            const postDate = new Date(post.date);
+            const isOld = postDate < cutoffDate;
+            console.log(`Post ${index + 1}:`);
+            console.log(`  Title: ${post.title}`);
+            console.log(`  Date: ${post.date}`);
+            console.log(`  Parsed: ${postDate.toISOString()}`);
+            console.log(`  Is Old? ${isOld ? '✅ YES' : '❌ NO'}`);
+            console.log('');
+        });
+        
+        // Filter posts
+        const postsToArchive = posts.filter(post => {
+            const postDate = new Date(post.date);
+            return postDate < cutoffDate;
+        });
+        
+        const remainingPosts = posts.filter(post => {
+            const postDate = new Date(post.date);
+            return postDate >= cutoffDate;
+        });
+        
+        console.log(`📦 Posts to archive: ${postsToArchive.length}`);
+        console.log(`📝 Posts to keep: ${remainingPosts.length}`);
+        
+        if (postsToArchive.length === 0) {
             console.log('✅ No posts to archive');
             return 0;
         }
+        
+        // Read existing archive
+        let archive = [];
+        try {
+            const archiveData = await fs.readFile(archivePath, 'utf8');
+            archive = JSON.parse(archiveData);
+        } catch (error) {
+            console.log('📂 Creating new archive file');
+        }
+        
+        // Add archived date
+        const archivedPosts = postsToArchive.map(post => ({
+            ...post,
+            archivedAt: new Date().toISOString()
+        }));
+        
+        // Update files
+        archive.push(...archivedPosts);
+        await fs.writeFile(archivePath, JSON.stringify(archive, null, 2));
+        await fs.writeFile(postsPath, JSON.stringify(remainingPosts, null, 2));
+        
+        console.log(`✅ Successfully archived ${postsToArchive.length} posts`);
+        return postsToArchive.length;
+        
     } catch (error) {
         console.error('❌ Error archiving posts:', error);
         return 0;
