@@ -107,19 +107,19 @@ async function archiveOldPosts() {
 // '0 2 * * 1' = 2:00 AM every Monday
 // '0 0 * * 1' = Midnight every Monday
 // '0 6 * * 1' = 6:00 AM every Monday
-cron.schedule('25 22 * * 1', async () => {
-    console.log('🕐 Running scheduled weekly archive task...');
+cron.schedule('25 22 * * *', async () => {
+    console.log('🕐 Running scheduled daily archive task...');
     const archivedCount = await archiveOldPosts();
     if (archivedCount > 0) {
-        console.log(`✅ Weekly archive complete: ${archivedCount} posts archived`);
+        console.log(`✅ Daily archive complete: ${archivedCount} posts archived`);
     } else {
-        console.log('✅ Weekly archive check complete: No posts needed archiving');
+        console.log('✅ Daily archive check complete: No posts needed archiving');
     }
 }, {
     timezone: "Asia/Tehran" // Change this to your timezone if needed
 });
 
-console.log('📅 Automatic weekly archiving scheduled for every Monday at 2:00 AM (Tehran time)');
+console.log('📅 Automatic daily archiving scheduled for every day at 22:25 PM (Tehran time)');
 // --- END AUTOMATIC WEEKLY ARCHIVING ---
 
 // Email transporter setup
