@@ -11,18 +11,67 @@
 /* --- 1. Base & Variables --- */
 
 
-/* Custom Font - Tahrir Regular */
+/* Custom Font - Sahel (Persian/Farsi) */
 @font-face {
-  font-family: 'Tahrir';
-  src: url('/fonts/TahrirRegular.eot'); /* IE9 Compat */
-  src: url('/fonts/TahrirRegular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('/fonts/TahrirRegular.woff2') format('woff2'), /* Modern Browsers */
-       url('/fonts/TahrirRegular.woff') format('woff'), /* Modern Browsers */
-       url('/fonts/TahrirRegular.ttf') format('truetype'); /* Safari, Android, iOS */
+  font-family: 'Sahel';
+  src: url('/fonts/Sahel.eot');
+  src: url('/fonts/Sahel.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/Sahel.woff2') format('woff2'),
+       url('/fonts/Sahel.woff') format('woff'),
+       url('/fonts/Sahel.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
-  font-display: swap; /* Improves loading performance */
+  font-display: swap;
 }
+
+@font-face {
+  font-family: 'Sahel';
+  src: url('/fonts/Sahel-Light.eot');
+  src: url('/fonts/Sahel-Light.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/Sahel-Light.woff2') format('woff2'),  
+       url('/fonts/Sahel-Light.woff') format('woff'),
+       url('/fonts/Sahel-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sahel';
+  src: url('/fonts/Sahel-SemiBold.eot');
+  src: url('/fonts/Sahel-SemiBold.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/Sahel-SemiBold.woff2') format('woff2'),  
+       url('/fonts/Sahel-SemiBold.woff') format('woff'),
+       url('/fonts/Sahel-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sahel';
+  src: url('/fonts/Sahel-Bold.eot');
+  src: url('/fonts/Sahel-Bold.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/Sahel-Bold.woff2') format('woff2'),
+       url('/fonts/Sahel-Bold.woff') format('woff'),
+       url('/fonts/Sahel-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sahel';
+  src: url('/fonts/Sahel-Black.eot');
+  src: url('/fonts/Sahel-Black.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/Sahel-Black.woff2') format('woff2'),  
+       url('/fonts/Sahel-Black.woff') format('woff'),
+       url('/fonts/Sahel-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 
 
 :root {
@@ -43,8 +92,8 @@
   --radius-md: 12px;
   --radius-lg: 18px;
 
-  --font-en: 'Tahrir';
-  --font-fa: 'Tahrir';
+  --font-en: 'Nunito Sans', sans-serif;
+  --font-fa: 'Sahel', sans-serif;
 }
 
 * {
@@ -53,12 +102,18 @@
   box-sizing: border-box;
 }
 
+/* Default font for Farsi */
 html {
-  font-family: var(--font-en);
+  font-family: var(--font-fa);
   color: var(--ink);
   background-color: var(--bg);
   scroll-behavior: smooth;
   height: 100%;
+}
+
+/* English font when lang="en" */
+html[lang="en"] {
+  font-family: var(--font-en);
 }
 
 body {
@@ -1119,7 +1174,7 @@ html[dir="rtl"] .menu-toggle {
 }
 
 [dir="rtl"] .post-title {
-  font-family: 'Cairo', sans-serif;
+  /* Sahel font will be used automatically via html[lang] selector */
 }
 
 .post-meta {
@@ -1158,7 +1213,6 @@ html[dir="rtl"] .menu-toggle {
 }
 
 [dir="rtl"] .post-content {
-  font-family: 'Cairo', sans-serif;
   text-align: right;
 }
 
@@ -1394,7 +1448,6 @@ html[dir="rtl"] .menu-toggle {
 [dir="rtl"] .modal-title {
   padding-right: 0;
   padding-left: 3rem;
-  font-family: 'Cairo', sans-serif;
 }
 
 .modal-meta {
@@ -1414,7 +1467,6 @@ html[dir="rtl"] .menu-toggle {
 }
 
 [dir="rtl"] .modal-body {
-  font-family: 'Cairo', sans-serif;
   text-align: right;
 }
 
