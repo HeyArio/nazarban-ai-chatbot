@@ -63,76 +63,36 @@ async function saveBlogPosts(posts) {
 // Archive old posts (configurable via environment variable, defaults to 7 days)
 async function archiveOldPosts() {
     try {
-        const postsPath = path.join(__dirname, 'blogPosts.json');
-        const archivePath = path.join(__dirname, 'archivePosts.json');
+        const archiveAfterDays = process.env.ARCHIVE_AFTER_DAYS || 7; // Changed default to 7 days
+        const posts = await loadBlogPosts();
+        const cutoffDate = Date.now() - (archiveAfterDays * 24 * 60 * 60 * 1000);
         
-        // Read current posts
-        const postsData = await fs.readFile(postsPath, 'utf8');
-        const posts = JSON.parse(postsData);
+        const activePosts = posts.filter(post => new Date(post.date).getTime() > cutoffDate);
+        const postsToArchive = posts.filter(post => new Date(post.date).getTime() <= cutoffDate);
         
-        // Calculate cutoff date
-        const cutoffDate = new Date();
-        cutoffDate.setDate(cutoffDate.getDate() - (parseInt(process.env.ARCHIVE_AFTER_DAYS) || 7));
-        
-        console.log('🔍 DEBUG INFO:');
-        console.log('📊 Total posts:', posts.length);
-        console.log('📅 Cutoff date:', cutoffDate.toISOString());
-        console.log('');
-        
-        // Check each post
-        posts.forEach((post, index) => {
-            const postDate = new Date(post.date);
-            const isOld = postDate < cutoffDate;
-            console.log(`Post ${index + 1}:`);
-            console.log(`  Title: ${post.title}`);
-            console.log(`  Date: ${post.date}`);
-            console.log(`  Parsed: ${postDate.toISOString()}`);
-            console.log(`  Is Old? ${isOld ? '✅ YES' : '❌ NO'}`);
-            console.log('');
-        });
-        
-        // Filter posts
-        const postsToArchive = posts.filter(post => {
-            const postDate = new Date(post.date);
-            return postDate < cutoffDate;
-        });
-        
-        const remainingPosts = posts.filter(post => {
-            const postDate = new Date(post.date);
-            return postDate >= cutoffDate;
-        });
-        
-        console.log(`📦 Posts to archive: ${postsToArchive.length}`);
-        console.log(`📝 Posts to keep: ${remainingPosts.length}`);
-        
-        if (postsToArchive.length === 0) {
+        if (postsToArchive.length > 0) {
+            // Load existing archive
+            let archived = [];
+            try {
+                const archiveData = await fs.readFile(archivedPostsPath, 'utf-8');
+                archived = JSON.parse(archiveData);
+            } catch (error) {
+                // Archive file doesn't exist yet
+            }
+            
+            // Add new archived posts
+            archived = [...archived, ...postsToArchive];
+            await fs.writeFile(archivedPostsPath, JSON.stringify(archived, null, 2));
+            
+            // Save only active posts
+            await saveBlogPosts(activePosts);
+            
+            console.log(`📦 Archived ${postsToArchive.length} old blog posts (older than ${archiveAfterDays} days)`);
+            return postsToArchive.length;
+        } else {
             console.log('✅ No posts to archive');
             return 0;
         }
-        
-        // Read existing archive
-        let archive = [];
-        try {
-            const archiveData = await fs.readFile(archivePath, 'utf8');
-            archive = JSON.parse(archiveData);
-        } catch (error) {
-            console.log('📂 Creating new archive file');
-        }
-        
-        // Add archived date
-        const archivedPosts = postsToArchive.map(post => ({
-            ...post,
-            archivedAt: new Date().toISOString()
-        }));
-        
-        // Update files
-        archive.push(...archivedPosts);
-        await fs.writeFile(archivePath, JSON.stringify(archive, null, 2));
-        await fs.writeFile(postsPath, JSON.stringify(remainingPosts, null, 2));
-        
-        console.log(`✅ Successfully archived ${postsToArchive.length} posts`);
-        return postsToArchive.length;
-        
     } catch (error) {
         console.error('❌ Error archiving posts:', error);
         return 0;
@@ -147,7 +107,7 @@ async function archiveOldPosts() {
 // '0 2 * * 1' = 2:00 AM every Monday
 // '0 0 * * 1' = Midnight every Monday
 // '0 6 * * 1' = 6:00 AM every Monday
-cron.schedule('12 18 */3 * *', async () => {
+cron.schedule('25 22 * * 1', async () => {
     console.log('🕐 Running scheduled weekly archive task...');
     const archivedCount = await archiveOldPosts();
     if (archivedCount > 0) {
@@ -475,25 +435,5 @@ app.listen(PORT, async () => {
     console.log(`📧 Zoho Email: ${process.env.ZOHO_EMAIL && process.env.ZOHO_APP_PASSWORD ? '✅ Found' : '❌ Missing'}`);
     console.log(`🔑 Admin Password: ${process.env.ADMIN_PASSWORD ? '✅ Set' : '❌ Missing'}`);
     console.log(`📝 Blog API: ✅ Enabled at /api/blog/post`);
-    console.log('📅 Automatic archiving scheduled every 3 days at 22:25 (Tehran time)');
+    console.log(`📅 Automatic archiving: ✅ Scheduled for every Monday at 2:00 AM`);
 });
-
-// 🧪 TEMPORARY TEST CODE - Remove after testing
-console.log('⏰ Archive test will run in 5 seconds...');
-setTimeout(async () => {
-    console.log('');
-    console.log('🧪 ========== TESTING ARCHIVE FUNCTION ==========');
-    console.log('📅 Current date:', new Date().toISOString());
-    console.log(`📊 Archive threshold: Posts older than ${process.env.ARCHIVE_AFTER_DAYS || 7} days`);
-    console.log('');
-    
-    try {
-        const archivedCount = await archiveOldPosts();
-        console.log('');
-        console.log('✅ ========== TEST COMPLETE ==========');
-        console.log(`📦 Posts archived: ${archivedCount}`);
-        console.log('');
-    } catch (error) {
-        console.error('❌ Test failed:', error);
-    }
-}, 5000);
