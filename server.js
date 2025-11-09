@@ -107,7 +107,7 @@ async function archiveOldPosts() {
 // '0 2 * * 1' = 2:00 AM every Monday
 // '0 0 * * 1' = Midnight every Monday
 // '0 6 * * 1' = 6:00 AM every Monday
-cron.schedule('25 22 * * 1', async () => {
+cron.schedule('25 22 */3 * *', async () => {
     console.log('🕐 Running scheduled weekly archive task...');
     const archivedCount = await archiveOldPosts();
     if (archivedCount > 0) {
@@ -435,5 +435,5 @@ app.listen(PORT, async () => {
     console.log(`📧 Zoho Email: ${process.env.ZOHO_EMAIL && process.env.ZOHO_APP_PASSWORD ? '✅ Found' : '❌ Missing'}`);
     console.log(`🔑 Admin Password: ${process.env.ADMIN_PASSWORD ? '✅ Set' : '❌ Missing'}`);
     console.log(`📝 Blog API: ✅ Enabled at /api/blog/post`);
-    console.log(`📅 Automatic archiving: ✅ Scheduled for every Monday at 2:00 AM`);
+    console.log('📅 Automatic archiving scheduled every 3 days at 22:25 (Tehran time)');
 });
