@@ -437,3 +437,23 @@ app.listen(PORT, async () => {
     console.log(`📝 Blog API: ✅ Enabled at /api/blog/post`);
     console.log('📅 Automatic archiving scheduled every 3 days at 22:25 (Tehran time)');
 });
+
+// 🧪 TEMPORARY TEST CODE - Remove after testing
+console.log('⏰ Archive test will run in 5 seconds...');
+setTimeout(async () => {
+    console.log('');
+    console.log('🧪 ========== TESTING ARCHIVE FUNCTION ==========');
+    console.log('📅 Current date:', new Date().toISOString());
+    console.log(`📊 Archive threshold: Posts older than ${process.env.ARCHIVE_AFTER_DAYS || 7} days`);
+    console.log('');
+    
+    try {
+        const archivedCount = await archiveOldPosts();
+        console.log('');
+        console.log('✅ ========== TEST COMPLETE ==========');
+        console.log(`📦 Posts archived: ${archivedCount}`);
+        console.log('');
+    } catch (error) {
+        console.error('❌ Test failed:', error);
+    }
+}, 5000);
