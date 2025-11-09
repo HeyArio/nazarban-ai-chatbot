@@ -63,8 +63,8 @@ async function saveBlogPosts(posts) {
 // Archive old posts (configurable via environment variable, defaults to 7 days)
 async function archiveOldPosts() {
     try {
-        const postsPath = path.join(__dirname, 'blogposts.json');
-        const archivePath = path.join(__dirname, 'archive.json');
+        const postsPath = path.join(__dirname, 'blogPosts.json');
+        const archivePath = path.join(__dirname, 'archivePosts.json');
         
         // Read current posts
         const postsData = await fs.readFile(postsPath, 'utf8');
