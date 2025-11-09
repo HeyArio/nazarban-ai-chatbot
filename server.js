@@ -107,7 +107,7 @@ async function archiveOldPosts() {
 // '0 2 * * 1' = 2:00 AM every Monday
 // '0 0 * * 1' = Midnight every Monday
 // '0 6 * * 1' = 6:00 AM every Monday
-cron.schedule('8 18 */3 * *', async () => {
+cron.schedule('12 18 */3 * *', async () => {
     console.log('🕐 Running scheduled weekly archive task...');
     const archivedCount = await archiveOldPosts();
     if (archivedCount > 0) {
