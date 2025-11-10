@@ -23,7 +23,7 @@
     body {
       background-color: #0F172A; 
       color: #F1F5F9;
-      overflow-x: hidden; 
+      /* Overflow is now handled by the .page-wrapper */
     }
 
     /* Page Wrapper Fix */
@@ -107,7 +107,7 @@
       padding: 1.5rem;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       border: 1px solid #334155;
-      overflow: hidden; /* <-- NEW: Safety net to clip any overflow */
+      overflow: hidden; /* Safety net to clip any overflow */
     }
     .chart-card h2 {
       margin-top: 0;
@@ -604,30 +604,31 @@
             }
           },
           dataLabels: {
-             enabled: false
+             enabled: false // <-- Data labels are OFF for desktop
           },
           // *** NEW: Responsive fix for mobile legend ***
           responsive: [{
             breakpoint: 480, // Mobile breakpoint
             options: {
               chart: {
-                height: 350 // Make chart smaller
+                height: 300 // Make chart smaller
               },
               legend: {
-                position: 'bottom',
-                horizontalAlign: 'center', // Center the legend items
-                itemMargin: {
-                    horizontal: 3,
-                    vertical: 3
-                }
+                show: false // <-- HIDE the legend on mobile
+              },
+              dataLabels: {
+                 enabled: true, // <-- SHOW data labels on mobile
+                 style: {
+                    colors: ['#fff'],
+                    fontSize: '14px'
+                 },
+                 formatter: (val) => val.toFixed(1) + '%' // Show percent
               },
               plotOptions: {
                 pie: {
                   donut: {
                     labels: {
-                      total: {
-                        fontSize: '18px' // Make total font smaller
-                      }
+                      show: false // Hide the "Total" label
                     }
                   }
                 }
@@ -679,33 +680,13 @@
         table.innerHTML = headerHTML + bodyHTML;
       }
       
-      // *** UPDATED: Renders Insights and new Key Takeaways ***
+      // *** UPDATED: Renders Insights and ONLY static Quick Facts ***
       function renderInsights(data) {
         const container = document.getElementById('insights-container');
         if (!container) return;
         
         const insights = data.insights || [];
-        const staticFacts = data.quick_facts || []; // <-- Re-added static facts
-        let dynamicFacts = [];
-
-        try {
-          // --- Start "Cool" Dynamic Fact Generation ---
-          
-          // Fact: Provider Dominance
-          if (data.charts && data.charts.provider_pie) {
-              const pieData = data.charts.provider_pie;
-              const topProvider = pieData.labels[0];
-              const topProviderCount = pieData.datasets[0].data[0];
-              dynamicFacts.push(`${topProvider} dominates the Top 10 with ${topProviderCount} models.`);
-          }
-          
-          // --- End Dynamic Fact Generation ---
-        } catch (e) {
-          console.error("Error generating dynamic facts:", e);
-        }
-        
-        // We combine the static facts (which you liked) with a few "cooler" dynamic ones
-        const allFacts = [...staticFacts, ...dynamicFacts];
+        const staticFacts = data.quick_facts || []; // <-- We now ONLY use this
         
         let insightsHTML = '';
         if (insights.length > 0) {
@@ -721,12 +702,12 @@
         }
 
         let factsHTML = '';
-        if (allFacts.length > 0) {
+        if (staticFacts.length > 0) {
             factsHTML = `
                 <div class="quick-facts-card">
                     <h3>Quick Facts</h3> 
                     <ul>
-                        ${allFacts.map(fact => `<li>${fact}</li>`).join('')}
+                        ${staticFacts.map(fact => `<li>${fact}</li>`).join('')}
                     </ul>
                 </div>
             `;
