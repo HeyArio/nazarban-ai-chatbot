@@ -23,11 +23,10 @@
     body {
       background-color: #0F172A; 
       color: #F1F5F9;
-      /* Overflow is now handled by the .page-wrapper */
+      overflow-x: hidden; 
     }
 
-    /* *** NEW: Page Wrapper Fix *** */
-    /* This wrapper isolates the page and finally kills the horizontal scroll */
+    /* Page Wrapper Fix */
     .page-wrapper {
         width: 100%;
         overflow-x: hidden;
@@ -108,6 +107,7 @@
       padding: 1.5rem;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       border: 1px solid #334155;
+      overflow: hidden; /* <-- NEW: Safety net to clip any overflow */
     }
     .chart-card h2 {
       margin-top: 0;
@@ -597,11 +597,43 @@
           },
           legend: {
             position: 'bottom',
-            labels: { colors: '#F1F5F9' }
+            labels: { colors: '#F1F5F9' },
+            itemMargin: {
+                horizontal: 5,
+                vertical: 2
+            }
           },
           dataLabels: {
              enabled: false
-          }
+          },
+          // *** NEW: Responsive fix for mobile legend ***
+          responsive: [{
+            breakpoint: 480, // Mobile breakpoint
+            options: {
+              chart: {
+                height: 350 // Make chart smaller
+              },
+              legend: {
+                position: 'bottom',
+                horizontalAlign: 'center', // Center the legend items
+                itemMargin: {
+                    horizontal: 3,
+                    vertical: 3
+                }
+              },
+              plotOptions: {
+                pie: {
+                  donut: {
+                    labels: {
+                      total: {
+                        fontSize: '18px' // Make total font smaller
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }]
         };
 
         const chart = new ApexCharts(document.querySelector("#provider-pie-chart"), options);
