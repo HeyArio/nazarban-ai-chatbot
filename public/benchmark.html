@@ -146,7 +146,7 @@
   <script src="js/translations.js"></script> 
   <script src="js/language.js"></script> 
 
-  <script>
+  <<script>
     document.addEventListener('DOMContentLoaded', () => {
       const chartsContainer = document.getElementById('charts-container');
       const lastUpdatedEl = document.getElementById('last-updated');
@@ -205,10 +205,21 @@
         }
       }
 
-      // Renders the Bar Chart
+      // UPDATED: Renders the Bar Chart (now with validation)
       function renderModelChart(chartData) {
+        // --- NEW VALIDATION ---
+        if (!chartData || !chartData.series || !chartData.categories) {
+            console.error("Invalid 'modelComparison' data received:", chartData);
+            const errorEl = document.getElementById('model-comparison-chart');
+            if (errorEl) {
+                errorEl.innerHTML = `<div class="error-message" style="margin:1rem;">Invalid chart data: 'modelComparison' object is missing 'series' or 'categories'.</div>`;
+            }
+            return; // Stop execution
+        }
+        // ----------------------
+
         const options = {
-          series: chartData.series, // e.g., [{ name: 'GPT-4o', data: [120, 95, 1.5] }]
+          series: chartData.series, // Now safe
           chart: {
             type: 'bar',
             height: 350,
@@ -229,7 +240,7 @@
             colors: ['transparent']
           },
           xaxis: {
-            categories: chartData.categories, // e.g., ['Speed', 'Accuracy', 'Cost']
+            categories: chartData.categories, // Now safe
           },
           yaxis: {
             title: { text: 'Value' }
@@ -240,7 +251,6 @@
               formatter: (val) => val
             }
           },
-          // This is key! It respects your <html dir="rtl">
           theme: {
             mode: 'light',
             palette: 'palette1' 
@@ -251,8 +261,19 @@
         chart.render();
       }
 
-      // Renders the "cool" Radial Gauges
+      // UPDATED: Renders the "cool" Radial Gauges (now with validation)
       function renderUptimeGauges(uptimeData) {
+        // --- NEW VALIDATION ---
+        if (!uptimeData || !Array.isArray(uptimeData)) {
+            console.error("Invalid 'apiUptime' data received:", uptimeData);
+            const errorEl = document.getElementById('uptime-gauges');
+            if(errorEl) {
+                errorEl.innerHTML = `<div class="error-message" style="margin:1rem;">Invalid chart data: 'apiUptime' must be an array.</div>`;
+            }
+            return; // Stop execution
+        }
+        // ----------------------
+        
         const gaugesContainer = document.getElementById('uptime-gauges');
         
         uptimeData.forEach(api => {
@@ -300,7 +321,7 @@
         });
       }
 
-      // Main function to fetch data
+      // UPDATED: Main function to fetch data (now with validation and logging)
       async function fetchBenchmarkData() {
         showLoading();
         try {
@@ -312,12 +333,29 @@
           const result = await response.json();
           
           if (result.success && result.data) {
-            renderData(result.data);
+            // --- NEW DEBUGGING LOG ---
+            // THIS IS THE MOST IMPORTANT PART
+            console.log("Successfully fetched data from /api/benchmark/data:", result.data); 
+            // -------------------------
+
+            // --- NEW VALIDATION CHECKS ---
+            if (!result.data.modelComparison) {
+              console.error("Data is missing 'modelComparison' key.", result.data);
+              throw new Error("Data loaded, but it's missing the 'modelComparison' section.");
+            }
+            if (!result.data.apiUptime) {
+              console.error("Data is missing 'apiUptime' key.", result.data);
+              throw new Error("Data loaded, but it's missing the 'apiUptime' section.");
+            }
+            // ---------------------------
+
+            renderData(result.data); // This is now "safe" to call
+
           } else {
             throw new Error(result.message || 'Data format is incorrect.');
           }
         } catch (error) {
-          console.error('Error fetching benchmark data:', error);
+          console.error('Error fetching/rendering benchmark data:', error); // Changed log
           showError(error.message);
         }
       }
