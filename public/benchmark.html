@@ -18,13 +18,12 @@
   <style>
     /* Main body and layout styles */
     html {
-      /* Keep background on HTML for smooth scroll */
       background-color: #0F172A; 
     }
     body {
       background-color: #0F172A; 
       color: #F1F5F9;
-      overflow-x: hidden; /* <-- MOVED: Prevents horizontal page scroll */
+      overflow-x: hidden; /* <-- This is correct, stops page scroll */
     }
     .benchmark-container {
       max-width: 1400px;
@@ -109,7 +108,7 @@
       color: #E2E8F0;
     }
     
-    /* Leaderboard Table Styles */
+    /* *** UPDATED LEADERBOARD STYLES *** */
     .leaderboard-container {
       background: #1E293B;
       border-radius: 12px;
@@ -118,6 +117,9 @@
       border: 1px solid #334155;
       overflow-x: auto; /* For mobile */
       margin-bottom: 2rem;
+      
+      width: 100%; /* <-- NEW: Forces container to fit screen */
+      box-sizing: border-box; /* <-- NEW: Includes padding in width */
     }
     .leaderboard-container h2 {
         margin-top: 0;
@@ -340,7 +342,7 @@
              </div>
         `;
         
-        // Date formatting (from v8)
+        // Date formatting
         try {
           const updatedDate = new Date(data.metadata.last_updated);
           const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -635,49 +637,40 @@
         table.innerHTML = headerHTML + bodyHTML;
       }
       
-      // *** UPDATED: Renders Insights and CURATED Key Takeaways ***
+      // *** UPDATED: Renders Insights and new Key Takeaways ***
       function renderInsights(data) {
         const container = document.getElementById('insights-container');
         if (!container) return;
         
         const insights = data.insights || [];
-        // We no longer use data.quick_facts
-        let curatedFacts = []; 
+        const staticFacts = data.quick_facts || []; // <-- Re-added static facts
+        let dynamicFacts = [];
 
         try {
-          // --- Start Curated Fact Generation ---
+          // --- Start "Cool" Dynamic Fact Generation ---
           
-          // Fact 1: Provider Dominance
+          // Fact 1: Top 10 Score Range
+          if (data.leaderboard && data.leaderboard.length >= 10) {
+              const topScore = data.leaderboard[0].intelligence;
+              const bottomScore = data.leaderboard[9].intelligence;
+              dynamicFacts.push(`The Top 10 models are in a tight race, with scores from ${bottomScore} to ${topScore}.`);
+          }
+          
+          // Fact 2: Provider Dominance
           if (data.charts && data.charts.provider_pie) {
               const pieData = data.charts.provider_pie;
               const topProvider = pieData.labels[0];
               const topProviderCount = pieData.datasets[0].data[0];
-              curatedFacts.push(`${topProvider} dominates the Top 10 with ${topProviderCount} models.`);
+              dynamicFacts.push(`${topProvider} is the most dominant provider in the Top 10, with ${topProviderCount} models listed.`);
           }
           
-          // Fact 2: Top 10 Score Range
-          if (data.leaderboard && data.leaderboard.length >= 10) {
-              const topScore = data.leaderboard[0].intelligence;
-              const bottomScore = data.leaderboard[9].intelligence;
-              curatedFacts.push(`Top 10 intelligence scores range from ${bottomScore} to ${topScore}.`);
-              
-              // Fact 3: Average score
-              const top10 = data.leaderboard.slice(0, 10);
-              const avg = top10.reduce((acc, model) => acc + model.intelligence, 0) / 10;
-              curatedFacts.push(`The average intelligence score in the Top 10 is ${avg.toFixed(1)}.`);
-          }
-          
-          // Fact 4: Math winner
-          if (data.category_winners) {
-            const mathWinner = data.category_winners.find(c => c.display_name === 'Math');
-            if (mathWinner) {
-                curatedFacts.push(`The top model for Math is ${mathWinner.model_name} (Score: ${mathWinner.score}).`);
-            }
-          }
-          // --- End Curated Fact Generation ---
+          // --- End Dynamic Fact Generation ---
         } catch (e) {
           console.error("Error generating dynamic facts:", e);
         }
+        
+        // We combine the static facts (which you liked) with a few "cooler" dynamic ones
+        const allFacts = [...staticFacts, ...dynamicFacts];
         
         let insightsHTML = '';
         if (insights.length > 0) {
@@ -693,12 +686,12 @@
         }
 
         let factsHTML = '';
-        if (curatedFacts.length > 0) {
+        if (allFacts.length > 0) {
             factsHTML = `
                 <div class="quick-facts-card">
                     <h3>Key Takeaways</h3> 
                     <ul>
-                        ${curatedFacts.map(fact => `<li>${fact}</li>`).join('')}
+                        ${allFacts.map(fact => `<li>${fact}</li>`).join('')}
                     </ul>
                 </div>
             `;
