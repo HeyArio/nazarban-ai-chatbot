@@ -279,7 +279,7 @@
         chart.render();
       }
 
-      // Main function to fetch data
+      // *** UPDATED fetchBenchmarkData function ***
       async function fetchBenchmarkData() {
         showLoading();
         try {
@@ -291,10 +291,10 @@
           const result = await response.json();
           
           // --- THIS IS THE KEY CHANGE ---
-          // We check if it's an array and grab the first element
-          if (result.success && Array.isArray(result.data) && result.data.length > 0) {
+          // We now check if result.data is just a valid object
+          if (result.success && result.data && typeof result.data === 'object') {
             
-            const realData = result.data[0]; // Your data is the first object in the array
+            const realData = result.data; // Data IS the object
             console.log("Successfully fetched data:", realData); 
 
             if (!realData.charts) {
@@ -305,7 +305,7 @@
             renderData(realData); // This is now "safe" to call
 
           } else {
-            // Handle if data is not an array or is empty
+            // This will trigger if data is null, undefined, or not an object
             throw new Error(result.message || 'Data format is incorrect or empty.');
           }
         } catch (error) {
