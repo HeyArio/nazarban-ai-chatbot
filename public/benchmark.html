@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nazarban AI Consultation - Benchmarks</title>
+  <title>Nazarban AI - LLM Data Hub</title>
 
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
   <link rel="icon" href="favicon.ico" />
@@ -16,12 +16,11 @@
   <link rel="stylesheet" href="style.css" />
 
   <style>
-    /* Ensure body is scrollable */
+    /* Main body and layout styles */
     body {
-      background-color: #0F172A; /* Assuming a dark background from your CSS */
+      background-color: #0F172A; 
       color: #F1F5F9;
     }
-
     .benchmark-container {
       max-width: 1400px;
       margin: 2rem auto;
@@ -40,7 +39,7 @@
       color: #94A3B8;
     }
 
-    /* NEW: Hero Stats Row */
+    /* Hero Stats Row */
     .hero-stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -72,22 +71,20 @@
       margin-top: 0.25rem;
     }
 
-    /* UPDATED: Charts Grid */
+    /* 2x2 Charts Grid */
     .charts-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr); /* 2x2 Grid */
+      grid-template-columns: repeat(2, 1fr); 
       gap: 1.5rem;
+      margin-bottom: 2rem;
     }
-
-    /* On mobile, stack the grid */
     @media (max-width: 900px) {
       .charts-grid {
         grid-template-columns: 1fr;
       }
     }
-
     .chart-card {
-      background: #1E293B; /* Dark card background */
+      background: #1E293B; 
       border-radius: 12px;
       padding: 1.5rem;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -100,35 +97,116 @@
       color: #E2E8F0;
     }
     
-    /* Loading Spinner */
-    .loader-container {
+    /* NEW: Leaderboard Table Styles */
+    .leaderboard-container {
+      background: #1E293B;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border: 1px solid #334155;
+      overflow-x: auto; /* For mobile */
+      margin-bottom: 2rem;
+    }
+    .leaderboard-container h2 {
+        margin-top: 0;
+    }
+    .leaderboard-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    .leaderboard-table th, .leaderboard-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #334155;
+    }
+    .leaderboard-table th {
+      color: #94A3B8;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+    }
+    .leaderboard-table td {
+      color: #E2E8F0;
+    }
+    .leaderboard-table tr:last-child td {
+      border-bottom: 0;
+    }
+    .leaderboard-table .rank {
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #F1F5F9;
+    }
+    .leaderboard-table .grade-c {
+      background-color: #374151;
+      color: #F1F5F9;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: inline-block;
+      min-width: 20px;
       text-align: center;
-      padding: 4rem 0;
     }
-    .loader {
-      width: 50px;
-      aspect-ratio: 1;
-      border-radius: 50%;
-      border: 8px solid #334155;
-      border-top-color: #3B82F6;
-      animation: spin 1s linear infinite;
+
+    /* NEW: Insights & Facts Grid */
+    .insights-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.5rem;
     }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    @media (max-width: 900px) {
+      .insights-grid {
+        grid-template-columns: 1fr;
+      }
     }
-    
-    /* Error Message */
-    .error-message {
-      text-align: center;
-      padding: 2rem;
-      background: #3a1a1a;
-      color: #fca5a5;
-      border: 1px solid #b91c1c;
-      border-radius: 8px;
+    .insight-card {
+      background: #1E293B;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 1.5rem;
     }
+    .insight-card h3 {
+      margin: 0 0 0.5rem 0;
+      color: #3B82F6; /* Blue title */
+    }
+    .insight-card h4 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.25rem;
+      color: #E2E8F0;
+    }
+    .insight-card p {
+      margin: 0;
+      color: #94A3B8;
+    }
+    .quick-facts-card {
+        background: #1E293B;
+        border: 1px solid #334155;
+        border-radius: 12px;
+        padding: 1.5rem;
+    }
+    .quick-facts-card h3 {
+        margin: 0 0 1rem 0;
+        color: #E2E8F0;
+    }
+    .quick-facts-card ul {
+      margin: 0;
+      padding-left: 20px;
+      color: #94A3B8;
+    }
+    .quick-facts-card li {
+      margin-bottom: 0.5rem;
+    }
+
+    /* Loader/Error Styles (unchanged) */
+    .loader-container { text-align: center; padding: 4rem 0; }
+    .loader { width: 50px; aspect-ratio: 1; border-radius: 50%; border: 8px solid #334155; border-top-color: #3B82F6; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .error-message { text-align: center; padding: 2rem; background: #3a1a1a; color: #fca5a5; border: 1px solid #b91c1c; border-radius: 8px; }
   </style>
 </head>
-<body style="background-color: #0F172A;"> <header class="header">
+<body style="background-color: #0F172A;"> 
+
+  <header class="header">
     <a href="index.html" class="logo-section">
       <div class="logo-badge"> <img class="logo" src="logo.png" alt="Nazarban Logo" /> </div>
       <div class="brand-text">
@@ -237,6 +315,15 @@
               <div id="provider-pie-chart"></div>
             </div>
           </div>
+
+          <div id="leaderboard-container" class="leaderboard-container">
+             <h2>Leaderboard</h2>
+             <table class="leaderboard-table" id="leaderboard-table">
+                </table>
+          </div>
+
+          <div id="insights-container" classs="insights-grid">
+             </div>
         `;
         
         // Update last updated time from metadata
@@ -253,6 +340,8 @@
         renderRadarChart(data.charts.top_5_radar);
         renderCategoryWinners(data.charts.category_winners_bar);
         renderProviderPie(data.charts.provider_pie);
+        renderLeaderboardTable(data.leaderboard); // <-- NEW
+        renderInsights(data.insights, data.quick_facts); // <-- NEW
         
         // Re-run translation for new content
         if (typeof window.updateContent === 'function') {
@@ -260,7 +349,7 @@
         }
       }
 
-      // NEW: Function to render Hero Stats
+      // Render Hero Stats
       function renderHeroStats(stats) {
         if (!stats) return;
         const container = document.getElementById('hero-stats-container');
@@ -292,10 +381,12 @@
             type: 'bar',
             height: 350,
             fontFamily: '"Nunito Sans", sans-serif',
-            toolbar: { show: false }
+            toolbar: { show: false },
+            id: 'top10bar', // <-- NEW: Chart ID for sync
+            group: 'llm-sync' // <-- NEW: Sync group
           },
           theme: {
-            mode: 'dark' // <-- THEME FIX
+            mode: 'dark' 
           },
           grid: {
             borderColor: '#334155'
@@ -336,10 +427,12 @@
             height: 400,
             type: 'radar',
             fontFamily: '"Nunito Sans", sans-serif',
-            toolbar: { show: false }
+            toolbar: { show: false },
+            id: 'top5radar', // <-- NEW: Chart ID for sync
+            group: 'llm-sync' // <-- NEW: Sync group
           },
           theme: {
-            mode: 'dark' // <-- THEME FIX
+            mode: 'dark' 
           },
           xaxis: {
             categories: chartData.labels,
@@ -367,7 +460,7 @@
         chart.render();
       }
 
-      // NEW: Renders the Horizontal Bar Chart
+      // Renders the Horizontal Bar Chart
       function renderCategoryWinners(chartData) {
         if (!chartData) return;
 
@@ -383,15 +476,15 @@
             toolbar: { show: false }
           },
           theme: {
-            mode: 'dark' // <-- THEME FIX
+            mode: 'dark' 
           },
           grid: {
             borderColor: '#334155'
           },
           plotOptions: {
             bar: {
-              horizontal: true, // <-- Makes it horizontal
-              distributed: true, // <-- Uses different colors
+              horizontal: true, 
+              distributed: true, 
               borderRadius: 4
             },
           },
@@ -407,14 +500,14 @@
               style: { colors: '#94A3B8', fontSize: '14px' }
             }
           },
-          legend: { show: false } // Hide legend since colors are distributed
+          legend: { show: false } 
         };
 
         const chart = new ApexCharts(document.querySelector("#category-winners-chart"), options);
         chart.render();
       }
 
-      // NEW: Renders the Pie Chart
+      // Renders the Pie Chart
       function renderProviderPie(chartData) {
         if (!chartData) return;
 
@@ -427,7 +520,7 @@
             fontFamily: '"Nunito Sans", sans-serif'
           },
           theme: {
-            mode: 'dark' // <-- THEME FIX
+            mode: 'dark' 
           },
           plotOptions: {
             pie: {
@@ -456,7 +549,85 @@
         chart.render();
       }
 
-      // Main fetch function (unchanged)
+      // NEW: Renders the Leaderboard Table
+      function renderLeaderboardTable(leaderboardData) {
+        if (!leaderboardData || !Array.isArray(leaderboardData)) return;
+
+        const table = document.getElementById('leaderboard-table');
+        
+        // Create Header
+        let headerHTML = `
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>Provider</th>
+                    <th>Intelligence</th>
+                    <th>Coding</th>
+                    <th>Math</th>
+                    <th>Grade</th>
+                </tr>
+            </thead>
+        `;
+
+        // Create Body
+        let bodyHTML = '<tbody>';
+        for (const model of leaderboardData) {
+          bodyHTML += `
+            <tr>
+              <td class="rank">#${model.rank}</td>
+              <td>${model.name}</td>
+              <td>${model.provider}</td>
+              <td>${model.intelligence}</td>
+              <td>${model.coding}</td>
+              <td>${model.math}</td>
+              <td><span class="grade-c">${model.grade}</span></td>
+            </tr>
+          `;
+        }
+        bodyHTML += '</tbody>';
+        
+        table.innerHTML = headerHTML + bodyHTML;
+      }
+      
+      // NEW: Renders the Insights and Quick Facts
+      function renderInsights(insights, quickFacts) {
+        const container = document.getElementById('insights-container');
+        if (!container) return;
+        
+        let insightsHTML = '';
+        if (insights && Array.isArray(insights)) {
+            for (const item of insights) {
+                insightsHTML += `
+                    <div class="insight-card">
+                        <h3>${item.type.replace('_', ' ')}</h3>
+                        <h4>${item.title}</h4>
+                        <p>${item.description}</p>
+                    </div>
+                `;
+            }
+        }
+
+        let factsHTML = '';
+        if (quickFacts && Array.isArray(quickFacts)) {
+            factsHTML = `
+                <div class="quick-facts-card">
+                    <h3>Quick Facts</h3>
+                    <ul>
+                        ${quickFacts.map(fact => `<li>${fact}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+        
+        // Combine them. We assume 2 insights, 1 fact list.
+        container.innerHTML = `
+            ${insightsHTML}
+            ${factsHTML}
+        `;
+      }
+
+      // Main fetch function
       async function fetchBenchmarkData() {
         showLoading();
         try {
@@ -472,12 +643,9 @@
             const realData = result.data;
             console.log("Successfully fetched data:", realData); 
 
-            if (!realData.charts) {
-              console.error("Data is missing 'charts' key.", realData);
-              throw new Error("Data loaded, but it's missing the 'charts' section.");
-            }
-            if (!realData.hero_stats) {
-              console.warn("Data is missing 'hero_stats' key.");
+            if (!realData.charts || !realData.leaderboard) {
+              console.error("Data is missing 'charts' or 'leaderboard' key.", realData);
+              throw new Error("Data loaded, but it's missing key sections.");
             }
 
             renderData(realData);
