@@ -277,8 +277,6 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // My custom translate() helper function is GONE
-    
       const chartsContainer = document.getElementById('charts-container');
       const lastUpdatedEl = document.getElementById('last-updated');
 
@@ -349,8 +347,7 @@
         renderLeaderboardTable(data.leaderboard); 
         renderInsights(data); 
         
-        // *** THIS IS THE FIX ***
-        // Now that all HTML is on the page, we call the new global function
+        // Call the global translation function from language.js
         if (typeof window.updateContent === 'function') {
             window.updateContent();
         } else {
@@ -375,22 +372,58 @@
         `;
       }
 
+      // *** UPDATED: Renders the Horizontal Bar Chart ***
       function renderTop10BarChart(chartData) {
         if (!chartData) return;
+
         const options = {
-          series: chartData.datasets.map(dataset => ({ name: dataset.label, data: dataset.data })), 
-          chart: { type: 'bar', height: 350, fontFamily: '"Nunito Sans", sans-serif', toolbar: { show: false }, id: 'top10bar', group: 'llm-sync' },
-          theme: { mode: 'dark' },
-          grid: { borderColor: '#334155' },
-          plotOptions: { bar: { horizontal: false, columnWidth: '55%', endingShape: 'rounded' } },
+          series: chartData.datasets.map(dataset => ({
+            name: dataset.label,
+            data: dataset.data
+          })), 
+          chart: {
+            type: 'bar',
+            height: 450, // Increased height for readability
+            fontFamily: '"Nunito Sans", sans-serif',
+            toolbar: { show: false },
+            id: 'top10bar', 
+            group: 'llm-sync' 
+          },
+          theme: {
+            mode: 'dark' 
+          },
+          grid: {
+            borderColor: '#334155',
+            xaxis: { lines: { show: true } }, // Show vertical grid lines
+            yaxis: { lines: { show: false } }
+          },
+          plotOptions: {
+            bar: {
+              horizontal: true, // <-- *** THE FIX ***
+              borderRadius: 4
+            },
+          },
           dataLabels: { enabled: false },
-          xaxis: { categories: chartData.labels, labels: { style: { colors: '#94A3B8' } } },
-          yaxis: { labels: { style: { colors: '#94A3B8' } } },
+          xaxis: { // <-- This is now the numeric (score) axis
+            categories: undefined, 
+            labels: {
+              style: { colors: '#94A3B8' }
+            }
+          },
+          yaxis: { // <-- This is now the category (model name) axis
+            categories: chartData.labels, // <-- Labels go here
+            labels: {
+              style: { colors: '#E2E8F0', fontSize: '14px' } // Make text a bit bigger
+            }
+          },
           fill: { opacity: 1 }
         };
-        new ApexCharts(document.querySelector("#top-10-bar-chart"), options).render();
+
+        const chart = new ApexCharts(document.querySelector("#top-10-bar-chart"), options);
+        chart.render();
       }
 
+      // Renders the Top 5 Grouped Bar Chart
       function renderTop5ComparisonChart(chartData) {
         if (!chartData) return;
         const seriesData = chartData.datasets.map(dataset => ({ name: dataset.label, data: dataset.data }));
@@ -410,6 +443,7 @@
         new ApexCharts(document.querySelector("#model-comparison-chart"), options).render();
       }
 
+      // Renders the Horizontal Bar Chart
       function renderCategoryWinners(categoryData) {
         if (!categoryData || !Array.isArray(categoryData)) return;
         const series = [{ name: 'Score', data: categoryData.map(item => item.score) }];
@@ -428,6 +462,7 @@
         new ApexCharts(document.querySelector("#category-winners-chart"), options).render();
       }
 
+      // Renders the Pie Chart
       function renderProviderPie(chartData) {
         if (!chartData) return;
         
@@ -456,6 +491,7 @@
         new ApexCharts(document.querySelector("#provider-pie-chart"), options).render();
       }
 
+      // Renders the Leaderboard Table
       function renderLeaderboardTable(leaderboardData) {
         if (!leaderboardData || !Array.isArray(leaderboardData)) return;
         const table = document.getElementById('leaderboard-table');
@@ -490,6 +526,7 @@
         table.innerHTML = headerHTML + bodyHTML;
       }
       
+      // Renders Insights and Quick Facts
       function renderInsights(data) {
         const container = document.getElementById('insights-container');
         if (!container) return;
