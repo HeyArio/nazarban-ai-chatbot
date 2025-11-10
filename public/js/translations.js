@@ -279,7 +279,7 @@ whitepaper_cta_text: "با ممیزی آمادگی داده ۷ روزه و اث�
     benchmark_table_math: "ریاضی",
     benchmark_table_grade: "نمره",
     
-    benchmark_insight_hidden_gem: "گوهر پنهان",
+    benchmark_insight_hidden_gem: "ستاره‌ی ناشناخته",
     benchmark_insight_specialist: "متخصص",
     benchmark_facts_title: "نکات کلیدی",
   }

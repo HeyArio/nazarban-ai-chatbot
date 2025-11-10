@@ -293,43 +293,7 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Helper function to get translation (assuming language.js provides it)
-      function translate(key) {
-        if (window.translations && window.currentLanguage && window.translations[window.currentLanguage]) {
-          return window.translations[window.currentLanguage][key] || key;
-        }
-        // Fallback if translation system isn't ready
-        const fallbackTranslations = {
-            benchmark_page_title: "Nazarban AI - LLM Data Hub",
-            benchmark_main_title: "AI Model Benchmark Leaderboard",
-            benchmark_loading: "Loading benchmark data...",
-            benchmark_updated_prefix: "Updated:",
-            benchmark_error_title: "Error loading benchmarks:",
-            benchmark_data_error: "Could not load data.",
-            benchmark_hero_top_model: "Top Model",
-            benchmark_hero_score_label: "Score:",
-            benchmark_hero_models: "Models Analyzed",
-            benchmark_hero_providers_label: "Providers",
-            benchmark_chart_top10_fallback: "Top 10 AI Models",
-            benchmark_chart_top5_fallback: "Top 5 Model Comparison",
-            benchmark_chart_champions: "Category Champions",
-            benchmark_chart_provider_fallback: "Top 10 Models by Provider",
-            benchmark_pie_total: "Providers",
-            benchmark_table_title: "Leaderboard",
-            benchmark_table_rank: "Rank",
-            benchmark_table_name: "Model",
-            benchmark_table_provider: "Provider",
-            benchmark_table_intelligence: "Intelligence",
-            benchmark_table_coding: "Coding",
-            benchmark_table_math: "Math",
-            benchmark_table_grade: "Grade",
-            benchmark_insights_hidden: "Hidden Gem",
-            benchmark_insights_specialist: "Specialist",
-            benchmark_facts_title: "Quick Facts"
-        };
-        // Use the correct fallback keys
-        return fallbackTranslations[key] || key;
-      }
+      // *** My custom translate() helper function has been REMOVED ***
     
       const chartsContainer = document.getElementById('charts-container');
       const lastUpdatedEl = document.getElementById('last-updated');
@@ -339,7 +303,7 @@
         chartsContainer.innerHTML = `
           <div class="loader-container">
             <div class="loader"></div>
-            <p data-lang-key="benchmark_loading">${translate('benchmark_loading')}</p>
+            <p data-lang-key="benchmark_loading">Loading benchmark data...</p>
           </div>
         `;
       }
@@ -348,10 +312,10 @@
       function showError(message) {
         chartsContainer.innerHTML = `
           <div class="error-message">
-            <strong data-lang-key="benchmark_error_title">${translate('benchmark_error_title')}</strong> ${message}
+            <strong data-lang-key="benchmark_error_title">Error loading benchmarks:</strong> ${message}
           </div>
         `;
-        lastUpdatedEl.innerHTML = `<span data-lang-key="benchmark_data_error">${translate('benchmark_data_error')}</span>`;
+        lastUpdatedEl.innerHTML = `<span data-lang-key="benchmark_data_error">Could not load data.</span>`;
       }
 
       // Main function to render all data
@@ -362,27 +326,27 @@
 
           <div class="charts-grid">
             <div class="chart-card">
-              <h2 data-lang-key="benchmark_chart_top10_fallback">${data.charts?.top_10_bar?.title || translate('benchmark_chart_top10_fallback')}</h2>
+              <h2 data-lang-key="benchmark_chart_top10_fallback">${data.charts?.top_10_bar?.title || 'Top 10 AI Models'}</h2>
               <div id="top-10-bar-chart"></div>
             </div>
             
             <div class="chart-card">
-              <h2 data-lang-key="benchmark_chart_top5_fallback">${data.charts?.top_5_radar?.title || translate('benchmark_chart_top5_fallback')}</h2>
+              <h2 data-lang-key="benchmark_chart_top5_fallback">${data.charts?.top_5_radar?.title || 'Top 5 Model Comparison'}</h2>
               <div id="model-comparison-chart"></div>
             </div>
             
             <div class="chart-card">
-              <h2 data-lang-key="benchmark_chart_champions">${translate('benchmark_chart_champions')}</h2>
+              <h2 data-lang-key="benchmark_chart_champions">Category Champions</h2>
               <div id="category-winners-chart"></div>
             </div>
             <div class="chart-card">
-              <h2 data-lang-key="benchmark_chart_provider_fallback">${data.charts?.provider_pie?.title || translate('benchmark_chart_provider_fallback')}</h2>
+              <h2 data-lang-key="benchmark_chart_provider_fallback">${data.charts?.provider_pie?.title || 'Top 10 Models by Provider'}</h2>
               <div id="provider-pie-chart"></div>
             </div>
           </div>
 
           <div id="leaderboard-container" class="leaderboard-container">
-             <h2 data-lang-key="benchmark_table_title">${translate('benchmark_table_title')}</h2>
+             <h2 data-lang-key="benchmark_table_title">Leaderboard</h2>
              <table class="leaderboard-table" id="leaderboard-table">
                 </table>
           </div>
@@ -395,8 +359,10 @@
         try {
           const updatedDate = new Date(data.metadata.last_updated);
           const options = { year: 'numeric', month: 'long', day: 'numeric' };
-          const formattedDate = updatedDate.toLocaleDateString(window.currentLanguage === 'fa' ? 'fa-IR' : 'en-US', options);
-          lastUpdatedEl.innerHTML = `<span data-lang-key="benchmark_updated_prefix">${translate('benchmark_updated_prefix')}</span> ${formattedDate}`;
+          const lang = window.currentLanguage === 'fa' ? 'fa-IR' : 'en-US';
+          const formattedDate = updatedDate.toLocaleDateString(lang, options);
+          // We set the key for the prefix, but the date is dynamic
+          lastUpdatedEl.innerHTML = `<span data-lang-key="benchmark_updated_prefix">Updated:</span> ${formattedDate}`;
         } catch (e) {
           lastUpdatedEl.textContent = `Data loaded.`;
         }
@@ -410,7 +376,8 @@
         renderLeaderboardTable(data.leaderboard); 
         renderInsights(data); // Pass full data object
         
-        // Re-run translation for any new static elements
+        // *** THIS IS THE IMPORTANT PART ***
+        // Now that all HTML is on the page, we tell language.js to translate everything
         if (typeof window.updateContent === 'function') {
             window.updateContent();
         }
@@ -422,14 +389,14 @@
         const container = document.getElementById('hero-stats-container');
         container.innerHTML = `
           <div class="stat-card">
-            <div class="stat-card-title" data-lang-key="benchmark_hero_top_model">${translate('benchmark_hero_top_model')}</div>
+            <div class="stat-card-title" data-lang-key="benchmark_hero_top_model">Top Model</div>
             <div class="stat-card-value">${stats.top_model || 'N/A'}</div>
-            <div class="stat-card-sub"><span data-lang-key="benchmark_hero_score_label">${translate('benchmark_hero_score_label')}</span> ${stats.highest_score || '0'}</div>
+            <div class="stat-card-sub"><span data-lang-key="benchmark_hero_score_label">Score:</span> ${stats.highest_score || '0'}</div>
           </div>
           <div class="stat-card">
-            <div class="stat-card-title" data-lang-key="benchmark_hero_models">${translate('benchmark_hero_models')}</div>
+            <div class="stat-card-title" data-lang-key="benchmark_hero_models">Models Analyzed</div>
             <div class="stat-card-value">${stats.total_models || '0'}</div>
-            <div class="stat-card-sub">${stats.providers_count || '0'} <span data-lang-key="benchmark_hero_providers_label">${translate('benchmark_hero_providers_label')}</span></div>
+            <div class="stat-card-sub">${stats.providers_count || '0'} <span data-lang-key="benchmark_hero_providers_label">Providers</span></div>
           </div>
         `;
       }
@@ -610,6 +577,12 @@
       function renderProviderPie(chartData) {
         if (!chartData) return;
 
+        // We must translate the "Total" label *after* language.js has run
+        // So we get it now and pass it to the chart
+        const totalLabel = (window.translations && window.translations[window.currentLanguage])
+                         ? window.translations[window.currentLanguage]['benchmark_pie_total']
+                         : 'Providers'; // English fallback
+
         const options = {
           series: chartData.datasets[0].data,
           labels: chartData.labels,
@@ -628,7 +601,7 @@
                   show: true,
                   total: {
                     show: true,
-                    label: translate('benchmark_pie_total'), 
+                    label: totalLabel, // <-- Use the translated label
                     color: '#94A3B8'
                   }
                 }
@@ -670,7 +643,7 @@
                       show: true, 
                       total: {
                         show: true,
-                        label: translate('benchmark_pie_total'), 
+                        label: totalLabel, // <-- Use the translated label
                         fontSize: '18px'
                       }
                     }
@@ -694,13 +667,13 @@
         let headerHTML = `
             <thead>
                 <tr>
-                    <th data-lang-key="benchmark_table_rank">${translate('benchmark_table_rank')}</th>
-                    <th data-lang-key="benchmark_table_name">${translate('benchmark_table_name')}</th>
-                    <th data-lang-key="benchmark_table_provider">${translate('benchmark_table_provider')}</th>
-                    <th data-lang-key="benchmark_table_intelligence">${translate('benchmark_table_intelligence')}</th>
-                    <th data-lang-key="benchmark_table_coding">${translate('benchmark_table_coding')}</th>
-                    <th data-lang-key="benchmark_table_math">${translate('benchmark_table_math')}</th>
-                    <th data-lang-key="benchmark_table_grade">${translate('benchmark_table_grade')}</th>
+                    <th data-lang-key="benchmark_table_rank">Rank</th>
+                    <th data-lang-key="benchmark_table_name">Model</th>
+                    <th data-lang-key="benchmark_table_provider">Provider</th>
+                    <th data-lang-key="benchmark_table_intelligence">Intelligence</th>
+                    <th data-lang-key="benchmark_table_coding">Coding</th>
+                    <th data-lang-key="benchmark_table_math">Math</th>
+                    <th data-lang-key="benchmark_table_grade">Grade</th>
                 </tr>
             </thead>
         `;
@@ -730,28 +703,25 @@
         if (!container) return;
         
         const insights = data.insights || [];
-        const staticFacts = data.quick_facts || []; // <-- We now ONLY use this
+        const staticFacts = data.quick_facts || []; 
         
         let insightsHTML = '';
         if (insights.length > 0) {
             for (const item of insights) {
                 // *** THIS IS THE FIX ***
-                // It now correctly maps 'hidden_gem' to 'benchmark_insights_hidden'
                 let typeKey = '';
                 if (item.type === 'hidden_gem') {
                     typeKey = 'benchmark_insights_hidden';
                 } else if (item.type === 'specialist') {
                     typeKey = 'benchmark_insights_specialist';
                 } else {
-                    // Fallback for any future types
                     typeKey = 'benchmark_insights_' + item.type;
                 }
-                const translatedType = translate(typeKey);
                 // *** END OF FIX ***
                 
                 insightsHTML += `
                     <div class="insight-card">
-                        <h3 data-lang-key="${typeKey}">${translatedType}</h3>
+                        <h3 data-lang-key="${typeKey}">${item.type}</h3>
                         <h4>${item.title}</h4>
                         <p>${item.description}</p>
                     </div>
@@ -763,7 +733,7 @@
         if (staticFacts.length > 0) {
             factsHTML = `
                 <div class="quick-facts-card">
-                    <h3 data-lang-key="benchmark_facts_title">${translate('benchmark_facts_title')}</h3> 
+                    <h3 data-lang-key="benchmark_facts_title">Quick Facts</h3> 
                     <ul>
                         ${staticFacts.map(fact => `<li>${fact}</li>`).join('')}
                     </ul>
@@ -810,7 +780,8 @@
         }
       }
 
-      // Initial load (wait for translations to be ready)
+      // We wait for the main site scripts (language.js) to be ready
+      // A 100ms delay is usually enough
       setTimeout(fetchBenchmarkData, 100);
     });
   </script>
