@@ -323,10 +323,11 @@
             benchmark_table_coding: "Coding",
             benchmark_table_math: "Math",
             benchmark_table_grade: "Grade",
-            benchmark_insight_hidden_gem: "Hidden Gem",
-            benchmark_insight_specialist: "Specialist",
+            benchmark_insights_hidden: "Hidden Gem",
+            benchmark_insights_specialist: "Specialist",
             benchmark_facts_title: "Quick Facts"
         };
+        // Use the correct fallback keys
         return fallbackTranslations[key] || key;
       }
     
@@ -627,7 +628,7 @@
                   show: true,
                   total: {
                     show: true,
-                    label: translate('benchmark_pie_total'), // <-- Translated
+                    label: translate('benchmark_pie_total'), 
                     color: '#94A3B8'
                   }
                 }
@@ -669,7 +670,7 @@
                       show: true, 
                       total: {
                         show: true,
-                        label: translate('benchmark_pie_total'), // <-- Translated
+                        label: translate('benchmark_pie_total'), 
                         fontSize: '18px'
                       }
                     }
@@ -723,20 +724,30 @@
         table.innerHTML = headerHTML + bodyHTML;
       }
       
-      // Renders Insights and Quick Facts
+      // *** UPDATED: Renders Insights and ONLY static Quick Facts ***
       function renderInsights(data) {
         const container = document.getElementById('insights-container');
         if (!container) return;
         
         const insights = data.insights || [];
-        const staticFacts = data.quick_facts || []; 
+        const staticFacts = data.quick_facts || []; // <-- We now ONLY use this
         
         let insightsHTML = '';
         if (insights.length > 0) {
             for (const item of insights) {
-                // Translate the type
-                const typeKey = 'benchmark_insight_' + item.type.replace('_', '');
+                // *** THIS IS THE FIX ***
+                // It now correctly maps 'hidden_gem' to 'benchmark_insights_hidden'
+                let typeKey = '';
+                if (item.type === 'hidden_gem') {
+                    typeKey = 'benchmark_insights_hidden';
+                } else if (item.type === 'specialist') {
+                    typeKey = 'benchmark_insights_specialist';
+                } else {
+                    // Fallback for any future types
+                    typeKey = 'benchmark_insights_' + item.type;
+                }
                 const translatedType = translate(typeKey);
+                // *** END OF FIX ***
                 
                 insightsHTML += `
                     <div class="insight-card">
@@ -800,8 +811,6 @@
       }
 
       // Initial load (wait for translations to be ready)
-      // We assume language.js sets 'window.currentLanguage'
-      // A small delay to ensure language.js has run
       setTimeout(fetchBenchmarkData, 100);
     });
   </script>
