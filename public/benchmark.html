@@ -26,6 +26,15 @@
       margin: 2rem auto;
       padding: 0 1rem;
     }
+    
+    /* *** NEW: Mobile Navbar Fix *** */
+    /* This overrides your external style.css to ensure the overlay is full-width */
+    .nav-mobile-overlay {
+        width: 100% !important; 
+        box-sizing: border-box;
+    }
+    /* *** END NEW STYLE *** */
+    
     .benchmark-header {
       text-align: center;
       margin-bottom: 2rem;
@@ -305,7 +314,8 @@
             
             <div class="chart-card">
               <h2>${data.charts?.top_5_radar?.title || 'Top 5 Model Comparison'}</h2>
-              <div id="model-comparison-chart"></div> </div>
+              <div id="model-comparison-chart"></div>
+            </div>
             
             <div class="chart-card">
               <h2>Category Champions</h2>
@@ -325,8 +335,7 @@
 
           <div id="insights-container" class="insights-grid">
              </div>
-          
-          `;
+        `;
         
         // Update last updated time from metadata
         try {
@@ -339,15 +348,13 @@
         // Render all the new content
         renderHeroStats(data.hero_stats);
         renderTop10BarChart(data.charts.top_10_bar);
-        
-        // *** UPDATED FUNCTION CALL ***
-        renderTop5ComparisonChart(data.charts.top_5_radar); // Was renderRadarChart
-        
+        renderTop5ComparisonChart(data.charts.top_5_radar);
         renderCategoryWinners(data.category_winners); 
         renderProviderPie(data.charts.provider_pie);
         renderLeaderboardTable(data.leaderboard); 
-        renderInsights(data.insights, data.quick_facts);
-        // renderShareable(data.shareable); // <-- Removed
+        
+        // *** UPDATED FUNCTION CALL ***
+        renderInsights(data); // Pass full data object
         
         // Re-run translation for new content
         if (typeof window.updateContent === 'function') {
@@ -423,24 +430,23 @@
         chart.render();
       }
 
-      // *** NEW FUNCTION: Replaces Radar Chart ***
       // Renders the Top 5 Grouped Bar Chart
       function renderTop5ComparisonChart(chartData) {
         if (!chartData) return;
         
         const seriesData = chartData.datasets.map(dataset => ({
-            name: dataset.label, // Use 'label' from JSON as 'name' for ApexCharts
+            name: dataset.label,
             data: dataset.data
         }));
         
         const options = {
           series: seriesData,
           chart: {
-            type: 'bar', // <-- Changed from 'radar'
+            type: 'bar',
             height: 400,
             fontFamily: '"Nunito Sans", sans-serif',
             toolbar: { show: false },
-            id: 'top5compare', // Changed ID
+            id: 'top5compare',
             group: 'llm-sync'
           },
           theme: {
@@ -462,7 +468,7 @@
             colors: ['transparent']
           },
           xaxis: {
-            categories: chartData.labels, // e.g., "Intelligence", "Coding", "Math"
+            categories: chartData.labels,
             labels: {
               style: { colors: '#E2E8F0', fontSize: '14px' }
             }
@@ -484,7 +490,7 @@
         chart.render();
       }
 
-      // UPDATED: Renders the Horizontal Bar Chart
+      // Renders the Horizontal Bar Chart
       function renderCategoryWinners(categoryData) {
         if (!categoryData || !Array.isArray(categoryData)) return;
         
@@ -627,13 +633,38 @@
         table.innerHTML = headerHTML + bodyHTML;
       }
       
-      // Renders the Insights and Quick Facts
-      function renderInsights(insights, quickFacts) {
+      // *** UPDATED: Renders Insights and new Key Takeaways ***
+      function renderInsights(data) {
         const container = document.getElementById('insights-container');
         if (!container) return;
         
+        const insights = data.insights || [];
+        const facts = data.quick_facts || [];
+        
+        // --- Start Dynamic Fact Generation ---
+        let dynamicFacts = [];
+        
+        // Fact 1: Top 10 Score Range
+        if (data.leaderboard && data.leaderboard.length >= 10) {
+            const topScore = data.leaderboard[0].intelligence;
+            const bottomScore = data.leaderboard[9].intelligence;
+            dynamicFacts.push(`Top 10 intelligence scores range from ${bottomScore} to ${topScore}.`);
+        }
+        
+        // Fact 2: Provider Dominance
+        if (data.charts && data.charts.provider_pie) {
+            const pieData = data.charts.provider_pie;
+            const topProvider = pieData.labels[0];
+            const topProviderCount = pieData.datasets[0].data[0];
+            dynamicFacts.push(`${topProvider} dominates the Top 10 with ${topProviderCount} models.`);
+        }
+        
+        const allFacts = [...facts, ...dynamicFacts];
+        // --- End Dynamic Fact Generation ---
+
+        
         let insightsHTML = '';
-        if (insights && Array.isArray(insights)) {
+        if (insights.length > 0) {
             for (const item of insights) {
                 insightsHTML += `
                     <div class="insight-card">
@@ -646,12 +677,12 @@
         }
 
         let factsHTML = '';
-        if (quickFacts && Array.isArray(quickFacts)) {
+        if (allFacts.length > 0) {
             factsHTML = `
                 <div class="quick-facts-card">
-                    <h3>Quick Facts</h3>
+                    <h3>Key Takeaways</h3> 
                     <ul>
-                        ${quickFacts.map(fact => `<li>${fact}</li>`).join('')}
+                        ${allFacts.map(fact => `<li>${fact}</li>`).join('')}
                     </ul>
                 </div>
             `;
@@ -663,7 +694,6 @@
         `;
       }
       
-      // Shareable function removed
 
       // Main fetch function
       async function fetchBenchmarkData() {
