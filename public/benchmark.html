@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nazarban AI - LLM Data Hub</title>
+  <title data-lang-key="benchmark_page_title">Nazarban AI - LLM Data Hub</title>
 
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
   <link rel="icon" href="favicon.ico" />
@@ -273,13 +273,14 @@
     </ul>
     <main class="benchmark-container" id="benchmark-content">
       <div class="benchmark-header">
-        <h1 data-lang-key="benchmark_title">AI Model Benchmark Leaderboard</h1>
+        <h1 data-lang-key="benchmark_main_title">AI Model Benchmark Leaderboard</h1>
         <p id="last-updated" data-lang-key="benchmark_loading">Loading data...</p>
       </div>
 
       <div id="charts-container">
         <div class="loader-container">
           <div class="loader"></div>
+          <p data-lang-key="benchmark_loading">Loading benchmark data...</p>
         </div>
       </div>
     </main>
@@ -292,6 +293,43 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // Helper function to get translation (assuming language.js provides it)
+      function translate(key) {
+        if (window.translations && window.currentLanguage && window.translations[window.currentLanguage]) {
+          return window.translations[window.currentLanguage][key] || key;
+        }
+        // Fallback if translation system isn't ready
+        const fallbackTranslations = {
+            benchmark_page_title: "Nazarban AI - LLM Data Hub",
+            benchmark_main_title: "AI Model Benchmark Leaderboard",
+            benchmark_loading: "Loading benchmark data...",
+            benchmark_updated_prefix: "Updated:",
+            benchmark_error_title: "Error loading benchmarks:",
+            benchmark_data_error: "Could not load data.",
+            benchmark_hero_top_model: "Top Model",
+            benchmark_hero_score_label: "Score:",
+            benchmark_hero_models: "Models Analyzed",
+            benchmark_hero_providers_label: "Providers",
+            benchmark_chart_top10_fallback: "Top 10 AI Models",
+            benchmark_chart_top5_fallback: "Top 5 Model Comparison",
+            benchmark_chart_champions: "Category Champions",
+            benchmark_chart_provider_fallback: "Top 10 Models by Provider",
+            benchmark_pie_total: "Providers",
+            benchmark_table_title: "Leaderboard",
+            benchmark_table_rank: "Rank",
+            benchmark_table_name: "Model",
+            benchmark_table_provider: "Provider",
+            benchmark_table_intelligence: "Intelligence",
+            benchmark_table_coding: "Coding",
+            benchmark_table_math: "Math",
+            benchmark_table_grade: "Grade",
+            benchmark_insight_hidden_gem: "Hidden Gem",
+            benchmark_insight_specialist: "Specialist",
+            benchmark_facts_title: "Quick Facts"
+        };
+        return fallbackTranslations[key] || key;
+      }
+    
       const chartsContainer = document.getElementById('charts-container');
       const lastUpdatedEl = document.getElementById('last-updated');
 
@@ -300,19 +338,19 @@
         chartsContainer.innerHTML = `
           <div class="loader-container">
             <div class="loader"></div>
+            <p data-lang-key="benchmark_loading">${translate('benchmark_loading')}</p>
           </div>
         `;
-        lastUpdatedEl.textContent = 'Loading data...';
       }
 
       // Helper to show an error message
       function showError(message) {
         chartsContainer.innerHTML = `
           <div class="error-message">
-            <strong>Error loading benchmarks:</strong> ${message}
+            <strong data-lang-key="benchmark_error_title">${translate('benchmark_error_title')}</strong> ${message}
           </div>
         `;
-        lastUpdatedEl.textContent = 'Could not load data.';
+        lastUpdatedEl.innerHTML = `<span data-lang-key="benchmark_data_error">${translate('benchmark_data_error')}</span>`;
       }
 
       // Main function to render all data
@@ -323,27 +361,27 @@
 
           <div class="charts-grid">
             <div class="chart-card">
-              <h2>${data.charts?.top_10_bar?.title || 'Top 10 AI Models'}</h2>
+              <h2 data-lang-key="benchmark_chart_top10_fallback">${data.charts?.top_10_bar?.title || translate('benchmark_chart_top10_fallback')}</h2>
               <div id="top-10-bar-chart"></div>
             </div>
             
             <div class="chart-card">
-              <h2>${data.charts?.top_5_radar?.title || 'Top 5 Model Comparison'}</h2>
+              <h2 data-lang-key="benchmark_chart_top5_fallback">${data.charts?.top_5_radar?.title || translate('benchmark_chart_top5_fallback')}</h2>
               <div id="model-comparison-chart"></div>
             </div>
             
             <div class="chart-card">
-              <h2>Category Champions</h2>
+              <h2 data-lang-key="benchmark_chart_champions">${translate('benchmark_chart_champions')}</h2>
               <div id="category-winners-chart"></div>
             </div>
             <div class="chart-card">
-              <h2>${data.charts?.provider_pie?.title || 'Top 10 Models by Provider'}</h2>
+              <h2 data-lang-key="benchmark_chart_provider_fallback">${data.charts?.provider_pie?.title || translate('benchmark_chart_provider_fallback')}</h2>
               <div id="provider-pie-chart"></div>
             </div>
           </div>
 
           <div id="leaderboard-container" class="leaderboard-container">
-             <h2>Leaderboard</h2>
+             <h2 data-lang-key="benchmark_table_title">${translate('benchmark_table_title')}</h2>
              <table class="leaderboard-table" id="leaderboard-table">
                 </table>
           </div>
@@ -356,7 +394,8 @@
         try {
           const updatedDate = new Date(data.metadata.last_updated);
           const options = { year: 'numeric', month: 'long', day: 'numeric' };
-          lastUpdatedEl.textContent = `Updated: ${updatedDate.toLocaleDateString('en-US', options)}`;
+          const formattedDate = updatedDate.toLocaleDateString(window.currentLanguage === 'fa' ? 'fa-IR' : 'en-US', options);
+          lastUpdatedEl.innerHTML = `<span data-lang-key="benchmark_updated_prefix">${translate('benchmark_updated_prefix')}</span> ${formattedDate}`;
         } catch (e) {
           lastUpdatedEl.textContent = `Data loaded.`;
         }
@@ -370,7 +409,7 @@
         renderLeaderboardTable(data.leaderboard); 
         renderInsights(data); // Pass full data object
         
-        // Re-run translation for new content
+        // Re-run translation for any new static elements
         if (typeof window.updateContent === 'function') {
             window.updateContent();
         }
@@ -382,14 +421,14 @@
         const container = document.getElementById('hero-stats-container');
         container.innerHTML = `
           <div class="stat-card">
-            <div class="stat-card-title">Top Model</div>
+            <div class="stat-card-title" data-lang-key="benchmark_hero_top_model">${translate('benchmark_hero_top_model')}</div>
             <div class="stat-card-value">${stats.top_model || 'N/A'}</div>
-            <div class="stat-card-sub">Score: ${stats.highest_score || '0'}</div>
+            <div class="stat-card-sub"><span data-lang-key="benchmark_hero_score_label">${translate('benchmark_hero_score_label')}</span> ${stats.highest_score || '0'}</div>
           </div>
           <div class="stat-card">
-            <div class="stat-card-title">Models Analyzed</div>
+            <div class="stat-card-title" data-lang-key="benchmark_hero_models">${translate('benchmark_hero_models')}</div>
             <div class="stat-card-value">${stats.total_models || '0'}</div>
-            <div class="stat-card-sub">${stats.providers_count || '0'} Providers</div>
+            <div class="stat-card-sub">${stats.providers_count || '0'} <span data-lang-key="benchmark_hero_providers_label">${translate('benchmark_hero_providers_label')}</span></div>
           </div>
         `;
       }
@@ -566,7 +605,7 @@
         chart.render();
       }
 
-      // *** UPDATED PIE CHART ***
+      // Renders the Pie Chart
       function renderProviderPie(chartData) {
         if (!chartData) return;
 
@@ -588,24 +627,17 @@
                   show: true,
                   total: {
                     show: true,
-                    label: 'Providers',
+                    label: translate('benchmark_pie_total'), // <-- Translated
                     color: '#94A3B8'
                   }
                 }
               }
             }
           },
-          // *** NEW: Tooltip for all devices ***
           tooltip: {
             y: {
-                // This formatter shows "7 models"
-                formatter: (val, { series, seriesIndex, dataPointIndex, w }) => {
-                    // val is the raw number (e.g., 7)
-                    if (val === 1) return "1 model";
-                    return val + " models";
-                },
+                formatter: (val) => (val === 1 ? "1 model" : val + " models"),
                 title: {
-                    // This formatter shows the label (e.g., "OpenAI")
                     formatter: (seriesName) => seriesName
                 }
             }
@@ -619,26 +651,25 @@
             }
           },
           dataLabels: {
-             enabled: false // <-- Data labels are OFF for all sizes
+             enabled: false 
           },
-          // *** UPDATED: Responsive fix for mobile legend ***
           responsive: [{
-            breakpoint: 480, // Mobile breakpoint
+            breakpoint: 480, 
             options: {
               chart: {
-                height: 300 // Make chart smaller
+                height: 300 
               },
               legend: {
-                show: false // <-- HIDE the legend on mobile
+                show: false 
               },
               plotOptions: {
                 pie: {
                   donut: {
                     labels: {
-                      show: true, // Show "Total"
+                      show: true, 
                       total: {
                         show: true,
-                        label: 'Providers',
+                        label: translate('benchmark_pie_total'), // <-- Translated
                         fontSize: '18px'
                       }
                     }
@@ -662,13 +693,13 @@
         let headerHTML = `
             <thead>
                 <tr>
-                    <th>Rank</th>
-                    <th>Name</th>
-                    <th>Provider</th>
-                    <th>Intelligence</th>
-                    <th>Coding</th>
-                    <th>Math</th>
-                    <th>Grade</th>
+                    <th data-lang-key="benchmark_table_rank">${translate('benchmark_table_rank')}</th>
+                    <th data-lang-key="benchmark_table_name">${translate('benchmark_table_name')}</th>
+                    <th data-lang-key="benchmark_table_provider">${translate('benchmark_table_provider')}</th>
+                    <th data-lang-key="benchmark_table_intelligence">${translate('benchmark_table_intelligence')}</th>
+                    <th data-lang-key="benchmark_table_coding">${translate('benchmark_table_coding')}</th>
+                    <th data-lang-key="benchmark_table_math">${translate('benchmark_table_math')}</th>
+                    <th data-lang-key="benchmark_table_grade">${translate('benchmark_table_grade')}</th>
                 </tr>
             </thead>
         `;
@@ -692,20 +723,24 @@
         table.innerHTML = headerHTML + bodyHTML;
       }
       
-      // *** UPDATED: Renders Insights and ONLY static Quick Facts ***
+      // Renders Insights and Quick Facts
       function renderInsights(data) {
         const container = document.getElementById('insights-container');
         if (!container) return;
         
         const insights = data.insights || [];
-        const staticFacts = data.quick_facts || []; // <-- We now ONLY use this
+        const staticFacts = data.quick_facts || []; 
         
         let insightsHTML = '';
         if (insights.length > 0) {
             for (const item of insights) {
+                // Translate the type
+                const typeKey = 'benchmark_insight_' + item.type.replace('_', '');
+                const translatedType = translate(typeKey);
+                
                 insightsHTML += `
                     <div class="insight-card">
-                        <h3>${item.type.replace('_', ' ')}</h3>
+                        <h3 data-lang-key="${typeKey}">${translatedType}</h3>
                         <h4>${item.title}</h4>
                         <p>${item.description}</p>
                     </div>
@@ -714,11 +749,10 @@
         }
 
         let factsHTML = '';
-        // This will show 10, 20, or however many facts are in your JSON
         if (staticFacts.length > 0) {
             factsHTML = `
                 <div class="quick-facts-card">
-                    <h3>Quick Facts</h3> 
+                    <h3 data-lang-key="benchmark_facts_title">${translate('benchmark_facts_title')}</h3> 
                     <ul>
                         ${staticFacts.map(fact => `<li>${fact}</li>`).join('')}
                     </ul>
@@ -765,8 +799,10 @@
         }
       }
 
-      // Initial load
-      fetchBenchmarkData();
+      // Initial load (wait for translations to be ready)
+      // We assume language.js sets 'window.currentLanguage'
+      // A small delay to ensure language.js has run
+      setTimeout(fetchBenchmarkData, 100);
     });
   </script>
 </body>
