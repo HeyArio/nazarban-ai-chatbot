@@ -383,7 +383,7 @@
           })), 
           chart: {
             type: 'bar',
-            height: 450, // Increased height for readability
+            height: 450, 
             fontFamily: '"Nunito Sans", sans-serif',
             toolbar: { show: false },
             id: 'top10bar', 
@@ -394,28 +394,32 @@
           },
           grid: {
             borderColor: '#334155',
-            xaxis: { lines: { show: true } }, // Show vertical grid lines
+            xaxis: { lines: { show: true } }, 
             yaxis: { lines: { show: false } }
           },
           plotOptions: {
             bar: {
-              horizontal: true, // <-- *** THE FIX ***
+              horizontal: true, // <-- Correct
               borderRadius: 4
             },
           },
           dataLabels: { enabled: false },
-          xaxis: { // <-- This is now the numeric (score) axis
-            categories: undefined, 
+          
+          // *** THE FIX ***
+          xaxis: { 
+            categories: chartData.labels, // <-- Labels are correctly in xaxis
             labels: {
               style: { colors: '#94A3B8' }
             }
           },
-          yaxis: { // <-- This is now the category (model name) axis
-            categories: chartData.labels, // <-- Labels go here
+          yaxis: { 
+            // 'categories' property is removed
             labels: {
-              style: { colors: '#E2E8F0', fontSize: '14px' } // Make text a bit bigger
+              style: { colors: '#E2E8F0', fontSize: '14px' } 
             }
           },
+          // *** END FIX ***
+          
           fill: { opacity: 1 }
         };
 
