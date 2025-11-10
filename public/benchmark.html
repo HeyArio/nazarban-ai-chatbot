@@ -198,39 +198,6 @@
       margin-bottom: 0.5rem;
     }
     
-    /* NEW: Shareable Content Styles */
-    .shareable-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-    }
-    @media (max-width: 900px) {
-      .shareable-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-    .shareable-card {
-      background: #1E293B;
-      border: 1px solid #334155;
-      border-radius: 12px;
-      padding: 1.5rem;
-    }
-    .shareable-card h3 {
-      margin: 0 0 1rem 0;
-      color: #E2E8F0;
-      font-size: 1.5rem;
-    }
-    .shareable-card pre {
-      background: #0F172A;
-      padding: 1rem;
-      border-radius: 8px;
-      color: #CBD5E1;
-      white-space: pre-wrap; /* Wraps text */
-      font-family: inherit;
-      font-size: 0.95rem;
-    }
-
     /* Loader/Error Styles (unchanged) */
     .loader-container { text-align: center; padding: 4rem 0; }
     .loader { width: 50px; aspect-ratio: 1; border-radius: 50%; border: 8px solid #334155; border-top-color: #3B82F6; animation: spin 1s linear infinite; }
@@ -241,10 +208,45 @@
 <body style="background-color: #0F172A;"> 
 
   <header class="header">
-    </header>
+    <a href="index.html" class="logo-section">
+      <div class="logo-badge"> <img class="logo" src="logo.png" alt="Nazarban Logo" /> </div>
+      <div class="brand-text">
+        <div class="brand-name">NAZARBAN</div>
+        <div class="brand-tagline">ANALYTICS · FZCO</div>
+      </div>
+    </a>
+
+    <div class="header-right-group">
+        <nav class="nav-desktop">
+          <a href="benchmark.html" class="active-page" data-lang-key="nav_insight">Benchmarks</a>
+          <a href="about.html" data-lang-key="nav_about">About</a>
+          <a href="blog.html" data-lang-key="nav_blog">Blog</a>
+          <a href="services.html" data-lang-key="nav_services">Services</a>
+          <a href="whitepaper.html" data-lang-key="nav_whitepaper">White Paper</a>
+        </nav>
+
+        <div class="language-switcher">
+          <a href="#" data-lang="en" data-lang-key="lang_en">EN</a>
+          <a href="#" data-lang="fa" class="active" data-lang-key="lang_fa">FA</a>
+        </div>
+
+        <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+          <span class="bar"></span> <span class="bar"></span> <span class="bar"></span>
+        </button>
+    </div> </header>
+
   <ul class="nav-mobile-overlay">
-    </ul>
-  
+      <li><a href="benchmark.html" class="active-page" data-lang-key="nav_insight">Benchmarks</a></li>
+      <li><a href="about.html" data-lang-key="nav_about">About</a></li>
+      <li><a href="blog.html" data-lang-key="nav_blog">Blog</a></li>
+      <li><a href="services.html" data-lang-key="nav_services">Services</a></li>
+      <li><a href="whitepaper.html" data-lang-key="nav_whitepaper">White Paper</a></li>
+
+      <div class="language-switcher">
+      <a href="#" data-lang="en" data-lang-key="lang_en">EN</a>
+      <a href="#" data-lang="fa" class="active" data-lang-key="lang_fa">FA</a>
+    </div>
+  </ul>
   <main class="benchmark-container" id="benchmark-content">
     <div class="benchmark-header">
       <h1 data-lang-key="benchmark_title">AI Model Benchmark Leaderboard</h1>
@@ -300,10 +302,11 @@
               <h2>${data.charts?.top_10_bar?.title || 'Top 10 AI Models'}</h2>
               <div id="top-10-bar-chart"></div>
             </div>
+            
             <div class="chart-card">
               <h2>${data.charts?.top_5_radar?.title || 'Top 5 Model Comparison'}</h2>
-              <div id="radar-chart"></div>
-            </div>
+              <div id="model-comparison-chart"></div> </div>
+            
             <div class="chart-card">
               <h2>Category Champions</h2>
               <div id="category-winners-chart"></div>
@@ -323,9 +326,7 @@
           <div id="insights-container" class="insights-grid">
              </div>
           
-          <div id="shareable-container" class="shareable-grid">
-             </div>
-        `;
+          `;
         
         // Update last updated time from metadata
         try {
@@ -338,12 +339,15 @@
         // Render all the new content
         renderHeroStats(data.hero_stats);
         renderTop10BarChart(data.charts.top_10_bar);
-        renderRadarChart(data.charts.top_5_radar);
-        renderCategoryWinners(data.category_winners); // <-- CHANGED: Now uses the root data
+        
+        // *** UPDATED FUNCTION CALL ***
+        renderTop5ComparisonChart(data.charts.top_5_radar); // Was renderRadarChart
+        
+        renderCategoryWinners(data.category_winners); 
         renderProviderPie(data.charts.provider_pie);
         renderLeaderboardTable(data.leaderboard); 
         renderInsights(data.insights, data.quick_facts);
-        renderShareable(data.shareable); // <-- NEW
+        // renderShareable(data.shareable); // <-- Removed
         
         // Re-run translation for new content
         if (typeof window.updateContent === 'function') {
@@ -419,44 +423,56 @@
         chart.render();
       }
 
-      // Renders the Radar Chart
-      function renderRadarChart(chartData) {
+      // *** NEW FUNCTION: Replaces Radar Chart ***
+      // Renders the Top 5 Grouped Bar Chart
+      function renderTop5ComparisonChart(chartData) {
         if (!chartData) return;
         
-        // *** FIX: Map 'label' to 'name' for the legend ***
         const seriesData = chartData.datasets.map(dataset => ({
             name: dataset.label, // Use 'label' from JSON as 'name' for ApexCharts
             data: dataset.data
         }));
         
         const options = {
-          series: seriesData, // <-- Use the fixed data
+          series: seriesData,
           chart: {
+            type: 'bar', // <-- Changed from 'radar'
             height: 400,
-            type: 'radar',
             fontFamily: '"Nunito Sans", sans-serif',
             toolbar: { show: false },
-            id: 'top5radar', 
-            group: 'llm-sync' 
+            id: 'top5compare', // Changed ID
+            group: 'llm-sync'
           },
           theme: {
             mode: 'dark' 
           },
+          grid: {
+            borderColor: '#334155'
+          },
+          plotOptions: {
+            bar: {
+              horizontal: false,
+              columnWidth: '80%',
+            },
+          },
+          dataLabels: { enabled: false },
+          stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+          },
           xaxis: {
-            categories: chartData.labels,
+            categories: chartData.labels, // e.g., "Intelligence", "Coding", "Math"
             labels: {
               style: { colors: '#E2E8F0', fontSize: '14px' }
             }
           },
           yaxis: {
-            show: false
+            labels: {
+              style: { colors: '#94A3B8' }
+            }
           },
-          stroke: {
-            width: 2
-          },
-          fill: {
-            opacity: 0.1
-          },
+          fill: { opacity: 1 },
           legend: {
             position: 'top',
             offsetY: 0,
@@ -464,24 +480,19 @@
           }
         };
 
-        const chart = new ApexCharts(document.querySelector("#radar-chart"), options);
+        const chart = new ApexCharts(document.querySelector("#model-comparison-chart"), options);
         chart.render();
       }
 
-      // *** UPDATED: Renders the Horizontal Bar Chart from ROOT data ***
+      // UPDATED: Renders the Horizontal Bar Chart
       function renderCategoryWinners(categoryData) {
         if (!categoryData || !Array.isArray(categoryData)) return;
         
-        // We are building the chart from the 'category_winners' array now,
-        // not from the 'charts' object.
-        
-        // Format data for ApexCharts
         const series = [{
             name: 'Score',
             data: categoryData.map(item => item.score)
         }];
         
-        // Create informative labels
         const categories = categoryData.map(item => {
             return `${item.display_name}: ${item.model_name}`
         });
@@ -513,13 +524,12 @@
                 colors: ['#fff']
             },
             formatter: (val, opts) => {
-                // Show the provider on the bar
                 return categoryData[opts.dataPointIndex].provider
             },
             offsetX: -10,
           },
           xaxis: {
-            categories: categories, // Use our new rich labels
+            categories: categories, 
             labels: {
               style: { colors: '#94A3B8' }
             }
@@ -653,22 +663,7 @@
         `;
       }
       
-      // NEW: Renders the Shareable Content
-      function renderShareable(shareableData) {
-        if (!shareableData) return;
-        
-        const container = document.getElementById('shareable-container');
-        container.innerHTML = `
-            <div class="shareable-card">
-                <h3>Twitter</h3>
-                <pre>${shareableData.twitter}</pre>
-            </div>
-            <div class_id="shareable-card">
-                <h3>LinkedIn</h3>
-                <pre>${shareableData.linkedin}</pre>
-            </div>
-        `;
-      }
+      // Shareable function removed
 
       // Main fetch function
       async function fetchBenchmarkData() {
