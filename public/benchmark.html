@@ -11,7 +11,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;7Methods:0;800;900&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css" />
 
@@ -23,27 +23,20 @@
     body {
       background-color: #0F172A; 
       color: #F1F5F9;
-      /* Overflow is now handled by the .page-wrapper */
     }
-
-    /* Page Wrapper Fix */
     .page-wrapper {
         width: 100%;
         overflow-x: hidden;
     }
-
     .benchmark-container {
       max-width: 1400px;
       margin: 2rem auto;
       padding: 0 1rem;
     }
-    
-    /* Mobile Navbar Fix */
     .nav-mobile-overlay {
         width: 100% !important; 
         box-sizing: border-box;
     }
-    
     .benchmark-header {
       text-align: center;
       margin-bottom: 2rem;
@@ -56,8 +49,6 @@
       font-size: 1rem;
       color: #94A3B8;
     }
-
-    /* Hero Stats Row */
     .hero-stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -88,8 +79,6 @@
       color: #64748B;
       margin-top: 0.25rem;
     }
-
-    /* 2x2 Charts Grid */
     .charts-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr); 
@@ -107,7 +96,7 @@
       padding: 1.5rem;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       border: 1px solid #334155;
-      overflow: hidden; /* Safety net to clip any overflow */
+      overflow: hidden; 
     }
     .chart-card h2 {
       margin-top: 0;
@@ -115,17 +104,14 @@
       font-weight: 700;
       color: #E2E8F0;
     }
-    
-    /* Leaderboard Table Styles */
     .leaderboard-container {
       background: #1E293B;
       border-radius: 12px;
       padding: 1.5rem;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       border: 1px solid #334155;
-      overflow-x: auto; /* For mobile */
+      overflow-x: auto; 
       margin-bottom: 2rem;
-      
       width: 100%;
       box-sizing: border-box;
     }
@@ -169,8 +155,6 @@
       min-width: 20px;
       text-align: center;
     }
-
-    /* Insights & Facts Grid */
     .insights-grid {
       display: grid;
       grid-template-columns: 2fr 1fr;
@@ -190,7 +174,7 @@
     }
     .insight-card h3 {
       margin: 0 0 0.5rem 0;
-      color: #3B82F6; /* Blue title */
+      color: #3B82F6; 
     }
     .insight-card h4 {
       margin: 0 0 0.5rem 0;
@@ -219,8 +203,6 @@
     .quick-facts-card li {
       margin-bottom: 0.5rem;
     }
-    
-    /* Loader/Error Styles (unchanged) */
     .loader-container { text-align: center; padding: 4rem 0; }
     .loader { width: 50px; aspect-ratio: 1; border-radius: 50%; border: 8px solid #334155; border-top-color: #3B82F6; animation: spin 1s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -239,7 +221,6 @@
           <div class="brand-tagline">ANALYTICS · FZCO</div>
         </div>
       </a>
-
       <div class="header-right-group">
           <nav class="nav-desktop">
             <a href="benchmark.html" class="active-page" data-lang-key="nav_insight">Benchmarks</a>
@@ -248,16 +229,15 @@
             <a href="services.html" data-lang-key="nav_services">Services</a>
             <a href="whitepaper.html" data-lang-key="nav_whitepaper">White Paper</a>
           </nav>
-
           <div class="language-switcher">
             <a href="#" data-lang="en" data-lang-key="lang_en">EN</a>
             <a href="#" data-lang="fa" class="active" data-lang-key="lang_fa">FA</a>
           </div>
-
           <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
             <span class="bar"></span> <span class="bar"></span> <span class="bar"></span>
           </button>
-      </div> </header>
+      </div> 
+    </header>
 
     <ul class="nav-mobile-overlay">
         <li><a href="benchmark.html" class="active-page" data-lang-key="nav_insight">Benchmarks</a></li>
@@ -265,18 +245,18 @@
         <li><a href="blog.html" data-lang-key="nav_blog">Blog</a></li>
         <li><a href="services.html" data-lang-key="nav_services">Services</a></li>
         <li><a href="whitepaper.html" data-lang-key="nav_whitepaper">White Paper</a></li>
-
         <div class="language-switcher">
         <a href="#" data-lang="en" data-lang-key="lang_en">EN</a>
         <a href="#" data-lang="fa" class="active" data-lang-key="lang_fa">FA</a>
       </div>
     </ul>
+    
+    
     <main class="benchmark-container" id="benchmark-content">
       <div class="benchmark-header">
         <h1 data-lang-key="benchmark_main_title">AI Model Benchmark Leaderboard</h1>
         <p id="last-updated" data-lang-key="benchmark_loading">Loading data...</p>
       </div>
-
       <div id="charts-container">
         <div class="loader-container">
           <div class="loader"></div>
@@ -284,7 +264,11 @@
         </div>
       </div>
     </main>
-    </div> <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+  </div> 
+
+
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
   <script src="js/main.js"></script> 
   <script src="js/chat.js"></script> 
@@ -293,12 +277,11 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // *** My custom translate() helper function has been REMOVED ***
+      // My custom translate() helper function is GONE
     
       const chartsContainer = document.getElementById('charts-container');
       const lastUpdatedEl = document.getElementById('last-updated');
 
-      // Helper to show a loading spinner
       function showLoading() {
         chartsContainer.innerHTML = `
           <div class="loader-container">
@@ -308,7 +291,6 @@
         `;
       }
 
-      // Helper to show an error message
       function showError(message) {
         chartsContainer.innerHTML = `
           <div class="error-message">
@@ -318,50 +300,42 @@
         lastUpdatedEl.innerHTML = `<span data-lang-key="benchmark_data_error">Could not load data.</span>`;
       }
 
-      // Main function to render all data
       function renderData(data) {
         // Clear the loader
         chartsContainer.innerHTML = `
           <div id="hero-stats-container" class="hero-stats-grid"></div>
-
           <div class="charts-grid">
             <div class="chart-card">
-              <h2 data-lang-key="benchmark_chart_top10_fallback">${data.charts?.top_10_bar?.title || 'Top 10 AI Models'}</h2>
+              <h2>${data.charts?.top_10_bar?.title || 'Top 10 AI Models'}</h2>
               <div id="top-10-bar-chart"></div>
             </div>
-            
             <div class="chart-card">
-              <h2 data-lang-key="benchmark_chart_top5_fallback">${data.charts?.top_5_radar?.title || 'Top 5 Model Comparison'}</h2>
+              <h2>${data.charts?.top_5_radar?.title || 'Top 5 Model Comparison'}</h2>
               <div id="model-comparison-chart"></div>
             </div>
-            
             <div class="chart-card">
               <h2 data-lang-key="benchmark_chart_champions">Category Champions</h2>
               <div id="category-winners-chart"></div>
             </div>
             <div class="chart-card">
-              <h2 data-lang-key="benchmark_chart_provider_fallback">${data.charts?.provider_pie?.title || 'Top 10 Models by Provider'}</h2>
+              <h2>${data.charts?.provider_pie?.title || 'Top 10 Models by Provider'}</h2>
               <div id="provider-pie-chart"></div>
             </div>
           </div>
-
           <div id="leaderboard-container" class="leaderboard-container">
              <h2 data-lang-key="benchmark_table_title">Leaderboard</h2>
-             <table class="leaderboard-table" id="leaderboard-table">
-                </table>
+             <table class="leaderboard-table" id="leaderboard-table"></table>
           </div>
-
-          <div id="insights-container" class="insights-grid">
-             </div>
+          <div id="insights-container" class="insights-grid"></div>
         `;
         
         // Date formatting
         try {
           const updatedDate = new Date(data.metadata.last_updated);
           const options = { year: 'numeric', month: 'long', day: 'numeric' };
-          const lang = window.currentLanguage === 'fa' ? 'fa-IR' : 'en-US';
-          const formattedDate = updatedDate.toLocaleDateString(lang, options);
-          // We set the key for the prefix, but the date is dynamic
+          // Use localStorage to get lang, as window.currentLanguage might not be set
+          const lang = localStorage.getItem('preferredLanguage') || 'fa'; 
+          const formattedDate = updatedDate.toLocaleDateString(lang === 'fa' ? 'fa-IR' : 'en-US', options);
           lastUpdatedEl.innerHTML = `<span data-lang-key="benchmark_updated_prefix">Updated:</span> ${formattedDate}`;
         } catch (e) {
           lastUpdatedEl.textContent = `Data loaded.`;
@@ -374,16 +348,15 @@
         renderCategoryWinners(data.category_winners); 
         renderProviderPie(data.charts.provider_pie);
         renderLeaderboardTable(data.leaderboard); 
-        renderInsights(data); // Pass full data object
+        renderInsights(data); 
         
-        // *** THIS IS THE IMPORTANT PART ***
-        // Now that all HTML is on the page, we tell language.js to translate everything
+        // *** THIS IS THE FIX ***
+        // Now that all HTML is on the page, we call the new global function
         if (typeof window.updateContent === 'function') {
             window.updateContent();
         }
       }
 
-      // Render Hero Stats
       function renderHeroStats(stats) {
         if (!stats) return;
         const container = document.getElementById('hero-stats-container');
@@ -401,269 +374,91 @@
         `;
       }
 
-
-      // Renders the Bar Chart
       function renderTop10BarChart(chartData) {
         if (!chartData) return;
-
         const options = {
-          series: chartData.datasets.map(dataset => ({
-            name: dataset.label,
-            data: dataset.data
-          })), 
-          chart: {
-            type: 'bar',
-            height: 350,
-            fontFamily: '"Nunito Sans", sans-serif',
-            toolbar: { show: false },
-            id: 'top10bar', 
-            group: 'llm-sync' 
-          },
-          theme: {
-            mode: 'dark' 
-          },
-          grid: {
-            borderColor: '#334155'
-          },
-          plotOptions: {
-            bar: {
-              horizontal: false,
-              columnWidth: '55%',
-              endingShape: 'rounded'
-            },
-          },
+          series: chartData.datasets.map(dataset => ({ name: dataset.label, data: dataset.data })), 
+          chart: { type: 'bar', height: 350, fontFamily: '"Nunito Sans", sans-serif', toolbar: { show: false }, id: 'top10bar', group: 'llm-sync' },
+          theme: { mode: 'dark' },
+          grid: { borderColor: '#334155' },
+          plotOptions: { bar: { horizontal: false, columnWidth: '55%', endingShape: 'rounded' } },
           dataLabels: { enabled: false },
-          xaxis: {
-            categories: chartData.labels,
-            labels: {
-              style: { colors: '#94A3B8' }
-            }
-          },
-          yaxis: {
-            labels: {
-              style: { colors: '#94A3B8' }
-            }
-          },
+          xaxis: { categories: chartData.labels, labels: { style: { colors: '#94A3B8' } } },
+          yaxis: { labels: { style: { colors: '#94A3B8' } } },
           fill: { opacity: 1 }
         };
-
-        const chart = new ApexCharts(document.querySelector("#top-10-bar-chart"), options);
-        chart.render();
+        new ApexCharts(document.querySelector("#top-10-bar-chart"), options).render();
       }
 
-      // Renders the Top 5 Grouped Bar Chart
       function renderTop5ComparisonChart(chartData) {
         if (!chartData) return;
-        
-        const seriesData = chartData.datasets.map(dataset => ({
-            name: dataset.label,
-            data: dataset.data
-        }));
-        
+        const seriesData = chartData.datasets.map(dataset => ({ name: dataset.label, data: dataset.data }));
         const options = {
           series: seriesData,
-          chart: {
-            type: 'bar',
-            height: 400,
-            fontFamily: '"Nunito Sans", sans-serif',
-            toolbar: { show: false },
-            id: 'top5compare',
-            group: 'llm-sync'
-          },
-          theme: {
-            mode: 'dark' 
-          },
-          grid: {
-            borderColor: '#334155'
-          },
-          plotOptions: {
-            bar: {
-              horizontal: false,
-              columnWidth: '80%',
-            },
-          },
+          chart: { type: 'bar', height: 400, fontFamily: '"Nunito Sans", sans-serif', toolbar: { show: false }, id: 'top5compare', group: 'llm-sync' },
+          theme: { mode: 'dark' },
+          grid: { borderColor: '#334155' },
+          plotOptions: { bar: { horizontal: false, columnWidth: '80%' } },
           dataLabels: { enabled: false },
-          stroke: {
-            show: true,
-            width: 2,
-            colors: ['transparent']
-          },
-          xaxis: {
-            categories: chartData.labels,
-            labels: {
-              style: { colors: '#E2E8F0', fontSize: '14px' }
-            }
-          },
-          yaxis: {
-            labels: {
-              style: { colors: '#94A3B8' }
-            }
-          },
+          stroke: { show: true, width: 2, colors: ['transparent'] },
+          xaxis: { categories: chartData.labels, labels: { style: { colors: '#E2E8F0', fontSize: '14px' } } },
+          yaxis: { labels: { style: { colors: '#94A3B8' } } },
           fill: { opacity: 1 },
-          legend: { 
-            position: 'top',
-            offsetY: 0,
-            labels: { colors: '#F1F5F9' }
-          }
+          legend: { position: 'top', offsetY: 0, labels: { colors: '#F1F5F9' } }
         };
-
-        const chart = new ApexCharts(document.querySelector("#model-comparison-chart"), options);
-        chart.render();
+        new ApexCharts(document.querySelector("#model-comparison-chart"), options).render();
       }
 
-      // Renders the Horizontal Bar Chart
       function renderCategoryWinners(categoryData) {
         if (!categoryData || !Array.isArray(categoryData)) return;
-        
-        const series = [{
-            name: 'Score',
-            data: categoryData.map(item => item.score)
-        }];
-        
-        const categories = categoryData.map(item => {
-            return `${item.display_name}: ${item.model_name}`
-        });
-
+        const series = [{ name: 'Score', data: categoryData.map(item => item.score) }];
+        const categories = categoryData.map(item => `${item.display_name}: ${item.model_name}`);
         const options = {
           series: series,
-          chart: {
-            type: 'bar',
-            height: 350,
-            fontFamily: '"Nunito Sans", sans-serif',
-            toolbar: { show: false }
-          },
-          theme: {
-            mode: 'dark' 
-          },
-          grid: {
-            borderColor: '#334155'
-          },
-          plotOptions: {
-            bar: {
-              horizontal: true, 
-              distributed: true, 
-              borderRadius: 4
-            },
-          },
-          dataLabels: { 
-            enabled: true,
-            style: {
-                colors: ['#fff']
-            },
-            formatter: (val, opts) => {
-                return categoryData[opts.dataPointIndex].provider
-            },
-            offsetX: -10,
-          },
-          xaxis: {
-            categories: categories, 
-            labels: {
-              style: { colors: '#94A3B8' }
-            }
-          },
-          yaxis: {
-            labels: {
-              style: { colors: '#94A3B8', fontSize: '14px' }
-            }
-          },
+          chart: { type: 'bar', height: 350, fontFamily: '"Nunito Sans", sans-serif', toolbar: { show: false } },
+          theme: { mode: 'dark' },
+          grid: { borderColor: '#334155' },
+          plotOptions: { bar: { horizontal: true, distributed: true, borderRadius: 4 } },
+          dataLabels: { enabled: true, style: { colors: ['#fff'] }, formatter: (val, opts) => categoryData[opts.dataPointIndex].provider, offsetX: -10 },
+          xaxis: { categories: categories, labels: { style: { colors: '#94A3B8' } } },
+          yaxis: { labels: { style: { colors: '#94A3B8', fontSize: '14px' } } },
           legend: { show: false } 
         };
-
-        const chart = new ApexCharts(document.querySelector("#category-winners-chart"), options);
-        chart.render();
+        new ApexCharts(document.querySelector("#category-winners-chart"), options).render();
       }
 
-      // Renders the Pie Chart
       function renderProviderPie(chartData) {
         if (!chartData) return;
-
-        // We must translate the "Total" label *after* language.js has run
-        // So we get it now and pass it to the chart
-        const totalLabel = (window.translations && window.translations[window.currentLanguage])
-                         ? window.translations[window.currentLanguage]['benchmark_pie_total']
-                         : 'Providers'; // English fallback
+        
+        // Get the translation *now*, it will be updated later by window.updateContent
+        const lang = localStorage.getItem('preferredLanguage') || 'fa';
+        const totalLabel = (translations[lang] && translations[lang]['benchmark_pie_total']) 
+                           ? translations[lang]['benchmark_pie_total'] : 'Providers';
 
         const options = {
           series: chartData.datasets[0].data,
           labels: chartData.labels,
-          chart: {
-            type: 'donut',
-            height: 400,
-            fontFamily: '"Nunito Sans", sans-serif'
-          },
-          theme: {
-            mode: 'dark' 
-          },
-          plotOptions: {
-            pie: {
-              donut: {
-                labels: {
-                  show: true,
-                  total: {
-                    show: true,
-                    label: totalLabel, // <-- Use the translated label
-                    color: '#94A3B8'
-                  }
-                }
-              }
-            }
-          },
-          tooltip: {
-            y: {
-                formatter: (val) => (val === 1 ? "1 model" : val + " models"),
-                title: {
-                    formatter: (seriesName) => seriesName
-                }
-            }
-          },
-          legend: {
-            position: 'bottom',
-            labels: { colors: '#F1F5F9' },
-            itemMargin: {
-                horizontal: 5,
-                vertical: 2
-            }
-          },
-          dataLabels: {
-             enabled: false 
-          },
+          chart: { type: 'donut', height: 400, fontFamily: '"Nunito Sans", sans-serif' },
+          theme: { mode: 'dark' },
+          plotOptions: { pie: { donut: { labels: { show: true, total: { show: true, label: totalLabel, color: '#94A3B8' } } } } },
+          tooltip: { y: { formatter: (val) => (val === 1 ? "1 model" : val + " models"), title: { formatter: (seriesName) => seriesName } } },
+          legend: { position: 'bottom', labels: { colors: '#F1F5F9' }, itemMargin: { horizontal: 5, vertical: 2 } },
+          dataLabels: { enabled: false },
           responsive: [{
             breakpoint: 480, 
             options: {
-              chart: {
-                height: 300 
-              },
-              legend: {
-                show: false 
-              },
-              plotOptions: {
-                pie: {
-                  donut: {
-                    labels: {
-                      show: true, 
-                      total: {
-                        show: true,
-                        label: totalLabel, // <-- Use the translated label
-                        fontSize: '18px'
-                      }
-                    }
-                  }
-                }
-              }
+              chart: { height: 300 },
+              legend: { show: false },
+              plotOptions: { pie: { donut: { labels: { show: true, total: { show: true, label: totalLabel, fontSize: '18px' } } } } }
             }
           }]
         };
-
-        const chart = new ApexCharts(document.querySelector("#provider-pie-chart"), options);
-        chart.render();
+        new ApexCharts(document.querySelector("#provider-pie-chart"), options).render();
       }
 
-      // Renders the Leaderboard Table
       function renderLeaderboardTable(leaderboardData) {
         if (!leaderboardData || !Array.isArray(leaderboardData)) return;
-
         const table = document.getElementById('leaderboard-table');
-        
         let headerHTML = `
             <thead>
                 <tr>
@@ -677,7 +472,6 @@
                 </tr>
             </thead>
         `;
-
         let bodyHTML = '<tbody>';
         for (const model of leaderboardData) {
           bodyHTML += `
@@ -693,22 +487,17 @@
           `;
         }
         bodyHTML += '</tbody>';
-        
         table.innerHTML = headerHTML + bodyHTML;
       }
       
-      // *** UPDATED: Renders Insights and ONLY static Quick Facts ***
       function renderInsights(data) {
         const container = document.getElementById('insights-container');
         if (!container) return;
-        
         const insights = data.insights || [];
         const staticFacts = data.quick_facts || []; 
-        
         let insightsHTML = '';
         if (insights.length > 0) {
             for (const item of insights) {
-                // *** THIS IS THE FIX ***
                 let typeKey = '';
                 if (item.type === 'hidden_gem') {
                     typeKey = 'benchmark_insights_hidden';
@@ -717,8 +506,6 @@
                 } else {
                     typeKey = 'benchmark_insights_' + item.type;
                 }
-                // *** END OF FIX ***
-                
                 insightsHTML += `
                     <div class="insight-card">
                         <h3 data-lang-key="${typeKey}">${item.type}</h3>
@@ -728,7 +515,6 @@
                 `;
             }
         }
-
         let factsHTML = '';
         if (staticFacts.length > 0) {
             factsHTML = `
@@ -740,15 +526,9 @@
                 </div>
             `;
         }
-        
-        container.innerHTML = `
-            ${insightsHTML}
-            ${factsHTML}
-        `;
+        container.innerHTML = insightsHTML + factsHTML;
       }
       
-
-      // Main fetch function
       async function fetchBenchmarkData() {
         showLoading();
         try {
@@ -756,21 +536,14 @@
           if (!response.ok) {
             throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
           }
-          
           const result = await response.json();
-          
           if (result.success && result.data && typeof result.data === 'object') {
-            
-            const realData = result.data;
-            console.log("Successfully fetched data:", realData); 
-
-            if (!realData.charts || !realData.leaderboard) {
-              console.error("Data is missing 'charts' or 'leaderboard' key.", realData);
+            console.log("Successfully fetched data:", result.data); 
+            if (!result.data.charts || !result.data.leaderboard) {
+              console.error("Data is missing 'charts' or 'leaderboard' key.", result.data);
               throw new Error("Data loaded, but it's missing key sections.");
             }
-
-            renderData(realData);
-
+            renderData(result.data);
           } else {
             throw new Error(result.message || 'Data format is incorrect or empty.');
           }
@@ -780,9 +553,9 @@
         }
       }
 
-      // We wait for the main site scripts (language.js) to be ready
-      // A 100ms delay is usually enough
-      setTimeout(fetchBenchmarkData, 100);
+      // *** REMOVED the setTimeout ***
+      // We can call it directly.
+      fetchBenchmarkData();
     });
   </script>
 </body>
