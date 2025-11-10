@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nazarban AI Consultation - Benchmarks</title>
+
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+  <link rel="icon" href="favicon.ico" />
+  <link rel="apple-touch-icon" href="logo.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    .benchmark-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .benchmark-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .benchmark-header h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+    }
+    #last-updated {
+      font-size: 1rem;
+      color: #666;
+    }
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .chart-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .chart-card h2 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .uptime-gauges {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      justify-items: center;
+    }
+    
+    /* Loading Spinner */
+    .loader-container {
+      text-align: center;
+      padding: 4rem 0;
+    }
+    .loader {
+      width: 50px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 8px solid #f3f3f3;
+      border-top-color: #007bff; /* Change this to your brand color */
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Error Message */
+    .error-message {
+      text-align: center;
+      padding: 2rem;
+      background: #fff8f8;
+      color: #c00;
+      border: 1px solid #fdd;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body class="chat-page">
+
+  <header class="header">
+    <a href="index.html" class="logo-section">
+      <div class="logo-badge"> <img class="logo" src="logo.png" alt="Nazarban Logo" /> </div>
+      <div class="brand-text">
+        <div class="brand-name">NAZARBAN</div>
+        <div class="brand-tagline">ANALYTICS · FZCO</div>
+      </div>
+    </a>
+
+    <div class="header-right-group">
+        <nav class="nav-desktop">
+          <a href="benchmark.html" class="active-page" data-lang-key="nav_insight">Benchmarks</a>
+          <a href="about.html" data-lang-key="nav_about">About</a>
+          <a href="blog.html" data-lang-key="nav_blog">Blog</a>
+          <a href="services.html" data-lang-key="nav_services">Services</a>
+          <a href="whitepaper.html" data-lang-key="nav_whitepaper">White Paper</a>
+        </nav>
+
+        <div class="language-switcher">
+          <a href="#" data-lang="en" data-lang-key="lang_en">EN</a>
+          <a href="#" data-lang="fa" class="active" data-lang-key="lang_fa">FA</a>
+        </div>
+
+        <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+          <span class="bar"></span> <span class="bar"></span> <span class="bar"></span>
+        </button>
+    </div> </header>
+
+  <ul class="nav-mobile-overlay">
+      <li><a href="benchmark.html" class="active-page" data-lang-key="nav_insight">Benchmarks</a></li>
+      <li><a href="about.html" data-lang-key="nav_about">About</a></li>
+      <li><a href="blog.html" data-lang-key="nav_blog">Blog</a></li>
+      <li><a href="services.html" data-lang-key="nav_services">Services</a></li>
+      <li><a href="whitepaper.html" data-lang-key="nav_whitepaper">White Paper</a></li>
+
+      <div class="language-switcher">
+      <a href="#" data-lang="en" data-lang-key="lang_en">EN</a>
+      <a href="#" data-lang="fa" class="active" data-lang-key="lang_fa">FA</a>
+    </div>
+  </ul>
+  
+  <main class="benchmark-container" id="benchmark-content">
+    <div class="benchmark-header">
+      <h1 data-lang-key="benchmark_title">AI Model Benchmarks</h1>
+      <p id="last-updated" data-lang-key="benchmark_loading">Loading data...</p>
+    </div>
+
+    <div id="charts-container">
+      <div class="loader-container">
+        <div class="loader"></div>
+      </div>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+  <script src="js/main.js"></script> 
+  <script src="js/chat.js"></script> 
+  <script src="js/translations.js"></script> 
+  <script src="js/language.js"></script> 
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const chartsContainer = document.getElementById('charts-container');
+      const lastUpdatedEl = document.getElementById('last-updated');
+
+      // Helper to show a loading spinner
+      function showLoading() {
+        chartsContainer.innerHTML = `
+          <div class="loader-container">
+            <div class="loader"></div>
+          </div>
+        `;
+        lastUpdatedEl.textContent = 'Loading data...';
+      }
+
+      // Helper to show an error message
+      function showError(message) {
+        chartsContainer.innerHTML = `
+          <div class="error-message">
+            <strong>Error loading benchmarks:</strong> ${message}
+          </div>
+        `;
+        lastUpdatedEl.textContent = 'Could not load data.';
+      }
+
+      // Main function to render all data
+      function renderData(data) {
+        // Clear the loader
+        chartsContainer.innerHTML = `
+          <div class="charts-grid">
+            <div class="chart-card">
+              <h2 data-lang-key="benchmark_model_comparison">Model Comparison</h2>
+              <div id="model-comparison-chart"></div>
+            </div>
+            <div class="chart-card">
+              <h2 data-lang-key="benchmark_api_uptime">API Uptime</h2>
+              <div id="uptime-gauges" class="uptime-gauges"></div>
+            </div>
+          </div>
+        `;
+        
+        // Update last updated time
+        try {
+          const updatedDate = new Date(data.lastUpdated);
+          lastUpdatedEl.textContent = `Last updated: ${updatedDate.toLocaleString()}`;
+        } catch (e) {
+          lastUpdatedEl.textContent = `Data loaded.`;
+        }
+
+        // Render the charts
+        renderModelChart(data.modelComparison);
+        renderUptimeGauges(data.apiUptime);
+        
+        // Re-run translation for new content
+        if (typeof window.updateContent === 'function') {
+            window.updateContent();
+        }
+      }
+
+      // Renders the Bar Chart
+      function renderModelChart(chartData) {
+        const options = {
+          series: chartData.series, // e.g., [{ name: 'GPT-4o', data: [120, 95, 1.5] }]
+          chart: {
+            type: 'bar',
+            height: 350,
+            fontFamily: '"Nunito Sans", sans-serif',
+            toolbar: { show: false }
+          },
+          plotOptions: {
+            bar: {
+              horizontal: false,
+              columnWidth: '55%',
+              endingShape: 'rounded'
+            },
+          },
+          dataLabels: { enabled: false },
+          stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+          },
+          xaxis: {
+            categories: chartData.categories, // e.g., ['Speed', 'Accuracy', 'Cost']
+          },
+          yaxis: {
+            title: { text: 'Value' }
+          },
+          fill: { opacity: 1 },
+          tooltip: {
+            y: {
+              formatter: (val) => val
+            }
+          },
+          // This is key! It respects your <html dir="rtl">
+          theme: {
+            mode: 'light',
+            palette: 'palette1' 
+          }
+        };
+
+        const chart = new ApexCharts(document.querySelector("#model-comparison-chart"), options);
+        chart.render();
+      }
+
+      // Renders the "cool" Radial Gauges
+      function renderUptimeGauges(uptimeData) {
+        const gaugesContainer = document.getElementById('uptime-gauges');
+        
+        uptimeData.forEach(api => {
+          const gaugeEl = document.createElement('div');
+          gaugesContainer.appendChild(gaugeEl);
+
+          const options = {
+            series: [api.value], // e.g., [99.98]
+            chart: {
+              height: 250,
+              type: 'radialBar',
+            },
+            plotOptions: {
+              radialBar: {
+                hollow: {
+                  size: '70%',
+                },
+                dataLabels: {
+                  name: {
+                    show: true,
+                    fontSize: '16px',
+                    fontWeight: 600,
+                    offsetY: -10,
+                    color: '#111'
+                  },
+                  value: {
+                    show: true,
+                    fontSize: '22px',
+                    fontWeight: 700,
+                    offsetY: 10,
+                    formatter: (val) => `${val}%`
+                  }
+                }
+              }
+            },
+            labels: [api.name], // e.g., ['Google API']
+            stroke: {
+              lineCap: 'round'
+            },
+            colors: [ (api.value > 99.9) ? '#00E396' : '#FEB019'] // Green if > 99.9, else yellow
+          };
+
+          const chart = new ApexCharts(gaugeEl, options);
+          chart.render();
+        });
+      }
+
+      // Main function to fetch data
+      async function fetchBenchmarkData() {
+        showLoading();
+        try {
+          const response = await fetch('/api/benchmark/data');
+          if (!response.ok) {
+            throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
+          }
+          
+          const result = await response.json();
+          
+          if (result.success && result.data) {
+            renderData(result.data);
+          } else {
+            throw new Error(result.message || 'Data format is incorrect.');
+          }
+        } catch (error) {
+          console.error('Error fetching benchmark data:', error);
+          showError(error.message);
+        }
+      }
+
+      // Initial load
+      fetchBenchmarkData();
+    });
+  </script>
+</body>
+</html>

@@ -7,6 +7,7 @@ const translations = {
     nav_blog: "Blog",
     nav_services: "Services",
     nav_whitepaper: "White Paper",
+    nav_insight: "Benchmarks",
     // Language Switcher
     lang_en: "EN",
     lang_fa: "FA",
@@ -107,6 +108,57 @@ whitepaper_cta_text: "Start with a 7-Day Data Readiness Audit and an executable 
     blog_header_title: "AI Product Highlights",
     blog_header_subtitle: "Daily insights from Product Hunt's top AI innovations",
     blog_loading: "Loading posts...",
+    
+    // Benchmark Page
+    benchmark_title: "AI Model Benchmark Leaderboard",
+    benchmark_subtitle: "Real-time rankings of the smartest AI models",
+    benchmark_loading: "Loading benchmark data...",
+    benchmark_error: "Failed to load benchmark data. Please try again later.",
+    benchmark_last_updated: "Last Updated",
+    benchmark_data_source: "Data Source",
+    benchmark_models_analyzed: "Models Analyzed",
+    benchmark_version: "Version",
+    
+    benchmark_hero_total: "Total Models",
+    benchmark_hero_highest: "Highest Score",
+    benchmark_hero_providers: "Providers",
+    
+    benchmark_leaderboard_title: "Top 10 Leaderboard",
+    benchmark_table_rank: "Rank",
+    benchmark_table_model: "Model",
+    benchmark_table_provider: "Provider",
+    benchmark_table_intelligence: "Intelligence",
+    benchmark_table_coding: "Coding",
+    benchmark_table_math: "Math",
+    benchmark_table_grade: "Grade",
+    
+    benchmark_categories_title: "Category Champions",
+    benchmark_category_smartest: "Smartest Model",
+    benchmark_category_coder: "Best Coder",
+    benchmark_category_math: "Math Wizard",
+    benchmark_category_value: "Best Value",
+    benchmark_category_balanced: "Most Balanced",
+    
+    benchmark_charts_title: "Performance Analytics",
+    benchmark_chart_top10: "Top 10 Models - Overall Intelligence",
+    benchmark_chart_categories: "Category Winners - Scores",
+    benchmark_chart_radar: "Top 5 Models - Skill Comparison",
+    benchmark_chart_providers: "Models by Provider",
+    
+    benchmark_insights_title: "Key Insights",
+    benchmark_insights_hidden: "Hidden Gem",
+    benchmark_insights_specialist: "Specialist",
+    benchmark_insights_score: "Score",
+    benchmark_insights_specialty: "Specialty",
+    benchmark_insights_type: "Type",
+    
+    benchmark_facts_title: "Quick Facts",
+    
+    benchmark_share_title: "Share These Results",
+    benchmark_share_twitter: "Share on Twitter",
+    benchmark_share_linkedin: "Share on LinkedIn",
+    benchmark_share_copy: "Copy Summary",
+    benchmark_share_copied: "Summary copied to clipboard!",
   },
   // Farsi translations
   fa: {
@@ -116,6 +168,7 @@ whitepaper_cta_text: "Start with a 7-Day Data Readiness Audit and an executable 
     nav_blog: "بلاگ",
     nav_services: "خدمات",
     nav_whitepaper: "وایت پیپر",
+    nav_insight: " بنچمارک",
     // Language Switcher
     lang_en: "EN",
     lang_fa: "FA",
@@ -215,5 +268,56 @@ whitepaper_cta_text: "با ممیزی آمادگی داده ۷ روزه و اث�
     blog_header_title: "محصولات برجسته هوش مصنوعی",
     blog_header_subtitle: "بینش‌های روزانه از نوآوری‌های برتر Product Hunt",
     blog_loading: "در حال بارگذاری...",
+    
+    // Benchmark Page
+    benchmark_title: "جدول رتبه‌بندی مدل‌های هوش مصنوعی",
+    benchmark_subtitle: "رتبه‌بندی لحظه‌ای هوشمندترین مدل‌های هوش مصنوعی",
+    benchmark_loading: "در حال بارگذاری داده‌های بنچمارک...",
+    benchmark_error: "بارگذاری داده‌های بنچمارک ناموفق بود. لطفاً بعداً دوباره تلاش کنید.",
+    benchmark_last_updated: "آخرین به‌روزرسانی",
+    benchmark_data_source: "منبع داده",
+    benchmark_models_analyzed: "مدل‌های تحلیل شده",
+    benchmark_version: "نسخه",
+    
+    benchmark_hero_total: "تعداد کل مدل‌ها",
+    benchmark_hero_highest: "بالاترین امتیاز",
+    benchmark_hero_providers: "ارائه‌دهندگان",
+    
+    benchmark_leaderboard_title: "۱۰ مدل برتر",
+    benchmark_table_rank: "رتبه",
+    benchmark_table_model: "مدل",
+    benchmark_table_provider: "ارائه‌دهنده",
+    benchmark_table_intelligence: "هوش",
+    benchmark_table_coding: "کدنویسی",
+    benchmark_table_math: "ریاضی",
+    benchmark_table_grade: "نمره",
+    
+    benchmark_categories_title: "قهرمانان دسته‌بندی",
+    benchmark_category_smartest: "هوشمندترین مدل",
+    benchmark_category_coder: "بهترین کدنویس",
+    benchmark_category_math: "جادوگر ریاضی",
+    benchmark_category_value: "بهترین ارزش",
+    benchmark_category_balanced: "متعادل‌ترین",
+    
+    benchmark_charts_title: "تحلیل عملکرد",
+    benchmark_chart_top10: "۱۰ مدل برتر - هوش کلی",
+    benchmark_chart_categories: "برندگان دسته‌بندی - امتیازها",
+    benchmark_chart_radar: "۵ مدل برتر - مقایسه مهارت‌ها",
+    benchmark_chart_providers: "مدل‌ها بر اساس ارائه‌دهنده",
+    
+    benchmark_insights_title: "بینش‌های کلیدی",
+    benchmark_insights_hidden: "گوهر پنهان",
+    benchmark_insights_specialist: "متخصص",
+    benchmark_insights_score: "امتیاز",
+    benchmark_insights_specialty: "تخصص",
+    benchmark_insights_type: "نوع",
+    
+    benchmark_facts_title: "حقایق سریع",
+    
+    benchmark_share_title: "اشتراک‌گذاری این نتایج",
+    benchmark_share_twitter: "اشتراک در توییتر",
+    benchmark_share_linkedin: "اشتراک در لینکدین",
+    benchmark_share_copy: "کپی خلاصه",
+    benchmark_share_copied: "خلاصه در کلیپ‌بورد کپی شد!",
   }
 };

@@ -20,6 +20,10 @@ const blogPostsPath = path.join(__dirname, 'blogPosts.json');
 const archivedPostsPath = path.join(__dirname, 'archivedPosts.json');
 // --- END BLOG POST PATHS ---
 
+// --- BENCHMARK DATA PATHS ---
+const benchmarkDataPath = path.join(__dirname, 'benchmarkData.json');
+// --- END BENCHMARK DATA PATHS ---
+
 // --- NEW: Prompt Management ---
 let prompts = {};
 const promptsFilePath = path.join(__dirname, 'prompts.json');
@@ -99,6 +103,25 @@ async function archiveOldPosts() {
     }
 }
 // --- END BLOG POST MANAGEMENT FUNCTIONS ---
+
+// --- BENCHMARK DATA MANAGEMENT FUNCTIONS ---
+// Load benchmark data from JSON
+async function loadBenchmarkData() {
+    try {
+        const data = await fs.readFile(benchmarkDataPath, 'utf-8');
+        return JSON.parse(data);
+    } catch (error) {
+        console.log('⚠️ No benchmark data file found');
+        return null;
+    }
+}
+
+// Save benchmark data to JSON
+async function saveBenchmarkData(data) {
+    await fs.writeFile(benchmarkDataPath, JSON.stringify(data, null, 2));
+    console.log('✅ Benchmark data saved successfully');
+}
+// --- END BENCHMARK DATA MANAGEMENT FUNCTIONS ---
 
 // --- AUTOMATIC WEEKLY ARCHIVING ---
 // Schedule archiving to run every Monday at 2:00 AM
@@ -345,6 +368,67 @@ app.post('/api/blog/archive', async (req, res) => {
     }
 });
 // --- END: BLOG API ROUTES ---
+
+// --- BENCHMARK API ROUTES ---
+// API: Receive benchmark data from n8n
+app.post('/api/benchmark/update', async (req, res) => {
+    try {
+        const benchmarkData = req.body;
+        
+        // Validate that we received data
+        if (!benchmarkData || Object.keys(benchmarkData).length === 0) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'No benchmark data provided' 
+            });
+        }
+        
+        // Save the benchmark data
+        await saveBenchmarkData(benchmarkData);
+        
+        res.json({ 
+            success: true, 
+            message: 'Benchmark data updated successfully',
+            timestamp: new Date().toISOString()
+        });
+        
+    } catch (error) {
+        console.error('❌ Error updating benchmark data:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Failed to update benchmark data',
+            error: error.message
+        });
+    }
+});
+
+// API: Get benchmark data for frontend
+app.get('/api/benchmark/data', async (req, res) => {
+    try {
+        const benchmarkData = await loadBenchmarkData();
+        
+        if (!benchmarkData) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'No benchmark data available yet' 
+            });
+        }
+        
+        res.json({ 
+            success: true, 
+            data: benchmarkData 
+        });
+        
+    } catch (error) {
+        console.error('❌ Error loading benchmark data:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Failed to load benchmark data',
+            error: error.message
+        });
+    }
+});
+// --- END: BENCHMARK API ROUTES ---
 
 // Initialize email transporter on startup
 setupEmailTransporter();
