@@ -17,9 +17,10 @@
 
   <style>
     /* Main body and layout styles */
-    body {
+    html, body {
       background-color: #0F172A; 
       color: #F1F5F9;
+      overflow-x: hidden; /* <-- Prevents horizontal page scroll */
     }
     .benchmark-container {
       max-width: 1400px;
@@ -27,13 +28,11 @@
       padding: 0 1rem;
     }
     
-    /* *** NEW: Mobile Navbar Fix *** */
-    /* This overrides your external style.css to ensure the overlay is full-width */
+    /* Mobile Navbar Fix */
     .nav-mobile-overlay {
         width: 100% !important; 
         box-sizing: border-box;
     }
-    /* *** END NEW STYLE *** */
     
     .benchmark-header {
       text-align: center;
@@ -337,10 +336,12 @@
              </div>
         `;
         
-        // Update last updated time from metadata
+        // *** UPDATED: Date formatting ***
         try {
           const updatedDate = new Date(data.metadata.last_updated);
-          lastUpdatedEl.textContent = `Last updated: ${updatedDate.toLocaleString()}`;
+          const options = { year: 'numeric', month: 'long', day: 'numeric' };
+          // This will format as "Updated: November 9, 2025"
+          lastUpdatedEl.textContent = `Updated: ${updatedDate.toLocaleDateString('en-US', options)}`;
         } catch (e) {
           lastUpdatedEl.textContent = `Data loaded.`;
         }
@@ -352,8 +353,6 @@
         renderCategoryWinners(data.category_winners); 
         renderProviderPie(data.charts.provider_pie);
         renderLeaderboardTable(data.leaderboard); 
-        
-        // *** UPDATED FUNCTION CALL ***
         renderInsights(data); // Pass full data object
         
         // Re-run translation for new content
@@ -479,11 +478,13 @@
             }
           },
           fill: { opacity: 1 },
-          legend: {
+          // *** THIS IS THE CORRECTED PART ***
+          legend: { 
             position: 'top',
             offsetY: 0,
             labels: { colors: '#F1F5F9' }
           }
+          // *** THE EXTRA PERIOD IS GONE ***
         };
 
         const chart = new ApexCharts(document.querySelector("#model-comparison-chart"), options);
@@ -640,28 +641,49 @@
         
         const insights = data.insights || [];
         const facts = data.quick_facts || [];
-        
-        // --- Start Dynamic Fact Generation ---
         let dynamicFacts = [];
-        
-        // Fact 1: Top 10 Score Range
-        if (data.leaderboard && data.leaderboard.length >= 10) {
-            const topScore = data.leaderboard[0].intelligence;
-            const bottomScore = data.leaderboard[9].intelligence;
-            dynamicFacts.push(`Top 10 intelligence scores range from ${bottomScore} to ${topScore}.`);
-        }
-        
-        // Fact 2: Provider Dominance
-        if (data.charts && data.charts.provider_pie) {
-            const pieData = data.charts.provider_pie;
-            const topProvider = pieData.labels[0];
-            const topProviderCount = pieData.datasets[0].data[0];
-            dynamicFacts.push(`${topProvider} dominates the Top 10 with ${topProviderCount} models.`);
+
+        try {
+          // --- Start Dynamic Fact Generation ---
+          
+          // Fact 1: Total models
+          if (data.metadata && data.metadata.models_analyzed) {
+             dynamicFacts.push(`This analysis is based on ${data.metadata.models_analyzed} models.`);
+          }
+          
+          // Fact 2: Top 10 Score Range
+          if (data.leaderboard && data.leaderboard.length >= 10) {
+              const topScore = data.leaderboard[0].intelligence;
+              const bottomScore = data.leaderboard[9].intelligence;
+              dynamicFacts.push(`Top 10 intelligence scores range from ${bottomScore} to ${topScore}.`);
+              
+              // Fact 3: Average score
+              const top10 = data.leaderboard.slice(0, 10);
+              const avg = top10.reduce((acc, model) => acc + model.intelligence, 0) / 10;
+              dynamicFacts.push(`The average intelligence score in the Top 10 is ${avg.toFixed(1)}.`);
+          }
+          
+          // Fact 4: Provider Dominance
+          if (data.charts && data.charts.provider_pie) {
+              const pieData = data.charts.provider_pie;
+              const topProvider = pieData.labels[0];
+              const topProviderCount = pieData.datasets[0].data[0];
+              dynamicFacts.push(`${topProvider} dominates the Top 10 with ${topProviderCount} models.`);
+          }
+          
+          // Fact 5: Math winner
+          if (data.category_winners) {
+            const mathWinner = data.category_winners.find(c => c.display_name === 'Math');
+            if (mathWinner) {
+                dynamicFacts.push(`The top model for Math is ${mathWinner.model_name} with a score of ${mathWinner.score}.`);
+            }
+          }
+          // --- End Dynamic Fact Generation ---
+        } catch (e) {
+          console.error("Error generating dynamic facts:", e);
         }
         
         const allFacts = [...facts, ...dynamicFacts];
-        // --- End Dynamic Fact Generation ---
-
         
         let insightsHTML = '';
         if (insights.length > 0) {
