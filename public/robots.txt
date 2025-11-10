@@ -5,4 +5,4 @@ Allow: /
 
 Location of the sitemap file
 
-Sitemap: https://www.google.com/search?q=https://nazarba
+Sitemap: https://www.google.com/search?q=https://nazarbanai.com
