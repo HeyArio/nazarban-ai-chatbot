@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // *** THIS IS THE KEY CHANGE ***
     // Call the global function to do all the work
+    localStorage.setItem('preferredLanguage', lang);
     window.updateContent(); 
     // *****************************
 
@@ -68,9 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
         phoneLink.href = 'https://wa.me/19165870145';
       }
     }
-
-    // Save preference to localStorage
-    localStorage.setItem('preferredLanguage', lang);
     
     // ✨ NEW: Dispatch custom event for blog page
     document.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang } }));

@@ -11,7 +11,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;7Methods:0;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css" />
 
@@ -333,7 +333,6 @@
         try {
           const updatedDate = new Date(data.metadata.last_updated);
           const options = { year: 'numeric', month: 'long', day: 'numeric' };
-          // Use localStorage to get lang, as window.currentLanguage might not be set
           const lang = localStorage.getItem('preferredLanguage') || 'fa'; 
           const formattedDate = updatedDate.toLocaleDateString(lang === 'fa' ? 'fa-IR' : 'en-US', options);
           lastUpdatedEl.innerHTML = `<span data-lang-key="benchmark_updated_prefix">Updated:</span> ${formattedDate}`;
@@ -354,6 +353,8 @@
         // Now that all HTML is on the page, we call the new global function
         if (typeof window.updateContent === 'function') {
             window.updateContent();
+        } else {
+            console.error("language.js has not loaded window.updateContent() yet.");
         }
       }
 
@@ -430,9 +431,8 @@
       function renderProviderPie(chartData) {
         if (!chartData) return;
         
-        // Get the translation *now*, it will be updated later by window.updateContent
         const lang = localStorage.getItem('preferredLanguage') || 'fa';
-        const totalLabel = (translations[lang] && translations[lang]['benchmark_pie_total']) 
+        const totalLabel = (window.translations && translations[lang] && translations[lang]['benchmark_pie_total']) 
                            ? translations[lang]['benchmark_pie_total'] : 'Providers';
 
         const options = {
@@ -553,8 +553,6 @@
         }
       }
 
-      // *** REMOVED the setTimeout ***
-      // We can call it directly.
       fetchBenchmarkData();
     });
   </script>
