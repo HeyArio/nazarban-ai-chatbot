@@ -23,8 +23,16 @@
     body {
       background-color: #0F172A; 
       color: #F1F5F9;
-      overflow-x: hidden; /* <-- This is correct, stops page scroll */
+      /* Overflow is now handled by the .page-wrapper */
     }
+
+    /* *** NEW: Page Wrapper Fix *** */
+    /* This wrapper isolates the page and finally kills the horizontal scroll */
+    .page-wrapper {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
     .benchmark-container {
       max-width: 1400px;
       margin: 2rem auto;
@@ -108,7 +116,7 @@
       color: #E2E8F0;
     }
     
-    /* *** UPDATED LEADERBOARD STYLES *** */
+    /* Leaderboard Table Styles */
     .leaderboard-container {
       background: #1E293B;
       border-radius: 12px;
@@ -118,8 +126,8 @@
       overflow-x: auto; /* For mobile */
       margin-bottom: 2rem;
       
-      width: 100%; /* <-- NEW: Forces container to fit screen */
-      box-sizing: border-box; /* <-- NEW: Includes padding in width */
+      width: 100%;
+      box-sizing: border-box;
     }
     .leaderboard-container h2 {
         margin-top: 0;
@@ -221,59 +229,61 @@
 </head>
 <body style="background-color: #0F172A;"> 
 
-  <header class="header">
-    <a href="index.html" class="logo-section">
-      <div class="logo-badge"> <img class="logo" src="logo.png" alt="Nazarban Logo" /> </div>
-      <div class="brand-text">
-        <div class="brand-name">NAZARBAN</div>
-        <div class="brand-tagline">ANALYTICS · FZCO</div>
-      </div>
-    </a>
+  <div class="page-wrapper">
 
-    <div class="header-right-group">
-        <nav class="nav-desktop">
-          <a href="benchmark.html" class="active-page" data-lang-key="nav_insight">Benchmarks</a>
-          <a href="about.html" data-lang-key="nav_about">About</a>
-          <a href="blog.html" data-lang-key="nav_blog">Blog</a>
-          <a href="services.html" data-lang-key="nav_services">Services</a>
-          <a href="whitepaper.html" data-lang-key="nav_whitepaper">White Paper</a>
-        </nav>
+    <header class="header">
+      <a href="index.html" class="logo-section">
+        <div class="logo-badge"> <img class="logo" src="logo.png" alt="Nazarban Logo" /> </div>
+        <div class="brand-text">
+          <div class="brand-name">NAZARBAN</div>
+          <div class="brand-tagline">ANALYTICS · FZCO</div>
+        </div>
+      </a>
+
+      <div class="header-right-group">
+          <nav class="nav-desktop">
+            <a href="benchmark.html" class="active-page" data-lang-key="nav_insight">Benchmarks</a>
+            <a href="about.html" data-lang-key="nav_about">About</a>
+            <a href="blog.html" data-lang-key="nav_blog">Blog</a>
+            <a href="services.html" data-lang-key="nav_services">Services</a>
+            <a href="whitepaper.html" data-lang-key="nav_whitepaper">White Paper</a>
+          </nav>
+
+          <div class="language-switcher">
+            <a href="#" data-lang="en" data-lang-key="lang_en">EN</a>
+            <a href="#" data-lang="fa" class="active" data-lang-key="lang_fa">FA</a>
+          </div>
+
+          <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+            <span class="bar"></span> <span class="bar"></span> <span class="bar"></span>
+          </button>
+      </div> </header>
+
+    <ul class="nav-mobile-overlay">
+        <li><a href="benchmark.html" class="active-page" data-lang-key="nav_insight">Benchmarks</a></li>
+        <li><a href="about.html" data-lang-key="nav_about">About</a></li>
+        <li><a href="blog.html" data-lang-key="nav_blog">Blog</a></li>
+        <li><a href="services.html" data-lang-key="nav_services">Services</a></li>
+        <li><a href="whitepaper.html" data-lang-key="nav_whitepaper">White Paper</a></li>
 
         <div class="language-switcher">
-          <a href="#" data-lang="en" data-lang-key="lang_en">EN</a>
-          <a href="#" data-lang="fa" class="active" data-lang-key="lang_fa">FA</a>
-        </div>
-
-        <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
-          <span class="bar"></span> <span class="bar"></span> <span class="bar"></span>
-        </button>
-    </div> </header>
-
-  <ul class="nav-mobile-overlay">
-      <li><a href="benchmark.html" class="active-page" data-lang-key="nav_insight">Benchmarks</a></li>
-      <li><a href="about.html" data-lang-key="nav_about">About</a></li>
-      <li><a href="blog.html" data-lang-key="nav_blog">Blog</a></li>
-      <li><a href="services.html" data-lang-key="nav_services">Services</a></li>
-      <li><a href="whitepaper.html" data-lang-key="nav_whitepaper">White Paper</a></li>
-
-      <div class="language-switcher">
-      <a href="#" data-lang="en" data-lang-key="lang_en">EN</a>
-      <a href="#" data-lang="fa" class="active" data-lang-key="lang_fa">FA</a>
-    </div>
-  </ul>
-  <main class="benchmark-container" id="benchmark-content">
-    <div class="benchmark-header">
-      <h1 data-lang-key="benchmark_title">AI Model Benchmark Leaderboard</h1>
-      <p id="last-updated" data-lang-key="benchmark_loading">Loading data...</p>
-    </div>
-
-    <div id="charts-container">
-      <div class="loader-container">
-        <div class="loader"></div>
+        <a href="#" data-lang="en" data-lang-key="lang_en">EN</a>
+        <a href="#" data-lang="fa" class="active" data-lang-key="lang_fa">FA</a>
       </div>
-    </div>
-  </main>
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    </ul>
+    <main class="benchmark-container" id="benchmark-content">
+      <div class="benchmark-header">
+        <h1 data-lang-key="benchmark_title">AI Model Benchmark Leaderboard</h1>
+        <p id="last-updated" data-lang-key="benchmark_loading">Loading data...</p>
+      </div>
+
+      <div id="charts-container">
+        <div class="loader-container">
+          <div class="loader"></div>
+        </div>
+      </div>
+    </main>
+    </div> <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
   <script src="js/main.js"></script> 
   <script src="js/chat.js"></script> 
@@ -649,19 +659,12 @@
         try {
           // --- Start "Cool" Dynamic Fact Generation ---
           
-          // Fact 1: Top 10 Score Range
-          if (data.leaderboard && data.leaderboard.length >= 10) {
-              const topScore = data.leaderboard[0].intelligence;
-              const bottomScore = data.leaderboard[9].intelligence;
-              dynamicFacts.push(`The Top 10 models are in a tight race, with scores from ${bottomScore} to ${topScore}.`);
-          }
-          
-          // Fact 2: Provider Dominance
+          // Fact: Provider Dominance
           if (data.charts && data.charts.provider_pie) {
               const pieData = data.charts.provider_pie;
               const topProvider = pieData.labels[0];
               const topProviderCount = pieData.datasets[0].data[0];
-              dynamicFacts.push(`${topProvider} is the most dominant provider in the Top 10, with ${topProviderCount} models listed.`);
+              dynamicFacts.push(`${topProvider} dominates the Top 10 with ${topProviderCount} models.`);
           }
           
           // --- End Dynamic Fact Generation ---
@@ -689,7 +692,7 @@
         if (allFacts.length > 0) {
             factsHTML = `
                 <div class="quick-facts-card">
-                    <h3>Key Takeaways</h3> 
+                    <h3>Quick Facts</h3> 
                     <ul>
                         ${allFacts.map(fact => `<li>${fact}</li>`).join('')}
                     </ul>
