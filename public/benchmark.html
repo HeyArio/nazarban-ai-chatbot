@@ -17,10 +17,14 @@
 
   <style>
     /* Main body and layout styles */
-    html, body {
+    html {
+      /* Keep background on HTML for smooth scroll */
+      background-color: #0F172A; 
+    }
+    body {
       background-color: #0F172A; 
       color: #F1F5F9;
-      overflow-x: hidden; /* <-- Prevents horizontal page scroll */
+      overflow-x: hidden; /* <-- MOVED: Prevents horizontal page scroll */
     }
     .benchmark-container {
       max-width: 1400px;
@@ -336,11 +340,10 @@
              </div>
         `;
         
-        // *** UPDATED: Date formatting ***
+        // Date formatting (from v8)
         try {
           const updatedDate = new Date(data.metadata.last_updated);
           const options = { year: 'numeric', month: 'long', day: 'numeric' };
-          // This will format as "Updated: November 9, 2025"
           lastUpdatedEl.textContent = `Updated: ${updatedDate.toLocaleDateString('en-US', options)}`;
         } catch (e) {
           lastUpdatedEl.textContent = `Data loaded.`;
@@ -478,13 +481,11 @@
             }
           },
           fill: { opacity: 1 },
-          // *** THIS IS THE CORRECTED PART ***
           legend: { 
             position: 'top',
             offsetY: 0,
             labels: { colors: '#F1F5F9' }
           }
-          // *** THE EXTRA PERIOD IS GONE ***
         };
 
         const chart = new ApexCharts(document.querySelector("#model-comparison-chart"), options);
@@ -634,56 +635,49 @@
         table.innerHTML = headerHTML + bodyHTML;
       }
       
-      // *** UPDATED: Renders Insights and new Key Takeaways ***
+      // *** UPDATED: Renders Insights and CURATED Key Takeaways ***
       function renderInsights(data) {
         const container = document.getElementById('insights-container');
         if (!container) return;
         
         const insights = data.insights || [];
-        const facts = data.quick_facts || [];
-        let dynamicFacts = [];
+        // We no longer use data.quick_facts
+        let curatedFacts = []; 
 
         try {
-          // --- Start Dynamic Fact Generation ---
+          // --- Start Curated Fact Generation ---
           
-          // Fact 1: Total models
-          if (data.metadata && data.metadata.models_analyzed) {
-             dynamicFacts.push(`This analysis is based on ${data.metadata.models_analyzed} models.`);
+          // Fact 1: Provider Dominance
+          if (data.charts && data.charts.provider_pie) {
+              const pieData = data.charts.provider_pie;
+              const topProvider = pieData.labels[0];
+              const topProviderCount = pieData.datasets[0].data[0];
+              curatedFacts.push(`${topProvider} dominates the Top 10 with ${topProviderCount} models.`);
           }
           
           // Fact 2: Top 10 Score Range
           if (data.leaderboard && data.leaderboard.length >= 10) {
               const topScore = data.leaderboard[0].intelligence;
               const bottomScore = data.leaderboard[9].intelligence;
-              dynamicFacts.push(`Top 10 intelligence scores range from ${bottomScore} to ${topScore}.`);
+              curatedFacts.push(`Top 10 intelligence scores range from ${bottomScore} to ${topScore}.`);
               
               // Fact 3: Average score
               const top10 = data.leaderboard.slice(0, 10);
               const avg = top10.reduce((acc, model) => acc + model.intelligence, 0) / 10;
-              dynamicFacts.push(`The average intelligence score in the Top 10 is ${avg.toFixed(1)}.`);
+              curatedFacts.push(`The average intelligence score in the Top 10 is ${avg.toFixed(1)}.`);
           }
           
-          // Fact 4: Provider Dominance
-          if (data.charts && data.charts.provider_pie) {
-              const pieData = data.charts.provider_pie;
-              const topProvider = pieData.labels[0];
-              const topProviderCount = pieData.datasets[0].data[0];
-              dynamicFacts.push(`${topProvider} dominates the Top 10 with ${topProviderCount} models.`);
-          }
-          
-          // Fact 5: Math winner
+          // Fact 4: Math winner
           if (data.category_winners) {
             const mathWinner = data.category_winners.find(c => c.display_name === 'Math');
             if (mathWinner) {
-                dynamicFacts.push(`The top model for Math is ${mathWinner.model_name} with a score of ${mathWinner.score}.`);
+                curatedFacts.push(`The top model for Math is ${mathWinner.model_name} (Score: ${mathWinner.score}).`);
             }
           }
-          // --- End Dynamic Fact Generation ---
+          // --- End Curated Fact Generation ---
         } catch (e) {
           console.error("Error generating dynamic facts:", e);
         }
-        
-        const allFacts = [...facts, ...dynamicFacts];
         
         let insightsHTML = '';
         if (insights.length > 0) {
@@ -699,12 +693,12 @@
         }
 
         let factsHTML = '';
-        if (allFacts.length > 0) {
+        if (curatedFacts.length > 0) {
             factsHTML = `
                 <div class="quick-facts-card">
                     <h3>Key Takeaways</h3> 
                     <ul>
-                        ${allFacts.map(fact => `<li>${fact}</li>`).join('')}
+                        ${curatedFacts.map(fact => `<li>${fact}</li>`).join('')}
                     </ul>
                 </div>
             `;
