@@ -606,7 +606,7 @@
           dataLabels: {
              enabled: false // <-- Data labels are OFF for desktop
           },
-          // *** NEW: Responsive fix for mobile legend ***
+          // *** UPDATED: Responsive fix for mobile legend ***
           responsive: [{
             breakpoint: 480, // Mobile breakpoint
             options: {
@@ -619,10 +619,22 @@
               dataLabels: {
                  enabled: true, // <-- SHOW data labels on mobile
                  style: {
-                    colors: ['#fff'],
-                    fontSize: '14px'
+                    colors: ['#333'], // Dark text for contrast
+                    fontSize: '10px',
+                    fontWeight: 700
                  },
-                 formatter: (val) => val.toFixed(1) + '%' // Show percent
+                 // This formatter shows the NAME and the PERCENTAGE
+                 formatter: (val, opts) => {
+                    const name = opts.w.config.labels[opts.dataPointIndex];
+                    return `${name}: ${val.toFixed(0)}%`
+                 },
+                 dropShadow: { // Add a slight shadow to make text readable
+                    enabled: true,
+                    top: 1,
+                    left: 1,
+                    blur: 1,
+                    opacity: 0.45
+                 }
               },
               plotOptions: {
                 pie: {
