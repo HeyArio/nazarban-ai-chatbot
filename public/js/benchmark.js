@@ -3,46 +3,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const lastUpdatedEl = document.getElementById('last-updated');
 
   // Persian/Jalali Calendar Converter
+  // Persian/Jalali Calendar Converter
   function toPersianDate(date) {
-    const gregorianYear = date.getFullYear();
-    const gregorianMonth = date.getMonth() + 1;
-    const gregorianDay = date.getDate();
-    
-    // Gregorian to Jalali conversion
-    const gy = gregorianYear;
-    const gm = gregorianMonth;
-    const gd = gregorianDay;
-    
-    const g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
-    const jy = (gy <= 1600) ? 0 : 979;
-    const diff = (gy > 1600) ? gy - 1600 : 1600 - gy;
-    const gy2 = (gm > 2) ? (gy + 1) : gy;
-    
-    let days = (365 * diff) + (parseInt((gy2 + 3) / 4)) - (parseInt((gy2 + 99) / 100)) + (parseInt((gy2 + 399) / 400)) - 80 + gd + g_d_m[gm - 1];
-    const jy2 = jy + 33 * (parseInt(days / 12053));
-    days %= 12053;
-    let jy3 = jy2 + 4 * (parseInt(days / 1461));
-    days %= 1461;
-    
-    if (days > 365) {
-      jy3 += parseInt((days - 1) / 365);
-      days = (days - 1) % 365;
-    }
-    
-    const jm = (days < 186) ? 1 + parseInt(days / 31) : 7 + parseInt((days - 186) / 30);
-    const jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
-    
-    // Persian month names
-    const persianMonths = [
-      'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
-      'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
-    ];
-    
-    // Convert to Persian numerals
-    const persianNumerals = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-    const toPersianNum = (num) => String(num).split('').map(d => persianNumerals[parseInt(d)]).join('');
-    
-    return `${toPersianNum(jd)} ${persianMonths[jm - 1]} ${toPersianNum(jy3)}`;
+    // These options tell the browser to use the 'persian' (Jalali) calendar
+    // and format it for the 'fa-IR' (Farsi - Iran) locale.
+    const options = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      calendar: 'persian',
+      timeZone: 'Asia/Tehran' // Good practice to set a consistent timezone
+    };
+
+    // This one line replaces your entire algorithm
+    return new Intl.DateTimeFormat('fa-IR', options).format(date);
   }
 
   function showLoading() {
