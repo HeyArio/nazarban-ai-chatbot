@@ -217,6 +217,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   /**
    * Fetches crypto data and populates the ticker
    */
+  /**
+   * Fetches crypto data and populates the ticker
+   */
   const loadCryptoData = async () => {
     if (!cryptoTickerTrack) return; // Failsafe if element doesn't exist
 
@@ -229,13 +232,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         const coins = data.data;
 
         // Create and add all coin items
-        coins.forEach(coin => {
+        coins.forEach(item => {
+          const coin = item.json || item; // <--- THIS IS THE FIX (Handles n8n wrapper)
           cryptoTickerTrack.appendChild(createTickerItem(coin));
         });
 
         // **Duplicate items for seamless scroll**
-        // This is the trick to make the animation loop
-        coins.forEach(coin => {
+        coins.forEach(item => {
+          const coin = item.json || item; // <--- THIS IS THE FIX (Handles n8n wrapper)
           const duplicateItem = createTickerItem(coin);
           duplicateItem.setAttribute('aria-hidden', 'true');
           cryptoTickerTrack.appendChild(duplicateItem);

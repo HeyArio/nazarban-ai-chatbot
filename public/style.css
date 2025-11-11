@@ -1575,7 +1575,7 @@ html[dir="rtl"] .menu-toggle {
 .ticker-wrapper {
   width: 100%;
   overflow: hidden;
-  margin-top: 2rem;
+  margin-bottom: 3rem; /* Adds space below the ticker */
   /* Creates the fade-out effect on the left and right edges */
   mask-image: linear-gradient(to right,
       transparent 0%,
