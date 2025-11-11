@@ -17,87 +17,85 @@
 </head>
 <body>
 
-  <header class="header">
-    <a href="index.html" class="logo-section">
-      <div class="logo-badge"> <img class="logo" src="logo.png" alt="Nazarban Logo" /> </div>
-      <div class="brand-text">
-        <div class="brand-name">NAZARBAN</div>
-        <div class="brand-tagline">ANALYTICS · FZCO</div>
-      </div>
-    </a>
+  <!-- *** NEW: Page Wrapper Fix (from your benchmark.html) *** -->
+  <div class="page-wrapper">
 
-    <div class="header-right-group">
-        <nav class="nav-desktop">
-          <a href="benchmark.html" data-lang-key="nav_insight">Benchmarks</a>
-          <a href="about.html" data-lang-key="nav_about">About</a>
-          <a href="blog.html" class="active-page" data-lang-key="nav_blog">Blog</a>
-          <a href="services.html" data-lang-key="nav_services">Services</a>
-          <a href="whitepaper.html" data-lang-key="nav_whitepaper">White Paper</a>
-        </nav>
+    <header class="header">
+      <a href="index.html" class="logo-section">
+        <div class="logo-badge"> <img class="logo" src="logo.png" alt="Nazarban Logo" /> </div>
+        <div class="brand-text">
+          <div class="brand-name">NAZARBAN</div>
+          <div class="brand-tagline">ANALYTICS · FZCO</div>
+        </div>
+      </a>
+
+      <div class="header-right-group">
+          <nav class="nav-desktop">
+            <a href="benchmark.html" data-lang-key="nav_insight">Benchmarks</a>
+            <a href="about.html" data-lang-key="nav_about">About</a>
+            <a href="blog.html" class="active-page" data-lang-key="nav_blog">Blog</a>
+            <a href="services.html" data-lang-key="nav_services">Services</a>
+            <a href="whitepaper.html" data-lang-key="nav_whitepaper">White Paper</a>
+          </nav>
+
+          <div class="language-switcher">
+            <a href="#" data-lang="en" data-lang-key="lang_en">EN</a>
+            <a href="#" data-lang="fa" class="active" data-lang-key="lang_fa">FA</a>
+          </div>
+
+          <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+            <span class="bar"></span> <span class="bar"></span> <span class="bar"></span>
+          </button>
+      </div>
+    </header>
+
+    <ul class="nav-mobile-overlay">
+        <li><a href="benchmark.html" data-lang-key="nav_insight">Benchmarks</a></li>
+        <li><a href="about.html" data-lang-key="nav_about">About</a></li>
+        <li><a href="blog.html" class="active-page" data-lang-key="nav_blog">Blog</a></li>
+        <li><a href="services.html" data-lang-key="nav_services">Services</a></li>
+        <li><a href="whitepaper.html" data-lang-key="nav_whitepaper">White Paper</a></li>
 
         <div class="language-switcher">
-          <a href="#" data-lang="en" data-lang-key="lang_en">EN</a>
-          <a href="#" data-lang="fa" class="active" data-lang-key="lang_fa">FA</a>
+        <a href="#" data-lang="en" data-lang-key="lang_en">EN</a>
+        <a href="#" data-lang="fa" class="active" data-lang-key="lang_fa">FA</a>
+      </div>
+    </ul>
+
+    <main class="content-wrapper blog-wrapper">
+      
+      <!-- NEW LOCATION FOR TICKER -->
+      <div class="ticker-wrapper" aria-hidden="true">
+        <div class="ticker-track" id="cryptoTickerTrack">
+          <!-- Ticker items will be loaded here by blog.js -->
         </div>
+      </div>
+      <!-- END TICKER -->
 
-        <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
-          <span class="bar"></span> <span class="bar"></span> <span class="bar"></span>
-        </button>
-    </div>
-  </header>
+      <header class="blog-header">
+        <h1 data-lang-key="blog_header_title">AI Product Highlights</h1>
+        <p data-lang-key="blog_header_subtitle">Daily insights from Product Hunt's top AI innovations</p>
+      </header>
 
-  <ul class="nav-mobile-overlay">
-      <li><a href="benchmark.html" data-lang-key="nav_insight">Benchmarks</a></li>
-      <li><a href="about.html" data-lang-key="nav_about">About</a></li>
-      <li><a href="blog.html" class="active-page" data-lang-key="nav_blog">Blog</a></li>
-      <li><a href="services.html" data-lang-key="nav_services">Services</a></li>
-      <li><a href="whitepaper.html" data-lang-key="nav_whitepaper">White Paper</a></li>
+      <div id="loadingIndicator" class="loading-indicator">
+        <div class="spinner"></div>
+        <p data-lang-key="blog_loading">Loading posts...</p>
+      </div>
 
-      <div class="language-switcher">
-      <a href="#" data-lang="en" data-lang-key="lang_en">EN</a>
-      <a href="#" data-lang="fa" class="active" data-lang-key="lang_fa">FA</a>
-    </div>
-  </ul>
+      <div id="errorMessage" class="error-message" style="display: none;">
+        Error loading posts. Please try again.
+      </div>
 
-  <main class="content-wrapper blog-wrapper">
-  <div class="ticker-wrapper" aria-hidden="true">
-    <div class="ticker-track" id="cryptoTickerTrack"></div>
-  </div>
+      <div id="postsContainer" class="posts-grid">
+        <!-- Posts will be dynamically loaded here -->
+      </div>
+    </main>
+    
+    <script src="js/main.js"></script>
+    <script src="js/blog.js"></script>
+    <script src="js/translations.js"></script> 
+    <script src="js/language.js"></script> 
 
-  <header class="blog-header">
-    <h1 data-lang-key="blog_header_title">AI Product Highlights</h1>
-    <p id="lastUpdated"></p>
-  </header>
-
-  <script>
-    const today = new Date();
-    const formattedDate = today.toLocaleDateString(undefined, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-    document.getElementById("lastUpdated").textContent = `Last updated at ${formattedDate}`;
-  </script>
-</main>
-
-
-    <div id="loadingIndicator" class="loading-indicator">
-      <div class="spinner"></div>
-      <p data-lang-key="blog_loading">Loading posts...</p>
-    </div>
-
-    <div id="errorMessage" class="error-message" style="display: none;">
-      Error loading posts. Please try again.
-    </div>
-
-    <div id="postsContainer" class="posts-grid">
-      <!-- Posts will be dynamically loaded here -->
-    </div>
-  </main>
-  
-  <script src="js/main.js"></script>
-  <script src="js/blog.js"></script>
-  <script src="js/translations.js"></script> 
-  <script src="js/language.js"></script> 
+  </div> <!-- *** END: Page Wrapper Fix *** -->
 </body>
 </html>

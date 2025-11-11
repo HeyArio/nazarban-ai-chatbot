@@ -123,6 +123,13 @@ body {
   text-align: left;
 }
 
+/* *** NEW: Page Wrapper Fix *** */
+/* This wrapper isolates the page and kills the horizontal scroll */
+.page-wrapper {
+  width: 100%;
+  overflow-x: hidden;
+}
+
 /* --- 2. Site-wide Navigation --- */
 .header {
   position: sticky;
@@ -975,7 +982,6 @@ html[dir="rtl"] .menu-toggle {
   max-width: 1200px;
   margin: 0 auto;
   padding: 4rem 2rem;
-  overflow: hidden;
 }
 
 .blog-header {
