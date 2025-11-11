@@ -21,16 +21,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderData(data) {
+    // Get current language for translations
+    const lang = localStorage.getItem('preferredLanguage') || 'fa';
+    const t = window.translations && window.translations[lang] ? window.translations[lang] : window.translations.fa;
+    
     // Clear the loader
     chartsContainer.innerHTML = `
       <div id="hero-stats-container" class="hero-stats-grid"></div>
       <div class="charts-grid">
         <div class="chart-card">
-          <h2>${data.charts?.top_10_bar?.title || 'Top 10 AI Models'}</h2>
+          <h2 data-lang-key="benchmark_chart_top10_fallback">${data.charts?.top_10_bar?.title || t.benchmark_chart_top10_fallback}</h2>
           <div id="top-10-bar-chart"></div>
         </div>
         <div class="chart-card">
-          <h2>${data.charts?.top_5_radar?.title || 'Top 5 Model Comparison'}</h2>
+          <h2 data-lang-key="benchmark_chart_top5_fallback">${data.charts?.top_5_radar?.title || t.benchmark_chart_top5_fallback}</h2>
           <div id="model-comparison-chart"></div>
         </div>
         <div class="chart-card">
@@ -38,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div id="category-winners-chart"></div>
         </div>
         <div class="chart-card">
-          <h2>${data.charts?.provider_pie?.title || 'Top 10 Models by Provider'}</h2>
+          <h2 data-lang-key="benchmark_chart_provider_fallback">${data.charts?.provider_pie?.title || t.benchmark_chart_provider_fallback}</h2>
           <div id="provider-pie-chart"></div>
         </div>
       </div>
