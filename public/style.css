@@ -1619,22 +1619,19 @@ html[dir="rtl"] .menu-toggle {
   border-radius: var(--radius-md);
   flex-shrink: 0;
   width: max-content;
-  
-  /* --- !!! NEW CHANGES HERE !!! --- */
-  text-decoration: none; /* 1. Removes the underline */
+  text-decoration: none; /* Removes the underline */
   cursor: pointer;
-  /* 2. Adds a smooth transition for the new hover effect */
   transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
-/* 3. This is the new clickability indicator */
 .ticker-item:hover {
-  text-decoration: none; /* Double-check to remove underline */
+  /* --- !!! THIS IS THE FIX !!! --- */
+  text-decoration: none; /* 1. Explicitly remove underline on hover */
+  /* --- !!! END OF FIX !!! --- */
+  
   transform: scale(1.05); /* Lifts the card slightly */
   background: rgba(30, 41, 59, 0.9); /* Makes it slightly brighter */
 }
-
-/* --- !!! END OF CHANGES !!! --- */
 
 .ticker-symbol {
   font-size: 1.1rem;
