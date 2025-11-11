@@ -60,15 +60,26 @@
   </ul>
 
   <main class="content-wrapper blog-wrapper">
-    <div class="ticker-wrapper" aria-hidden="true">
-        <div class="ticker-track" id="cryptoTickerTrack">
-          </div>
-      </div>
-    <header class="blog-header">
-      <h1 data-lang-key="blog_header_title">AI Product Highlights</h1>
-      <p data-lang-key="blog_header_subtitle">Daily insights from Product Hunt's top AI innovations</p>
-      </header>
-    </header>
+  <div class="ticker-wrapper" aria-hidden="true">
+    <div class="ticker-track" id="cryptoTickerTrack"></div>
+  </div>
+
+  <header class="blog-header">
+    <h1 data-lang-key="blog_header_title">AI Product Highlights</h1>
+    <p id="lastUpdated"></p>
+  </header>
+
+  <script>
+    const today = new Date();
+    const formattedDate = today.toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+    document.getElementById("lastUpdated").textContent = `Last updated at ${formattedDate}`;
+  </script>
+</main>
+
 
     <div id="loadingIndicator" class="loading-indicator">
       <div class="spinner"></div>

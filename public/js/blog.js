@@ -192,16 +192,25 @@ document.addEventListener('DOMContentLoaded', async () => {
   /**
    * Creates a single ticker item element
    */
+  /**
+   * Creates a single ticker item element
+   */
   const createTickerItem = (coin) => {
-    const item = document.createElement('div');
+    // 1. Create an anchor tag <a> instead of a <div>
+    const item = document.createElement('a');
     item.className = 'ticker-item';
+    
+    // 2. Build the URL and set the 'href'
+    item.href = `https://wallex.ir/trade/${coin.pair}`;
+    
+    // 3. Make it open in a new tab
+    item.target = '_blank';
+    item.rel = 'noopener noreferrer';
 
-    // --- !!! THIS IS THE FIX !!! ---
-    // We add '|| 0' to default to zero if the value from the API
-    // is null, undefined, or otherwise invalid.
+    // --- The 'safer' code from last time ---
     const change = parseFloat(coin.change_percent_24h) || 0;
     const priceNum = parseFloat(coin.price) || 0;
-    // --- !!! END FIX ---
+    // --- End safe code ---
 
     const changeClass = change >= 0 ? 'positive' : 'negative';
     const changeSign = change >= 0 ? '+' : '';
@@ -213,6 +222,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       maximumFractionDigits: 4 
     });
 
+    // 4. The inner HTML is the same as before
     item.innerHTML = `
       <span class="ticker-symbol">${coin.symbol}</span>
       <span class="ticker-price">${price}</span>
