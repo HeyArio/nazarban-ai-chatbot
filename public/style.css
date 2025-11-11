@@ -1575,7 +1575,8 @@ html[dir="rtl"] .menu-toggle {
 .ticker-wrapper {
   width: 100%;
   overflow: hidden;
-  margin-bottom: 3rem;
+  margin-bottom: 3rem; /* Adds space below the ticker */
+  /* Creates the fade-out effect on the left and right edges */
   mask-image: linear-gradient(to right,
       transparent 0%,
       black 10%,
@@ -1592,10 +1593,12 @@ html[dir="rtl"] .menu-toggle {
   display: flex;
   flex-shrink: 0;
   gap: 1.5rem;
+  /* This animation duration will auto-adjust to content width */
   animation: scroll 60s linear infinite;
   width: max-content;
 }
 
+/* This stops the animation on hover, which is good for usability */
 .ticker-wrapper:hover .ticker-track {
   animation-play-state: paused;
 }
@@ -1605,6 +1608,7 @@ html[dir="rtl"] .menu-toggle {
     transform: translateX(0);
   }
   100% {
+    /* This moves the track to the left by exactly half its width */
     transform: translateX(-50%);
   }
 }
@@ -1619,14 +1623,6 @@ html[dir="rtl"] .menu-toggle {
   border-radius: var(--radius-md);
   flex-shrink: 0;
   width: max-content;
-  text-decoration: none; /* We'll leave the underline rule alone for now */
-  cursor: pointer;
-  transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-.ticker-item:hover {
-  transform: scale(1.05); /* Lifts the card slightly */
-  background: rgba(30, 41, 59, 0.9); /* Makes it slightly brighter */
 }
 
 .ticker-symbol {
@@ -1648,7 +1644,6 @@ html[dir="rtl"] .menu-toggle {
   border-radius: 6px;
 }
 
-/* --- HERE ARE THE COLORS --- */
 .ticker-change.positive {
   color: #4ade80; /* Green */
   background: rgba(74, 222, 128, 0.1);
