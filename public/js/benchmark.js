@@ -2,16 +2,69 @@ document.addEventListener('DOMContentLoaded', () => {
   const chartsContainer = document.getElementById('charts-container');
   const lastUpdatedEl = document.getElementById('last-updated');
 
+  // Persian/Jalali Calendar Converter
+  function toPersianDate(date) {
+    const gregorianYear = date.getFullYear();
+    const gregorianMonth = date.getMonth() + 1;
+    const gregorianDay = date.getDate();
+    
+    // Gregorian to Jalali conversion
+    const gy = gregorianYear;
+    const gm = gregorianMonth;
+    const gd = gregorianDay;
+    
+    const g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+    const jy = (gy <= 1600) ? 0 : 979;
+    const diff = (gy > 1600) ? gy - 1600 : 1600 - gy;
+    const gy2 = (gm > 2) ? (gy + 1) : gy;
+    
+    let days = (365 * diff) + (parseInt((gy2 + 3) / 4)) - (parseInt((gy2 + 99) / 100)) + (parseInt((gy2 + 399) / 400)) - 80 + gd + g_d_m[gm - 1];
+    const jy2 = jy + 33 * (parseInt(days / 12053));
+    days %= 12053;
+    let jy3 = jy2 + 4 * (parseInt(days / 1461));
+    days %= 1461;
+    
+    if (days > 365) {
+      jy3 += parseInt((days - 1) / 365);
+      days = (days - 1) % 365;
+    }
+    
+    const jm = (days < 186) ? 1 + parseInt(days / 31) : 7 + parseInt((days - 186) / 30);
+    const jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
+    
+    // Persian month names
+    const persianMonths = [
+      'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
+      'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
+    ];
+    
+    // Convert to Persian numerals
+    const persianNumerals = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    const toPersianNum = (num) => String(num).split('').map(d => persianNumerals[parseInt(d)]).join('');
+    
+    return `${toPersianNum(jd)} ${persianMonths[jm - 1]} ${toPersianNum(jy3)}`;
+  }
+
   function showLoading() {
     // Show today's date while loading
     const lang = localStorage.getItem('preferredLanguage') || 'fa';
     const today = new Date();
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    const formattedDate = today.toLocaleDateString(lang === 'fa' ? 'fa-IR' : 'en-US', options);
     const t = window.translations && window.translations[lang] ? window.translations[lang] : window.translations.fa;
     
+    // Format date based on language
+    let formattedDate;
+    if (lang === 'fa') {
+      formattedDate = toPersianDate(today);
+    } else {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      formattedDate = today.toLocaleDateString('en-US', options);
+    }
+    
+    // Remove data-lang-key attribute to prevent translation system from overwriting
+    lastUpdatedEl.removeAttribute('data-lang-key');
+    
     // Only show the date, no loading text
-    lastUpdatedEl.innerHTML = `<span data-lang-key="benchmark_updated_prefix">${t.benchmark_updated_prefix}</span> ${formattedDate}`;
+    lastUpdatedEl.innerHTML = `<span>${t.benchmark_updated_prefix}</span> ${formattedDate}`;
     
     chartsContainer.innerHTML = `
       <div class="loader-container">
@@ -63,16 +116,35 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     
     // Date formatting
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    // Remove data-lang-key attribute to prevent translation system from overwriting
+    lastUpdatedEl.removeAttribute('data-lang-key');
+    
     try {
       const updatedDate = new Date(data.metadata.last_updated);
-      const formattedDate = updatedDate.toLocaleDateString(lang === 'fa' ? 'fa-IR' : 'en-US', options);
-      lastUpdatedEl.innerHTML = `<span data-lang-key="benchmark_updated_prefix">${t.benchmark_updated_prefix}</span> ${formattedDate}`;
+      
+      // Format date based on language
+      let formattedDate;
+      if (lang === 'fa') {
+        formattedDate = toPersianDate(updatedDate);
+      } else {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        formattedDate = updatedDate.toLocaleDateString('en-US', options);
+      }
+      
+      lastUpdatedEl.innerHTML = `<span>${t.benchmark_updated_prefix}</span> ${formattedDate}`;
     } catch (e) {
       // Fallback to today's date if API date is invalid
       const today = new Date();
-      const formattedDate = today.toLocaleDateString(lang === 'fa' ? 'fa-IR' : 'en-US', options);
-      lastUpdatedEl.innerHTML = `<span data-lang-key="benchmark_updated_prefix">${t.benchmark_updated_prefix}</span> ${formattedDate}`;
+      
+      let formattedDate;
+      if (lang === 'fa') {
+        formattedDate = toPersianDate(today);
+      } else {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        formattedDate = today.toLocaleDateString('en-US', options);
+      }
+      
+      lastUpdatedEl.innerHTML = `<span>${t.benchmark_updated_prefix}</span> ${formattedDate}`;
     }
 
     // Render all the new content
