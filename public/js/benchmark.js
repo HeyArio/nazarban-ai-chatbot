@@ -10,8 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const formattedDate = today.toLocaleDateString(lang === 'fa' ? 'fa-IR' : 'en-US', options);
     const t = window.translations && window.translations[lang] ? window.translations[lang] : window.translations.fa;
     
+    // Remove data-lang-key attribute to prevent translation system from overwriting
+    lastUpdatedEl.removeAttribute('data-lang-key');
+    
     // Only show the date, no loading text
-    lastUpdatedEl.innerHTML = `<span data-lang-key="benchmark_updated_prefix">${t.benchmark_updated_prefix}</span> ${formattedDate}`;
+    lastUpdatedEl.innerHTML = `<span>${t.benchmark_updated_prefix}</span> ${formattedDate}`;
     
     chartsContainer.innerHTML = `
       <div class="loader-container">
@@ -64,15 +67,19 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Date formatting
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    
+    // Remove data-lang-key attribute to prevent translation system from overwriting
+    lastUpdatedEl.removeAttribute('data-lang-key');
+    
     try {
       const updatedDate = new Date(data.metadata.last_updated);
       const formattedDate = updatedDate.toLocaleDateString(lang === 'fa' ? 'fa-IR' : 'en-US', options);
-      lastUpdatedEl.innerHTML = `<span data-lang-key="benchmark_updated_prefix">${t.benchmark_updated_prefix}</span> ${formattedDate}`;
+      lastUpdatedEl.innerHTML = `<span>${t.benchmark_updated_prefix}</span> ${formattedDate}`;
     } catch (e) {
       // Fallback to today's date if API date is invalid
       const today = new Date();
       const formattedDate = today.toLocaleDateString(lang === 'fa' ? 'fa-IR' : 'en-US', options);
-      lastUpdatedEl.innerHTML = `<span data-lang-key="benchmark_updated_prefix">${t.benchmark_updated_prefix}</span> ${formattedDate}`;
+      lastUpdatedEl.innerHTML = `<span>${t.benchmark_updated_prefix}</span> ${formattedDate}`;
     }
 
     // Render all the new content
