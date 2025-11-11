@@ -264,7 +264,7 @@ window.translations = {
     benchmark_hero_providers_label: "ارائه‌دهنده",
     benchmark_chart_top10_fallback: "۱۰ مدل برتر هوش مصنوعی بر اساس هوش",
     benchmark_chart_top5_fallback: "۵ مدل برتر - مقایسه قابلیت‌ها",
-    benchmark_chart_champions: "قهرمانان دسته‌بندی",
+    benchmark_chart_champions: "برترین‌های هر دسته‌بندی",
     benchmark_chart_provider_fallback: "۱۰ مدل برتر بر اساس ارائه‌دهنده",
     benchmark_pie_total: "ارائه‌دهندگان",
     benchmark_table_title: "جدول رتبه‌بندی",
