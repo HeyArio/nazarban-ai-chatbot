@@ -254,7 +254,7 @@ window.translations = {
     // Benchmark Page (This is the full, correct section)
     benchmark_page_title: "Nazarban AI - مرکز داده مدل‌های زبان",
     benchmark_main_title: "جدول رتبه‌بندی مدل‌های هوش مصنوعی",
-    benchmark_loading: "در حال بارگذاری داده‌های بنچمارک...",
+    benchmark_loading: "به روز رسانی امروز",
     benchmark_updated_prefix: "به‌روزرسانی:",
     benchmark_error_title: "خطا در بارگذاری بنچمارک:",
     benchmark_data_error: "بارگذاری داده‌ها ناموفق بود.",
