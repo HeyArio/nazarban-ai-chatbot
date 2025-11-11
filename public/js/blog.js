@@ -20,6 +20,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     return localStorage.getItem('preferredLanguage') || 'fa';
   };
 
+  // --- Set Today's Date in Header ---
+  try {
+    const lastUpdatedEl = document.getElementById('last-updated-date');
+    if (lastUpdatedEl) {
+      const today = new Date();
+      const lang = getCurrentLanguage();
+      
+      // Get the prefix from translations.js
+      const prefix = translations[lang].blog_updated_prefix || (lang === 'fa' ? 'به‌روزرسانی تا تاریخ' : 'Updated as of');
+      
+      // Use your existing formatDate function
+      const formattedDate = formatDate(today.toISOString(), lang);
+      
+      lastUpdatedEl.textContent = `${prefix} ${formattedDate}`;
+    }
+  } catch (e) {
+    console.error("Error setting header date:", e);
+  }
+
   const formatDate = (dateString, lang) => {
     if (!dateString || typeof dateString !== 'string') {
       console.error('A post was found with an empty or missing date.');
