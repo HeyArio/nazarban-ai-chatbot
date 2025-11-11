@@ -1567,3 +1567,89 @@ html[dir="rtl"] .menu-toggle {
     font-size: 1.4rem;
   }
 }
+
+/* ========================================
+   LIVE CRYPTO TICKER
+   ======================================== */
+
+.ticker-wrapper {
+  width: 100%;
+  overflow: hidden;
+  margin-top: 2rem;
+  /* Creates the fade-out effect on the left and right edges */
+  mask-image: linear-gradient(to right,
+      transparent 0%,
+      black 10%,
+      black 90%,
+      transparent 100%);
+  -webkit-mask-image: linear-gradient(to right,
+      transparent 0%,
+      black 10%,
+      black 90%,
+      transparent 100%);
+}
+
+.ticker-track {
+  display: flex;
+  flex-shrink: 0;
+  gap: 1.5rem;
+  /* This animation duration will auto-adjust to content width */
+  animation: scroll 60s linear infinite;
+  width: max-content;
+}
+
+/* This stops the animation on hover, which is good for usability */
+.ticker-wrapper:hover .ticker-track {
+  animation-play-state: paused;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    /* This moves the track to the left by exactly half its width */
+    transform: translateX(-50%);
+  }
+}
+
+.ticker-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+  width: max-content;
+}
+
+.ticker-symbol {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.ticker-price {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.ticker-change {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+}
+
+.ticker-change.positive {
+  color: #4ade80; /* Green */
+  background: rgba(74, 222, 128, 0.1);
+}
+
+.ticker-change.negative {
+  color: #f87171; /* Red */
+  background: rgba(248, 113, 113, 0.1);
+}

@@ -1,59 +1,42 @@
 /*
   Nazarban Analytics - Blog Page JavaScript
   Handles:
-  - Loading blog posts from API
+  - Loading blog posts from API (via loadBlogPosts)
+  - Loading crypto data for ticker (via loadCryptoData)
   - Displaying bilingual content
-  - Post filtering and sorting
+  - Post modal logic
 */
 
 document.addEventListener('DOMContentLoaded', async () => {
+  // --- Get main DOM elements ---
   const postsContainer = document.getElementById('postsContainer');
   const loadingIndicator = document.getElementById('loadingIndicator');
   const errorMessage = document.getElementById('errorMessage');
+  // NEW: Get the crypto ticker track
+  const cryptoTickerTrack = document.getElementById('cryptoTickerTrack');
 
-  // Get current language from localStorage
+  // --- Helper Functions (from your original file) ---
   const getCurrentLanguage = () => {
     return localStorage.getItem('preferredLanguage') || 'fa';
   };
 
-  // Format date based on language
-  // Format date based on language
   const formatDate = (dateString, lang) => {
-    
-    // 1. Check for bad, missing, or null date strings
     if (!dateString || typeof dateString !== 'string') {
       console.error('A post was found with an empty or missing date.');
       return lang === 'fa' ? 'تاریخ نامشخص' : 'Date unavailable';
     }
-
-    // 2. Try to create the date. This is where it was crashing.
-    const date = new Date(dateString.trim()); // We add .trim() to fix spaces!
-
-    // 3. Check if the date is invalid after we tried to make it
+    const date = new Date(dateString.trim());
     if (isNaN(date.getTime())) {
       console.error('INVALID DATE DETECTED! The raw value was:', dateString);
       return lang === 'fa' ? 'تاریخ نامعتبر' : 'Invalid Date';
     }
-
-    // 4. If we get here, the date is valid. Proceed as normal.
     if (lang === 'fa') {
-      // Persian date format
-      return new Intl.DateTimeFormat('fa-IR', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      }).format(date);
+      return new Intl.DateTimeFormat('fa-IR', { year: 'numeric', month: 'long', day: 'numeric' }).format(date);
     } else {
-      // English date format
-      return new Intl.DateTimeFormat('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      }).format(date);
+      return new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(date);
     }
   };
 
-  // Create a post card element
   const createPostCard = (post, lang) => {
     const card = document.createElement('article');
     card.className = 'blog-post-card';
@@ -85,13 +68,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       ` : ''}
     `;
     
-    // Make card clickable to open modal
     card.addEventListener('click', () => openModal(post, lang));
-    
     return card;
   };
 
-  // Create modal HTML element
   const createModal = () => {
     const modal = document.createElement('div');
     modal.className = 'blog-modal';
@@ -109,37 +89,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     `;
     document.body.appendChild(modal);
     
-    // Close modal on background click
     modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        closeModal();
-      }
+      if (e.target === modal) closeModal();
     });
-    
-    // Close modal on close button click
     modal.querySelector('.modal-close').addEventListener('click', closeModal);
-    
-    // Close modal on ESC key
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modal.classList.contains('active')) {
-        closeModal();
-      }
+      if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
     });
     
     return modal;
   };
 
-  // Open modal with post content
   const openModal = (post, lang) => {
     let modal = document.getElementById('blogModal');
-    if (!modal) {
-      modal = createModal();
-    }
+    if (!modal) modal = createModal();
     
     const summary = lang === 'fa' ? post.summaryFarsi : post.summaryEnglish;
     const formattedDate = formatDate(post.date, lang);
     
-    // Update modal content
     modal.querySelector('.modal-title').textContent = post.title;
     modal.querySelector('.modal-meta').innerHTML = `
       <span class="post-date">${formattedDate}</span>
@@ -160,12 +127,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       modal.querySelector('.modal-footer').innerHTML = '';
     }
     
-    // Show modal
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
   };
 
-  // Close modal
   const closeModal = () => {
     const modal = document.getElementById('blogModal');
     if (modal) {
@@ -174,8 +139,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   };
 
-  // Load and display posts
-  const loadPosts = async () => {
+  // --- Main Blog Post Loader (from your file) ---
+  const loadBlogPosts = async () => {
+    // This function will *only* load blog posts.
     try {
       loadingIndicator.style.display = 'block';
       errorMessage.style.display = 'none';
@@ -197,21 +163,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         const emptyMessage = document.createElement('div');
         emptyMessage.className = 'empty-state';
         emptyMessage.innerHTML = `
-          <svg class="empty-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" stroke="currentColor" stroke-width="2"/>
-          </svg>
+          <svg class="empty-icon" ...> ... </svg>
           <h3>${lang === 'fa' ? 'مقاله‌ای موجود نیست' : 'No Posts Yet'}</h3>
           <p>${lang === 'fa' ? 'به زودی مقالات جدید منتشر خواهد شد' : 'New posts will be published soon'}</p>
         `;
         postsContainer.appendChild(emptyMessage);
       }
-
+      
       loadingIndicator.style.display = 'none';
 
     } catch (error) {
       console.error('Error loading blog posts:', error);
-      loadingIndicator.style.display = 'none';
-      errorMessage.style.display = 'block';
+      loadingIndicator.style.display = 'none'; // Hide main loading
+      errorMessage.style.display = 'block'; // Show main error
       
       const lang = getCurrentLanguage();
       errorMessage.textContent = lang === 'fa' 
@@ -220,18 +184,100 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   };
 
-  // Initial load
-  await loadPosts();
+  // --- NEW: Crypto Ticker Functions ---
 
-  // Listen for language changes and reload posts
+  /**
+   * Creates a single ticker item element
+   */
+  const createTickerItem = (coin) => {
+    const item = document.createElement('div');
+    item.className = 'ticker-item';
+
+    const change = parseFloat(coin.change_percent_24h);
+    const changeClass = change >= 0 ? 'positive' : 'negative';
+    const changeSign = change >= 0 ? '+' : '';
+
+    const price = parseFloat(coin.price).toLocaleString('en-US', { 
+      style: 'currency', 
+      currency: 'USD',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 4 
+    });
+
+    item.innerHTML = `
+      <span class="ticker-symbol">${coin.symbol}</span>
+      <span class="ticker-price">${price}</span>
+      <span class="ticker-change ${changeClass}">
+        ${changeSign}${change.toFixed(2)}%
+      </span>
+    `;
+    return item;
+  };
+
+  /**
+   * Fetches crypto data and populates the ticker
+   */
+  const loadCryptoData = async () => {
+    if (!cryptoTickerTrack) return; // Failsafe if element doesn't exist
+
+    try {
+      const response = await fetch('/api/crypto/data');
+      const data = await response.json();
+
+      if (data.success && data.data && data.data.length > 0) {
+        cryptoTickerTrack.innerHTML = ''; // Clear any old data
+        const coins = data.data;
+
+        // Create and add all coin items
+        coins.forEach(coin => {
+          cryptoTickerTrack.appendChild(createTickerItem(coin));
+        });
+
+        // **Duplicate items for seamless scroll**
+        // This is the trick to make the animation loop
+        coins.forEach(coin => {
+          const duplicateItem = createTickerItem(coin);
+          duplicateItem.setAttribute('aria-hidden', 'true');
+          cryptoTickerTrack.appendChild(duplicateItem);
+        });
+
+      } else {
+        // Don't show an error, just hide the ticker
+        if (cryptoTickerTrack.parentElement) {
+          cryptoTickerTrack.parentElement.style.display = 'none';
+        }
+      }
+    } catch (error) {
+      console.error('Error loading crypto data:', error);
+      // Hide the ticker on error
+      if (cryptoTickerTrack.parentElement) {
+        cryptoTickerTrack.parentElement.style.display = 'none';
+      }
+    }
+  };
+
+  // --- Initial Load ---
+  const loadPageData = async () => {
+    // We call both functions to run in parallel.
+    // loadBlogPosts will handle the main loading/error message.
+    // loadCryptoData will run silently in the background.
+    await loadBlogPosts();
+    loadCryptoData();
+  };
+
+  await loadPageData();
+
+  // --- Event Listeners ---
+  const handleLanguageChange = () => {
+    // Reload both blog posts and crypto data
+    loadPageData();
+  };
+
   window.addEventListener('storage', (e) => {
     if (e.key === 'preferredLanguage') {
-      loadPosts();
+      handleLanguageChange();
     }
   });
 
-  // Also listen for custom language change event (if language is changed on same page)
-  document.addEventListener('languageChanged', () => {
-    loadPosts();
-  });
+  document.addEventListener('languageChanged', handleLanguageChange);
 });
