@@ -84,13 +84,13 @@ const translations = {
     whitepaper_whynow_text: "Iranian enterprises hold years of ERP/POS/CRM data yet lack decision intelligence. Open-source CV/ML/NLP has matured, On-Prem/Hybrid meets sovereignty and risk needs, and inflationary pressure demands ROI in weeks, not months.",
     whitepaper_operating_title: "Operating Model (7+14)",
     whitepaper_operating_li1: "<strong>7-Day Data Readiness Audit</strong> → map KPIs, data quality, feasibility.",
-    whitepaper_operating_li2: "<strong>14-Day PoC</strong> on the client's stack proving lift on real KPIs.",
+    whitepushpin_operating_li2: "<strong>14-Day PoC</strong> on the client's stack proving lift on real KPIs.",
     whitepaper_operating_li3: "<strong>Secure by Design:</strong> On-Prem/Hybrid, RBAC, audit logs, NDA/DPA.",
     whitepaper_operating_li4: "<strong>Product-Led Consulting:</strong> modular CV/ML/NLP + Nazarban Insight Panel.",
     whitepaper_operating_li5: "<strong>MLOps:</strong> monitoring, drift detection, retraining, SLA dashboards.",
     whitepaper_scope_title: "Initial Scope",
     whitepaper_scope_li1: "<strong>Computer Vision:</strong> share of shelf, planogram compliance, OOS detection.",
-    whitepaper_scope_li2: "<strong>Forecasting & Optimization:</strong> demand/promo, inventory and routing.",
+    whitepushpin_scope_li2: "<strong>Forecasting & Optimization:</strong> demand/promo, inventory and routing.",
     whitepaper_scope_li3: "<strong>Persian NLP:</strong> claims/invoice extraction, ticket triage, sentiment.",
     whitepaper_scope_li4: "<strong>Executive Dashboards:</strong> before/after KPI tracking and alerts.",
     whitepaper_objectives_title: "3-Year Objectives",
@@ -107,9 +107,10 @@ const translations = {
     contact_phone: "+1 (916) 587 0145",
     // New Blog Page
     blog_header_title: "AI Product Highlights",
-    blog_header_subtitle: "Daily insights from Product Hunt's top AI innovations",
+    blog_header_subtitle: "Daily insights from Product Hunt's top AI innovations", // This key is no longer used, but we can leave it
     blog_loading: "Loading posts...",
-    
+    blog_updated_prefix: "Last Update ", // <-- ADD THIS
+
     // Benchmark Page (This is the full, correct section)
     benchmark_page_title: "Nazarban AI - LLM Data Hub",
     benchmark_main_title: "AI Model Benchmark Leaderboard",
@@ -246,8 +247,9 @@ const translations = {
     contact_phone: "+۹۸ ۹۱۲ ۰۴۳ ۷۵۰۲", // Farsi phone number
     // New Blog Page
     blog_header_title: "محصولات برجسته هوش مصنوعی",
-    blog_header_subtitle: "بینش‌های روزانه از نوآوری‌های برتر Product Hunt",
+    blog_header_subtitle: "بینش‌های روزانه از نوآوری‌های برتر Product Hunt", // This key is no longer used, but we can leave it
     blog_loading: "در حال بارگذاری...",
+    blog_updated_prefix: " آخرین به روز رسانی ", // <-- ADD THIS
     
     // Benchmark Page (This is the full, correct section)
     benchmark_page_title: "Nazarban AI - مرکز داده مدل‌های زبان",

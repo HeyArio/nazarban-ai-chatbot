@@ -20,25 +20,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     return localStorage.getItem('preferredLanguage') || 'fa';
   };
 
-  // --- Set Today's Date in Header ---
-  try {
-    const lastUpdatedEl = document.getElementById('last-updated-date');
-    if (lastUpdatedEl) {
-      const today = new Date();
-      const lang = getCurrentLanguage();
-      
-      // Get the prefix from translations.js
-      const prefix = translations[lang].blog_updated_prefix || (lang === 'fa' ? 'به‌روزرسانی تا تاریخ' : 'Updated as of');
-      
-      // Use your existing formatDate function
-      const formattedDate = formatDate(today.toISOString(), lang);
-      
-      lastUpdatedEl.textContent = `${prefix} ${formattedDate}`;
-    }
-  } catch (e) {
-    console.error("Error setting header date:", e);
-  }
-
   const formatDate = (dateString, lang) => {
     if (!dateString || typeof dateString !== 'string') {
       console.error('A post was found with an empty or missing date.');
@@ -55,6 +36,34 @@ document.addEventListener('DOMContentLoaded', async () => {
       return new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(date);
     }
   };
+
+  // --- FUNCTION TO SET DATE ---
+  const setLastUpdatedDate = () => {
+    try {
+      const lastUpdatedEl = document.getElementById('blog-subtitle');
+      if (!lastUpdatedEl) return; // Failsafe
+
+      const today = new Date();
+      const lang = getCurrentLanguage();
+      
+      // This is now SAFE because translations.js has already loaded.
+      const prefix = (translations[lang] && translations[lang].blog_updated_prefix) 
+                       ? translations[lang].blog_updated_prefix 
+                       : (lang === 'fa' ? 'به‌روزرسانی تا تاریخ' : 'Updated as of');
+      
+      // Use your existing formatDate function
+      const formattedDate = formatDate(today.toISOString(), lang);
+      
+      lastUpdatedEl.textContent = `${prefix} ${formattedDate}`;
+    } catch (e) {
+      console.error("Error setting header date:", e);
+      // Fallback in case translations object fails
+      const lastUpdatedEl = document.getElementById('blog-subtitle');
+      if(lastUpdatedEl) lastUpdatedEl.textContent = "Last Updated: " + new Date().toLocaleDateString();
+    }
+  };
+  // --- END FUNCTION TO SET DATE ---
+
 
   const createPostCard = (post, lang) => {
     const card = document.createElement('article');
@@ -208,15 +217,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   /**
    * Creates a single ticker item element
    */
-  /**
-   * Creates a single ticker item element
-   */
-  /**
-   * Creates a single ticker item element
-   */
-  /**
-   * Creates a single ticker item element
-   */
   const createTickerItem = (coin) => {
     // 1. Create an anchor tag <a>
     const item = document.createElement('a');
@@ -244,9 +244,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       maximumFractionDigits: 4 
     });
 
-    // 4. ---!!! THIS IS THE FIX !!!---
-    //    I changed class. to class=
-    //
+    // 4. ---!!! THIS IS THE FIX (from last time) !!!---
     item.innerHTML = `
       <span class="ticker-symbol">${coin.symbol}</span>
       <span class="ticker-price">${price}</span>
@@ -257,9 +255,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     return item;
   };
 
-  /**
-   * Fetches crypto data and populates the ticker
-   */
   /**
    * Fetches crypto data and populates the ticker
    */
@@ -312,12 +307,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadCryptoData();
   };
 
+  // --- Call functions on initial page load ---
+  
+  // ▼▼▼ THIS IS THE FIX ▼▼▼
+  // We call this *now*, after translations.js has loaded
+  // and after the function is defined.
+  setLastUpdatedDate(); 
+  
   await loadPageData();
 
   // --- Event Listeners ---
   const handleLanguageChange = () => {
     // Reload both blog posts and crypto data
     loadPageData();
+    setLastUpdatedDate(); // <-- This call is also safe.
   };
 
   window.addEventListener('storage', (e) => {
@@ -326,5 +329,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
+  // This event is fired by your language.js *after* it sets the language.
   document.addEventListener('languageChanged', handleLanguageChange);
 });
