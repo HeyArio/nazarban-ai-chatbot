@@ -1679,3 +1679,12 @@ html[dir="rtl"] .menu-toggle {
   color: #f87171 !important; /* Red */
   background: rgba(248, 113, 113, 0.1);
 }
+
+/* Force ticker to always scroll LTR (even in RTL pages) */
+.ticker-wrapper {
+  direction: ltr;
+}
+
+.ticker-track {
+  direction: ltr;
+}
