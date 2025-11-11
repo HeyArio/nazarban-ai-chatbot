@@ -2,43 +2,59 @@ document.addEventListener('DOMContentLoaded', () => {
   const chartsContainer = document.getElementById('charts-container');
   const lastUpdatedEl = document.getElementById('last-updated');
 
-  // Persian/Jalali Calendar Converter
-  // Persian/Jalali Calendar Converter
+  // This variable will hold the date from your API
+  let benchmarkApiDate = null;
+
+  // Modern, reliable Persian/Jalali Calendar Converter
   function toPersianDate(date) {
-    // These options tell the browser to use the 'persian' (Jalali) calendar
-    // and format it for the 'fa-IR' (Farsi - Iran) locale.
     const options = {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
       calendar: 'persian',
-      timeZone: 'Asia/Tehran' // Good practice to set a consistent timezone
+      timeZone: 'Asia/Tehran' // Ensures consistent date conversion
     };
-
-    // This one line replaces your entire algorithm
     return new Intl.DateTimeFormat('fa-IR', options).format(date);
   }
 
-  function showLoading() {
-    // Show today's date while loading
+  /**
+   * NEW Reusable Function
+   * This function reads the current language and updates the date element.
+   */
+  function formatAndUpdateDate() {
+    if (!lastUpdatedEl) return; // Safety check
+
     const lang = localStorage.getItem('preferredLanguage') || 'fa';
-    const today = new Date();
-    const t = window.translations && window.translations[lang] ? window.translations[lang] : window.translations.fa;
     
-    // Format date based on language
+    // Get translations safely
+    const t = (window.translations && window.translations[lang] && window.translations[lang])
+                ? window.translations[lang]
+                : (window.translations ? window.translations.fa : {}); // Fallback
+
+    // Use the stored API date, or fallback to today
+    const dateToFormat = benchmarkApiDate || new Date(); 
+    
     let formattedDate;
+    const prefix = t.benchmark_updated_prefix || 'Updated:'; // Get prefix from translations
+
     if (lang === 'fa') {
-      formattedDate = toPersianDate(today);
+      // Use the 'fa' (Persian) format
+      formattedDate = toPersianDate(dateToFormat); 
     } else {
+      // Use the 'en' (English) format
       const options = { year: 'numeric', month: 'long', day: 'numeric' };
-      formattedDate = today.toLocaleDateString('en-US', options);
+      formattedDate = dateToFormat.toLocaleDateString('en-US', options);
     }
-    
-    // Remove data-lang-key attribute to prevent translation system from overwriting
+
+    // Update the HTML
     lastUpdatedEl.removeAttribute('data-lang-key');
-    
-    // Only show the date, no loading text
-    lastUpdatedEl.innerHTML = `<span>${t.benchmark_updated_prefix}</span> ${formattedDate}`;
+    lastUpdatedEl.innerHTML = `<span>${prefix}</span> ${formattedDate}`;
+  }
+
+
+  function showLoading() {
+    // This will automatically show today's date in the correct language
+    formatAndUpdateDate();
     
     chartsContainer.innerHTML = `
       <div class="loader-container">
@@ -89,37 +105,22 @@ document.addEventListener('DOMContentLoaded', () => {
       <div id="insights-container" class="insights-grid"></div>
     `;
     
-    // Date formatting
-    // Remove data-lang-key attribute to prevent translation system from overwriting
-    lastUpdatedEl.removeAttribute('data-lang-key');
-    
+    // --- UPDATED Date Formatting ---
     try {
-      const updatedDate = new Date(data.metadata.last_updated);
-      
-      // Format date based on language
-      let formattedDate;
-      if (lang === 'fa') {
-        formattedDate = toPersianDate(updatedDate);
-      } else {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        formattedDate = updatedDate.toLocaleDateString('en-US', options);
+      // Save the date from the API into our global variable
+      benchmarkApiDate = new Date(data.metadata.last_updated);
+      // Check for invalid date (e.g., "Invalid Date")
+      if (isNaN(benchmarkApiDate.getTime())) {
+        benchmarkApiDate = new Date(); // Fallback to today
       }
-      
-      lastUpdatedEl.innerHTML = `<span>${t.benchmark_updated_prefix}</span> ${formattedDate}`;
     } catch (e) {
-      // Fallback to today's date if API date is invalid
-      const today = new Date();
-      
-      let formattedDate;
-      if (lang === 'fa') {
-        formattedDate = toPersianDate(today);
-      } else {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        formattedDate = today.toLocaleDateString('en-US', options);
-      }
-      
-      lastUpdatedEl.innerHTML = `<span>${t.benchmark_updated_prefix}</span> ${formattedDate}`;
+      benchmarkApiDate = new Date(); // Fallback to today if anything fails
     }
+    
+    // Now, render the date using the new function
+    formatAndUpdateDate();
+    // --- END UPDATED Date Formatting ---
+
 
     // Render all the new content
     renderHeroStats(data.hero_stats);
@@ -155,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
 
-  // *** UPDATED: Renders the Horizontal Bar Chart ***
+  // Renders the Horizontal Bar Chart
   function renderTop10BarChart(chartData) {
     if (!chartData) return;
 
@@ -182,27 +183,22 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       plotOptions: {
         bar: {
-          horizontal: true, // <-- Correct
+          horizontal: true,
           borderRadius: 4
         },
       },
       dataLabels: { enabled: false },
-      
-      // *** THE FIX ***
       xaxis: { 
-        categories: chartData.labels, // <-- Labels are correctly in xaxis
+        categories: chartData.labels,
         labels: {
           style: { colors: '#94A3B8' }
         }
       },
       yaxis: { 
-        // 'categories' property is removed
         labels: {
           style: { colors: '#E2E8F0', fontSize: '14px' } 
         }
       },
-      // *** END FIX ***
-      
       fill: { opacity: 1 }
     };
 
@@ -379,5 +375,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // --- SCRIPT EXECUTION STARTS HERE ---
+  
   fetchBenchmarkData();
+
+  // Listen for the custom event from language.js
+  document.addEventListener('languageChanged', (e) => {
+    // When language changes, just re-run the date formatting function.
+    // It will automatically pick up the new language from localStorage.
+    formatAndUpdateDate();
+  });
+
 });
