@@ -196,12 +196,14 @@ document.addEventListener('DOMContentLoaded', async () => {
    * Creates a single ticker item element
    */
   const createTickerItem = (coin) => {
-    // 1. Create an anchor tag <a> instead of a <div>
+    // 1. Create an anchor tag <a>
     const item = document.createElement('a');
     item.className = 'ticker-item';
     
-    // 2. Build the URL and set the 'href'
-    item.href = `https://wallex.ir/trade/${coin.pair}`;
+    // --- !!! THIS IS THE FIX !!! ---
+    // 2. Build the NEW URL using the lowercase symbol
+    item.href = `https://wallex.ir/buy-and-sell/${coin.symbol.toLowerCase()}`;
+    // --- !!! END FIX !!! ---
     
     // 3. Make it open in a new tab
     item.target = '_blank';
@@ -224,9 +226,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 4. The inner HTML is the same as before
     item.innerHTML = `
-      <span class="ticker-symbol">${coin.symbol}</span>
+      <span class.ticker-symbol">${coin.symbol}</span>
       <span class="ticker-price">${price}</span>
-      <span class="ticker-change ${changeClass}">
+      <span class.ticker-change ${changeClass}">
         ${changeSign}${change.toFixed(2)}%
       </span>
     `;
