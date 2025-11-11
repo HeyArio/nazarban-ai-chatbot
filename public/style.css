@@ -1619,16 +1619,12 @@ html[dir="rtl"] .menu-toggle {
   border-radius: var(--radius-md);
   flex-shrink: 0;
   width: max-content;
-  text-decoration: none; /* Removes the underline */
+  text-decoration: none; /* We'll leave the underline rule alone for now */
   cursor: pointer;
   transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
 .ticker-item:hover {
-  /* --- !!! THIS IS THE FIX !!! --- */
-  text-decoration: none; /* 1. Explicitly remove underline on hover */
-  /* --- !!! END OF FIX !!! --- */
-  
   transform: scale(1.05); /* Lifts the card slightly */
   background: rgba(30, 41, 59, 0.9); /* Makes it slightly brighter */
 }
@@ -1652,12 +1648,13 @@ html[dir="rtl"] .menu-toggle {
   border-radius: 6px;
 }
 
+/* --- HERE ARE THE COLORS --- */
 .ticker-change.positive {
-  color: #4ade80;
+  color: #4ade80; /* Green */
   background: rgba(74, 222, 128, 0.1);
 }
 
 .ticker-change.negative {
-  color: #f87171;
+  color: #f87171; /* Red */
   background: rgba(248, 113, 113, 0.1);
 }
