@@ -47,8 +47,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       const lang = getCurrentLanguage();
       
       // This is now SAFE because translations.js has already loaded.
-      const prefix = (translations[lang] && translations[lang].blog_updated_prefix) 
-                       ? translations[lang].blog_updated_prefix 
+      const prefix = (window.translations[lang] && window.translations[lang].blog_updated_prefix) 
+                       ? window.translations[lang].blog_updated_prefix 
                        : (lang === 'fa' ? 'به‌روزرسانی تا تاریخ' : 'Updated as of');
       
       // Use your existing formatDate function

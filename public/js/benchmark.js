@@ -195,8 +195,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const lang = localStorage.getItem('preferredLanguage') || 'fa';
     
     // This is now SAFE because translations.js is guaranteed to be loaded
-    const totalLabel = (window.translations && translations[lang] && translations[lang]['benchmark_pie_total']) 
-                       ? translations[lang]['benchmark_pie_total'] : 'Providers';
+    const totalLabel = (window.translations && window.translations[lang] && window.translations[lang]['benchmark_pie_total']) 
+                       ? window.translations[lang]['benchmark_pie_total'] : 'Providers';
 
     const options = {
       series: chartData.datasets[0].data,

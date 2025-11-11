@@ -1,4 +1,4 @@
-const translations = {
+window.translations = {
   // English translations
   en: {
     // Navigation
