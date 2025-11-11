@@ -277,6 +277,6 @@ window.translations = {
     benchmark_table_grade: "نمره",
     benchmark_insights_hidden: "گوهر پنهان",
     benchmark_insights_specialist: "متخصص",
-    benchmark_facts_title: "حقایق سریع",
+    benchmark_facts_title: "نکات کلیدی",
   }
 };
