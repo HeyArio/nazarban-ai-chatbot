@@ -189,15 +189,24 @@ document.addEventListener('DOMContentLoaded', async () => {
   /**
    * Creates a single ticker item element
    */
+  /**
+   * Creates a single ticker item element
+   */
   const createTickerItem = (coin) => {
     const item = document.createElement('div');
     item.className = 'ticker-item';
 
-    const change = parseFloat(coin.change_percent_24h);
+    // --- !!! THIS IS THE FIX !!! ---
+    // We add '|| 0' to default to zero if the value from the API
+    // is null, undefined, or otherwise invalid.
+    const change = parseFloat(coin.change_percent_24h) || 0;
+    const priceNum = parseFloat(coin.price) || 0;
+    // --- !!! END FIX ---
+
     const changeClass = change >= 0 ? 'positive' : 'negative';
     const changeSign = change >= 0 ? '+' : '';
 
-    const price = parseFloat(coin.price).toLocaleString('en-US', { 
+    const price = priceNum.toLocaleString('en-US', { 
       style: 'currency', 
       currency: 'USD',
       minimumFractionDigits: 2,
