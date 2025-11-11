@@ -3,10 +3,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const lastUpdatedEl = document.getElementById('last-updated');
 
   function showLoading() {
+    // Show today's date while loading
+    const lang = localStorage.getItem('preferredLanguage') || 'fa';
+    const today = new Date();
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = today.toLocaleDateString(lang === 'fa' ? 'fa-IR' : 'en-US', options);
+    const t = window.translations && window.translations[lang] ? window.translations[lang] : window.translations.fa;
+    
+    lastUpdatedEl.innerHTML = `<span data-lang-key="benchmark_updated_prefix">${t.benchmark_updated_prefix}</span> ${formattedDate}`;
+    
     chartsContainer.innerHTML = `
       <div class="loader-container">
         <div class="loader"></div>
-        <p data-lang-key="benchmark_loading">Loading benchmark data...</p>
+        <p data-lang-key="benchmark_loading">${t.benchmark_loading}</p>
       </div>
     `;
   }
@@ -54,14 +63,16 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     
     // Date formatting
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
     try {
       const updatedDate = new Date(data.metadata.last_updated);
-      const options = { year: 'numeric', month: 'long', day: 'numeric' };
-      const lang = localStorage.getItem('preferredLanguage') || 'fa'; 
       const formattedDate = updatedDate.toLocaleDateString(lang === 'fa' ? 'fa-IR' : 'en-US', options);
-      lastUpdatedEl.innerHTML = `<span data-lang-key="benchmark_updated_prefix">Updated:</span> ${formattedDate}`;
+      lastUpdatedEl.innerHTML = `<span data-lang-key="benchmark_updated_prefix">${t.benchmark_updated_prefix}</span> ${formattedDate}`;
     } catch (e) {
-      lastUpdatedEl.textContent = `Data loaded.`;
+      // Fallback to today's date if API date is invalid
+      const today = new Date();
+      const formattedDate = today.toLocaleDateString(lang === 'fa' ? 'fa-IR' : 'en-US', options);
+      lastUpdatedEl.innerHTML = `<span data-lang-key="benchmark_updated_prefix">${t.benchmark_updated_prefix}</span> ${formattedDate}`;
     }
 
     // Render all the new content
