@@ -10,12 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const formattedDate = today.toLocaleDateString(lang === 'fa' ? 'fa-IR' : 'en-US', options);
     const t = window.translations && window.translations[lang] ? window.translations[lang] : window.translations.fa;
     
+    // Only show the date, no loading text
     lastUpdatedEl.innerHTML = `<span data-lang-key="benchmark_updated_prefix">${t.benchmark_updated_prefix}</span> ${formattedDate}`;
     
     chartsContainer.innerHTML = `
       <div class="loader-container">
         <div class="loader"></div>
-        <p data-lang-key="benchmark_loading">${t.benchmark_loading}</p>
       </div>
     `;
   }
