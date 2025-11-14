@@ -420,6 +420,7 @@ body.chat-page {
   color: var(--ink);
   font-size: 14px;
   font-weight: 500;
+  font-family: inherit; /* Inherit Sahel for Farsi, Nunito Sans for English */
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
