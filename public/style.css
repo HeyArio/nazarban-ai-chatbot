@@ -385,6 +385,100 @@ body.chat-page {
   margin: 0 auto;
 }
 
+/* Suggestion Pills Container */
+.suggestion-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 32px;
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out 0.3s forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Individual Pill Button */
+.suggestion-pill {
+  padding: 12px 20px;
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(129, 140, 248, 0.2);
+  border-radius: 20px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.suggestion-pill:hover {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: var(--brand1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(129, 140, 248, 0.3);
+}
+
+.suggestion-pill:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(129, 140, 248, 0.2);
+}
+
+/* Hide animation when pills are removed */
+.suggestion-pills.hiding {
+  animation: fadeOutDown 0.4s ease-in forwards;
+}
+
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .suggestion-pills {
+    gap: 8px;
+    margin-top: 24px;
+    padding: 0 12px;
+  }
+  
+  .suggestion-pill {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+}
+
+/* RTL adjustments */
+html[dir="rtl"] .suggestion-pills {
+  direction: rtl;
+}
+
+html[dir="rtl"] .suggestion-pill {
+  direction: rtl;
+  text-align: right;
+}
+
 .message {
   width: 100%;
   display: flex;

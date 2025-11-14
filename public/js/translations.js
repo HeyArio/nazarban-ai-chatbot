@@ -102,6 +102,15 @@ window.translations = {
 
     // Chat input placeholder
     chat_placeholder: "Type your message…",
+    // Suggestion pills
+    suggestion_1: "I want to implement AI in my business",
+    suggestion_2: "I have sales data, how can I analyze it?",
+    suggestion_3: "I need a chatbot for customer service",
+    suggestion_4: "I need computer vision solutions",
+    // Chat error messages
+    chat_error_generic: "Something went wrong. Please try again.",
+    chat_error_connection: "I'm sorry – connection issue. Please try again.",
+    chat_farewell: "Thanks! Start a new topic anytime.",
     // Contact links
     contact_email: "info@nazarbanai.com",
     contact_phone: "+1 (916) 587 0145",
@@ -242,6 +251,15 @@ window.translations = {
 
      // Chat input placeholder
     chat_placeholder: "پیام خود را تایپ کنید...",
+    // Suggestion pills
+    suggestion_1: "می‌خوام برای کسب‌وکارم از AI استفاده کنم",
+    suggestion_2: "داده‌های فروش دارم، چطور تحلیل‌شون کنم؟",
+    suggestion_3: "می‌خوام یه چت‌بات برای مشتریام بسازم",
+    suggestion_4: "به تحلیل تصویر و بینایی ماشین نیاز دارم",
+    // Chat error messages
+    chat_error_generic: "مشکلی پیش آمده. لطفاً دوباره تلاش کنید.",
+    chat_error_connection: "متأسفم - مشکل در ارتباط. لطفاً دوباره امتحان کنید.",
+    chat_farewell: "ممنون! هر زمان می‌تونی موضوع جدیدی رو شروع کنی.",
      // Contact links
     contact_email: "info@nazarbanai.com", // Email stays the same
     contact_phone: "+۹۸ ۹۱۲ ۰۴۳ ۷۵۰۲", // Farsi phone number

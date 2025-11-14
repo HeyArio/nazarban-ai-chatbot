@@ -14,6 +14,24 @@ const messagesContainer = document.getElementById('messages');
 const messageInput = document.getElementById('messageInput');
 const sendButton = document.getElementById('sendButton');
 
+// =====================================================
+// TRANSLATION HELPER FOR CHAT MESSAGES
+// =====================================================
+
+function getChatTranslation(key) {
+  const currentLang = localStorage.getItem('preferredLanguage') || 'fa';
+  if (window.translations && window.translations[currentLang] && window.translations[currentLang][key]) {
+    return window.translations[currentLang][key];
+  }
+  // Fallback to key if translation not found
+  return key;
+}
+
+// =====================================================
+// END TRANSLATION HELPER
+// =====================================================
+
+
 if (messageInput) {
   // Auto-resize textarea
   messageInput.addEventListener('input', function () {
@@ -33,6 +51,96 @@ if (messageInput) {
 if (sendButton) {
   sendButton.addEventListener('click', sendMessage);
 }
+
+// =====================================================
+// SUGGESTION PILLS FUNCTIONALITY
+// =====================================================
+
+function createSuggestionPills() {
+  // Check if welcome section exists (means no messages yet)
+  const welcomeSection = document.querySelector('.welcome-section');
+  if (!welcomeSection) return;
+
+  // Check if pills already exist
+  if (document.querySelector('.suggestion-pills')) return;
+
+  // Get current language
+  const currentLang = localStorage.getItem('preferredLanguage') || 'fa';
+  
+  // Create container
+  const pillsContainer = document.createElement('div');
+  pillsContainer.className = 'suggestion-pills';
+  
+  // Create 4 suggestion pills
+  for (let i = 1; i <= 4; i++) {
+    const pill = document.createElement('button');
+    pill.className = 'suggestion-pill';
+    pill.setAttribute('data-lang-key', `suggestion_${i}`);
+    pill.type = 'button';
+    
+    // Set initial text from translations
+    if (window.translations && window.translations[currentLang]) {
+      pill.textContent = window.translations[currentLang][`suggestion_${i}`] || '';
+    }
+    
+    // Click handler
+    pill.addEventListener('click', function() {
+      const suggestionText = this.textContent;
+      if (messageInput && suggestionText) {
+        messageInput.value = suggestionText;
+        messageInput.focus();
+        // Trigger auto-resize
+        messageInput.style.height = 'auto';
+        messageInput.style.height = Math.min(messageInput.scrollHeight, 140) + 'px';
+        // Send the message
+        sendMessage();
+      }
+    });
+    
+    pillsContainer.appendChild(pill);
+  }
+  
+  // Add to welcome section
+  welcomeSection.appendChild(pillsContainer);
+}
+
+function removeSuggestionPills() {
+  const pillsContainer = document.querySelector('.suggestion-pills');
+  if (pillsContainer) {
+    // Add hiding animation class
+    pillsContainer.classList.add('hiding');
+    // Remove after animation completes
+    setTimeout(() => {
+      pillsContainer.remove();
+    }, 400); // Match the fadeOutDown animation duration
+  }
+}
+
+// Initialize suggestion pills on page load
+document.addEventListener('DOMContentLoaded', function() {
+  // Wait a tiny bit for translations to load
+  setTimeout(() => {
+    createSuggestionPills();
+  }, 100);
+});
+
+// Listen for language changes to update pill text
+document.addEventListener('languageChanged', function(e) {
+  const pills = document.querySelectorAll('.suggestion-pill');
+  const newLang = e.detail.lang;
+  
+  pills.forEach((pill, index) => {
+    const key = `suggestion_${index + 1}`;
+    if (window.translations && window.translations[newLang] && window.translations[newLang][key]) {
+      pill.textContent = window.translations[newLang][key];
+    }
+  });
+});
+
+// =====================================================
+// END SUGGESTION PILLS FUNCTIONALITY
+// =====================================================
+
 
 function addMessage(content, isUser = false) {
   if (!messagesContainer) return; // Safety check
@@ -54,7 +162,18 @@ function addMessage(content, isUser = false) {
   row.appendChild(inner);
 
   const welcome = messagesContainer.querySelector('.welcome-section');
-  if (welcome) welcome.remove();
+  if (welcome) {
+    // Remove suggestion pills with animation first (if user message)
+    if (isUser) {
+      removeSuggestionPills();
+      // Wait for pills animation before removing welcome
+      setTimeout(() => {
+        welcome.remove();
+      }, 400);
+    } else {
+      welcome.remove();
+    }
+  }
 
   messagesContainer.appendChild(row);
 
@@ -159,15 +278,15 @@ async function sendMessage() {
       if (data.conversationStage) conversationStage = data.conversationStage;
       if (data.userEmail) userEmail = data.userEmail;
       if (data.conversationComplete) {
-        setTimeout(() => addMessage('Thanks! Start a new topic anytime.', false), 1500);
+        setTimeout(() => addMessage(getChatTranslation('chat_farewell'), false), 1500);
       }
     } else {
-      addMessage(data.message || 'Something went wrong. Please try again.', false);
+      addMessage(data.message || getChatTranslation('chat_error_generic'), false);
     }
   } catch (err) {
     hideTyping();
     console.error('Chat Error:', err);
-    addMessage("I'm sorry – connection issue. Please try again.", false);
+    addMessage(getChatTranslation('chat_error_connection'), false);
   }
 
   sendButton.disabled = false;
