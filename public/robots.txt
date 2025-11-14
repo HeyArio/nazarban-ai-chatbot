@@ -1,8 +1,8 @@
-Allow all web crawlers access to all content
+# Nazarban Analytics - robots.txt
+# Allow all web crawlers access to all content
 
 User-agent: *
-Allow: /
+Disallow:
 
-Location of the sitemap file
-
-Sitemap: https://www.google.com/search?q=https://nazarbanai.com
+# Sitemap location
+Sitemap: https://nazarbanai.com/sitemap.xml
