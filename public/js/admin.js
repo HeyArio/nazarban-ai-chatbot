@@ -4,6 +4,80 @@
 */
 
 // ====================
+// LOGIN SYSTEM
+// ====================
+const loginScreen = document.getElementById('loginScreen');
+const adminPanel = document.getElementById('adminPanel');
+const loginPassword = document.getElementById('loginPassword');
+const loginBtn = document.getElementById('loginBtn');
+const loginStatus = document.getElementById('loginStatus');
+
+// Check if already authenticated
+const isAuthenticated = sessionStorage.getItem('adminAuthenticated');
+if (isAuthenticated === 'true') {
+    showAdminPanel();
+}
+
+// Handle Enter key on login password field
+loginPassword.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        login();
+    }
+});
+
+// Handle login button click
+loginBtn.addEventListener('click', login);
+
+async function login() {
+    const password = loginPassword.value;
+    
+    if (!password) {
+        showLoginStatus('Please enter a password', true);
+        return;
+    }
+
+    loginBtn.disabled = true;
+    showLoginStatus('Verifying...', false);
+
+    try {
+        const response = await fetch('/api/admin/verify-login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password })
+        });
+
+        if (response.ok) {
+            sessionStorage.setItem('adminAuthenticated', 'true');
+            showLoginStatus('Login successful!', false);
+            setTimeout(showAdminPanel, 500);
+        } else {
+            showLoginStatus('Invalid password', true);
+            loginPassword.value = '';
+            loginPassword.focus();
+        }
+    } catch (error) {
+        showLoginStatus('Connection error. Please try again.', true);
+    } finally {
+        loginBtn.disabled = false;
+    }
+}
+
+function showAdminPanel() {
+    loginScreen.style.display = 'none';
+    adminPanel.style.display = 'block';
+    loadPrompts(); // Load data when admin panel is shown
+}
+
+function showLoginStatus(message, isError) {
+    loginStatus.textContent = message;
+    loginStatus.className = isError ? 'status error' : 'status success';
+    setTimeout(() => {
+        loginStatus.textContent = '';
+        loginStatus.className = 'status';
+    }, 3000);
+}
+
+// ====================
 // TAB SWITCHING
 // ====================
 document.querySelectorAll('.tab').forEach(tab => {
@@ -427,5 +501,4 @@ function showStatus(elementId, message, isError) {
     setTimeout(() => statusEl.textContent = '', 4000);
 }
 
-// Load prompts on page load
-document.addEventListener('DOMContentLoaded', loadPrompts);
+// Prompts are now loaded after successful login via showAdminPanel()
