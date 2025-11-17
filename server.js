@@ -1022,6 +1022,41 @@ app.get('/api/test', (req, res) => {
     res.json({ status: 'Server is working!' });
 });
 
+// Admin login verification endpoint
+app.post('/api/admin/verify-login', (req, res) => {
+    const { password } = req.body;
+    
+    // Get admin password from environment variable
+    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+    
+    if (!ADMIN_PASSWORD) {
+        console.error('❌ ADMIN_PASSWORD not set in environment variables');
+        return res.status(500).json({ 
+            success: false, 
+            error: 'Server configuration error: Admin password not configured' 
+        });
+    }
+    
+    if (!password) {
+        return res.status(400).json({ 
+            success: false, 
+            error: 'Password required' 
+        });
+    }
+    
+    // Verify password
+    if (password === ADMIN_PASSWORD) {
+        console.log('✅ Admin login successful');
+        res.status(200).json({ success: true, message: 'Login successful' });
+    } else {
+        console.log('❌ Admin login failed - invalid password');
+        res.status(401).json({ 
+            success: false, 
+            error: 'Invalid password' 
+        });
+    }
+});
+
 // Main chat endpoint
 app.post('/api/chat', async (req, res) => {
     try {
