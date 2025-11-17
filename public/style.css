@@ -1929,11 +1929,19 @@ html[dir="rtl"] .faq-icon {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  text-align: center;
 }
 
 .products-header p {
   font-size: 1.2rem;
   color: var(--muted);
+  text-align: center;
+}
+
+/* Ensure RTL centering */
+html[dir="rtl"] .products-header,
+html[dir="rtl"] .products-header h1,
+html[dir="rtl"] .products-header p {
   text-align: center;
 }
 
