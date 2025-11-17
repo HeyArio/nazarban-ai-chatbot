@@ -1934,6 +1934,7 @@ html[dir="rtl"] .faq-icon {
 .products-header p {
   font-size: 1.2rem;
   color: var(--muted);
+  text-align: center;
 }
 
 .products-grid {
