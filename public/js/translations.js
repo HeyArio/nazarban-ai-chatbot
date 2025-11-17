@@ -147,6 +147,19 @@ window.translations = {
     benchmark_insights_hidden: "Hidden Gem",
     benchmark_insights_specialist: "Specialist",
     benchmark_facts_title: "Quick Facts",
+
+    // Products Page
+    nav_products: "Products",
+    products_header_title: "Our AI Products & Workflows",
+    products_header_subtitle: "Innovative SaaS solutions powered by artificial intelligence",
+    products_loading: "Loading products...",
+    products_error: "Error loading products. Please try again.",
+    products_empty: "No products available yet. Check back soon!",
+
+    // FAQ Section
+    faq_title: "Frequently Asked Questions",
+    faq_subtitle: "Find answers to common questions about our AI services",
+    faq_empty: "No FAQs available yet.",
   },
 
   // Farsi translations
@@ -296,5 +309,18 @@ window.translations = {
     benchmark_insights_hidden: "گوهر پنهان",
     benchmark_insights_specialist: "متخصص",
     benchmark_facts_title: "نکات کلیدی",
+
+    // Products Page
+    nav_products: "محصولات",
+    products_header_title: "محصولات و راهکارهای هوش مصنوعی ما",
+    products_header_subtitle: "راهکارهای نوآورانه SaaS با قدرت هوش مصنوعی",
+    products_loading: "در حال بارگذاری محصولات...",
+    products_error: "خطا در بارگذاری محصولات. لطفاً دوباره تلاش کنید.",
+    products_empty: "هنوز محصولی موجود نیست. به زودی برمی‌گردیم!",
+
+    // FAQ Section
+    faq_title: "سوالات متداول",
+    faq_subtitle: "پاسخ سوالات رایج درباره خدمات هوش مصنوعی ما",
+    faq_empty: "هنوز سوالی موجود نیست.",
   }
 };

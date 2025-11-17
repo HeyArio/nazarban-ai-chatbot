@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Prompt Management</title>
+    <title>Admin Panel - Nazarban Analytics</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -14,7 +14,10 @@
             --ink: #f8fafc;
             --muted: #94a3b8;
             --brand1: #818cf8;
+            --brand2: #c084fc;
             --border: rgba(148, 163, 184, .2);
+            --success: #4ade80;
+            --error: #f87171;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -23,17 +26,52 @@
             color: var(--ink);
             padding: 2rem;
         }
-        .container { max-width: 900px; margin: 0 auto; }
+        .container { max-width: 1200px; margin: 0 auto; }
         h1 {
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, var(--brand1), #c084fc);
+            background: linear-gradient(135deg, var(--brand1), var(--brand2));
             -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
         }
-        p { color: var(--muted); margin-bottom: 2rem; }
-        .form-group { margin-bottom: 2rem; }
-        label { display: block; font-weight: 600; margin-bottom: 0.75rem; }
-        textarea, input[type="password"] {
+        .subtitle { color: var(--muted); margin-bottom: 2rem; }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .tab {
+            padding: 1rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color .2s, border-color .2s;
+            border-bottom: 2px solid transparent;
+        }
+        .tab:hover { color: var(--ink); }
+        .tab.active {
+            color: var(--brand1);
+            border-bottom-color: var(--brand1);
+        }
+
+        /* Tab content */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Form groups */
+        .form-group { margin-bottom: 1.5rem; }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--ink);
+        }
+        textarea, input[type="text"], input[type="password"], input[type="url"], select {
             width: 100%;
             background: var(--panel);
             border: 1px solid var(--border);
@@ -44,21 +82,14 @@
             font-family: inherit;
             transition: border-color .2s, box-shadow .2s;
         }
-        textarea { resize: vertical; min-height: 200px; }
-        textarea:focus, input:focus {
+        textarea { resize: vertical; min-height: 150px; }
+        textarea:focus, input:focus, select:focus {
             outline: none;
             border-color: var(--brand1);
             box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.4);
         }
-        .controls {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            padding: 1rem;
-            background: var(--panel);
-            border-radius: 8px;
-            border: 1px solid var(--border);
-        }
+
+        /* Buttons */
         button {
             padding: 0.75rem 1.5rem;
             border: none;
@@ -71,103 +102,253 @@
             transition: transform .15s, opacity .15s;
         }
         button:hover { transform: translateY(-2px); }
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
-        #status { font-size: 0.9rem; transition: color .3s; }
-        .success { color: #4ade80; }
-        .error { color: #f87171; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        button.secondary {
+            background: var(--panel);
+            border: 1px solid var(--border);
+        }
+        button.danger {
+            background: var(--error);
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--panel);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-top: 1.5rem;
+        }
+
+        /* Status messages */
+        .status {
+            font-size: 0.9rem;
+            transition: color .3s;
+            margin-left: 1rem;
+        }
+        .success { color: var(--success); }
+        .error { color: var(--error); }
+
+        /* Product/FAQ lists */
+        .item-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .item-card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+        .item-title { font-size: 1.25rem; font-weight: 600; }
+        .item-meta { font-size: 0.9rem; color: var(--muted); margin-top: 0.5rem; }
+        .item-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .item-actions button {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Two column layout */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Feature list builder */
+        .features-builder {
+            margin-top: 0.5rem;
+        }
+        .feature-item {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .feature-item input {
+            flex: 1;
+        }
+        .feature-item button {
+            padding: 0.5rem 1rem;
+        }
+        .add-feature-btn {
+            margin-top: 0.5rem;
+            background: var(--panel);
+            border: 1px dashed var(--border);
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>AI Prompt Management</h1>
-        <p>Edit the prompts used by the AI chatbot. Your changes will be applied immediately after saving.</p>
+        <h1>Admin Panel</h1>
+        <p class="subtitle">Manage prompts, products, and FAQs</p>
 
-        <div class="form-group">
-            <label for="mainSystemPrompt">Main Chatbot System Prompt</label>
-            <textarea id="mainSystemPrompt"></textarea>
+        <div class="tabs">
+            <button class="tab active" data-tab="prompts">Prompts</button>
+            <button class="tab" data-tab="products">Products</button>
+            <button class="tab" data-tab="faqs">FAQs</button>
         </div>
 
-        <div class="form-group">
-            <label for="summaryPrompt">Conversation Summary Prompt</label>
-            <textarea id="summaryPrompt"></textarea>
+        <!-- PROMPTS TAB -->
+        <div class="tab-content active" id="prompts-tab">
+            <div class="form-group">
+                <label for="mainSystemPrompt">Main Chatbot System Prompt</label>
+                <textarea id="mainSystemPrompt"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="summaryPrompt">Conversation Summary Prompt</label>
+                <textarea id="summaryPrompt"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="proposalPrompt">Proposal Generation Prompt</label>
+                <textarea id="proposalPrompt"></textarea>
+            </div>
+
+            <div class="controls">
+                <input type="password" id="promptPassword" placeholder="Admin Password" required style="flex: 1; max-width: 250px;">
+                <button id="savePromptsBtn">Save Prompts</button>
+                <span class="status" id="promptStatus"></span>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="proposalPrompt">Proposal Generation Prompt</label>
-            <textarea id="proposalPrompt"></textarea>
+        <!-- PRODUCTS TAB -->
+        <div class="tab-content" id="products-tab">
+            <h2 style="margin-bottom: 1.5rem;">Add/Edit Product</h2>
+
+            <input type="hidden" id="productId">
+
+            <div class="two-col">
+                <div class="form-group">
+                    <label for="productNameEn">Product Name (English)</label>
+                    <input type="text" id="productNameEn" placeholder="e.g., Shelfzar">
+                </div>
+                <div class="form-group">
+                    <label for="productNameFa">Product Name (Persian)</label>
+                    <input type="text" id="productNameFa" placeholder="e.g., شلف‌زار">
+                </div>
+            </div>
+
+            <div class="two-col">
+                <div class="form-group">
+                    <label for="productTaglineEn">Tagline (English)</label>
+                    <input type="text" id="productTaglineEn" placeholder="Brief tagline">
+                </div>
+                <div class="form-group">
+                    <label for="productTaglineFa">Tagline (Persian)</label>
+                    <input type="text" id="productTaglineFa" placeholder="توضیح مختصر">
+                </div>
+            </div>
+
+            <div class="two-col">
+                <div class="form-group">
+                    <label for="productDescEn">Description (English)</label>
+                    <textarea id="productDescEn" style="min-height: 100px;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="productDescFa">Description (Persian)</label>
+                    <textarea id="productDescFa" style="min-height: 100px;"></textarea>
+                </div>
+            </div>
+
+            <div class="two-col">
+                <div class="form-group">
+                    <label>Features (English)</label>
+                    <div class="features-builder" id="featuresEnBuilder"></div>
+                    <button class="add-feature-btn" onclick="addFeatureInput('En')">+ Add Feature</button>
+                </div>
+                <div class="form-group">
+                    <label>Features (Persian)</label>
+                    <div class="features-builder" id="featuresFaBuilder"></div>
+                    <button class="add-feature-btn" onclick="addFeatureInput('Fa')">+ Add Feature</button>
+                </div>
+            </div>
+
+            <div class="two-col">
+                <div class="form-group">
+                    <label for="productUrl">Product URL</label>
+                    <input type="url" id="productUrl" placeholder="https://example.com">
+                </div>
+                <div class="form-group">
+                    <label for="productCategory">Category</label>
+                    <input type="text" id="productCategory" placeholder="e.g., Retail Analytics">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="productStatus">Status</label>
+                <select id="productStatus">
+                    <option value="live">Live</option>
+                    <option value="beta">Beta</option>
+                    <option value="coming_soon">Coming Soon</option>
+                </select>
+            </div>
+
+            <div class="controls">
+                <input type="password" id="productPassword" placeholder="Admin Password" required style="flex: 1; max-width: 250px;">
+                <button id="saveProductBtn">Save Product</button>
+                <button class="secondary" onclick="clearProductForm()">Clear Form</button>
+                <span class="status" id="productStatus"></span>
+            </div>
+
+            <h2 style="margin-top: 3rem; margin-bottom: 1rem;">Existing Products</h2>
+            <div class="item-list" id="productsList"></div>
         </div>
 
-        <div class="controls">
-            <input type="password" id="adminPassword" placeholder="Admin Password" required style="flex: 1; max-width: 250px;">
-            <button id="saveButton">Save Prompts</button>
-            <span id="status"></span>
+        <!-- FAQS TAB -->
+        <div class="tab-content" id="faqs-tab">
+            <h2 style="margin-bottom: 1.5rem;">Add/Edit FAQ</h2>
+
+            <input type="hidden" id="faqId">
+
+            <div class="two-col">
+                <div class="form-group">
+                    <label for="faqQuestionEn">Question (English)</label>
+                    <input type="text" id="faqQuestionEn">
+                </div>
+                <div class="form-group">
+                    <label for="faqQuestionFa">Question (Persian)</label>
+                    <input type="text" id="faqQuestionFa">
+                </div>
+            </div>
+
+            <div class="two-col">
+                <div class="form-group">
+                    <label for="faqAnswerEn">Answer (English)</label>
+                    <textarea id="faqAnswerEn" style="min-height: 100px;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="faqAnswerFa">Answer (Persian)</label>
+                    <textarea id="faqAnswerFa" style="min-height: 100px;"></textarea>
+                </div>
+            </div>
+
+            <div class="controls">
+                <input type="password" id="faqPassword" placeholder="Admin Password" required style="flex: 1; max-width: 250px;">
+                <button id="saveFaqBtn">Save FAQ</button>
+                <button class="secondary" onclick="clearFaqForm()">Clear Form</button>
+                <span class="status" id="faqStatus"></span>
+            </div>
+
+            <h2 style="margin-top: 3rem; margin-bottom: 1rem;">Existing FAQs</h2>
+            <div class="item-list" id="faqsList"></div>
         </div>
     </div>
 
-    <script>
-        const mainSystemPromptEl = document.getElementById('mainSystemPrompt');
-        const summaryPromptEl = document.getElementById('summaryPrompt');
-        const proposalPromptEl = document.getElementById('proposalPrompt');
-        const passwordEl = document.getElementById('adminPassword');
-        const saveButton = document.getElementById('saveButton');
-        const statusEl = document.getElementById('status');
-
-        // Fetch and display current prompts on page load
-        async function loadPrompts() {
-            try {
-                const response = await fetch('/api/prompts');
-                if (!response.ok) throw new Error('Failed to fetch prompts');
-                const prompts = await response.json();
-                mainSystemPromptEl.value = prompts.mainSystemPrompt;
-                summaryPromptEl.value = prompts.summaryPrompt;
-                proposalPromptEl.value = prompts.proposalPrompt;
-            } catch (error) {
-                showStatus(error.message, true);
-            }
-        }
-        
-        // Handle save button click
-        saveButton.addEventListener('click', async () => {
-            const password = passwordEl.value;
-            if (!password) {
-                showStatus('Password is required.', true);
-                return;
-            }
-
-            saveButton.disabled = true;
-            showStatus('Saving...', false);
-
-            const updatedPrompts = {
-                mainSystemPrompt: mainSystemPromptEl.value,
-                summaryPrompt: summaryPromptEl.value,
-                proposalPrompt: proposalPromptEl.value,
-                password: password,
-            };
-
-            try {
-                const response = await fetch('/api/prompts', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(updatedPrompts)
-                });
-                const result = await response.json();
-                if (!response.ok) throw new Error(result.message);
-                showStatus(result.message, false);
-            } catch (error) {
-                showStatus(error.message, true);
-            } finally {
-                saveButton.disabled = false;
-            }
-        });
-
-        function showStatus(message, isError) {
-            statusEl.textContent = message;
-            statusEl.className = isError ? 'error' : 'success';
-            setTimeout(() => statusEl.textContent = '', 4000);
-        }
-
-        // Load prompts when the page is ready
-        document.addEventListener('DOMContentLoaded', loadPrompts);
-    </script>
+    <script src="js/admin.js"></script>
 </body>
 </html>

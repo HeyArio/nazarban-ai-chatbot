@@ -28,6 +28,14 @@ const benchmarkDataPath = path.join(__dirname, 'benchmarkData.json');
 const cryptoDataPath = path.join(__dirname, 'cryptoData.json');
 // --- END: CRYPTO DATA PATH ---
 
+// --- PRODUCTS DATA PATH ---
+const productsDataPath = path.join(__dirname, 'productsData.json');
+// --- END: PRODUCTS DATA PATH ---
+
+// --- FAQS DATA PATH ---
+const faqsDataPath = path.join(__dirname, 'faqsData.json');
+// --- END: FAQS DATA PATH ---
+
 // --- NEW: Prompt Management ---
 let prompts = {};
 const promptsFilePath = path.join(__dirname, 'prompts.json');
@@ -146,6 +154,46 @@ async function saveCryptoData(data) {
     console.log('✅ Crypto data saved successfully');
 }
 // --- END: CRYPTO DATA MANAGEMENT FUNCTIONS ---
+
+// --- PRODUCTS DATA MANAGEMENT FUNCTIONS ---
+// Load products from JSON
+async function loadProducts() {
+    try {
+        const data = await fs.readFile(productsDataPath, 'utf-8');
+        return JSON.parse(data);
+    } catch (error) {
+        console.log('⚠️ No products file found, creating new one');
+        await fs.writeFile(productsDataPath, '[]');
+        return [];
+    }
+}
+
+// Save products to JSON
+async function saveProducts(products) {
+    await fs.writeFile(productsDataPath, JSON.stringify(products, null, 2));
+    console.log('✅ Products saved successfully');
+}
+// --- END: PRODUCTS DATA MANAGEMENT FUNCTIONS ---
+
+// --- FAQS DATA MANAGEMENT FUNCTIONS ---
+// Load FAQs from JSON
+async function loadFaqs() {
+    try {
+        const data = await fs.readFile(faqsDataPath, 'utf-8');
+        return JSON.parse(data);
+    } catch (error) {
+        console.log('⚠️ No FAQs file found, creating new one');
+        await fs.writeFile(faqsDataPath, '[]');
+        return [];
+    }
+}
+
+// Save FAQs to JSON
+async function saveFaqs(faqs) {
+    await fs.writeFile(faqsDataPath, JSON.stringify(faqs, null, 2));
+    console.log('✅ FAQs saved successfully');
+}
+// --- END: FAQS DATA MANAGEMENT FUNCTIONS ---
 
 // --- AUTOMATIC WEEKLY ARCHIVING ---
 // Schedule archiving to run every Monday at 2:00 AM
@@ -656,6 +704,315 @@ app.get('/api/crypto/data', async (req, res) => {
     }
 });
 // --- END: CRYPTO API ROUTES ---
+
+// --- PRODUCTS API ROUTES ---
+// API: Create/Update a product (Admin only)
+app.post('/api/products', async (req, res) => {
+    try {
+        const {
+            id,
+            nameEn,
+            nameFa,
+            taglineEn,
+            taglineFa,
+            descriptionEn,
+            descriptionFa,
+            featuresEn,
+            featuresFa,
+            url,
+            status,
+            category,
+            password
+        } = req.body;
+
+        // Simple password protection for the products API
+        if (password !== process.env.ADMIN_PASSWORD) {
+            return res.status(401).json({
+                success: false,
+                message: 'Unauthorized: Invalid password'
+            });
+        }
+
+        // Validate required fields
+        if (!nameEn || !nameFa || !descriptionEn || !descriptionFa) {
+            return res.status(400).json({
+                success: false,
+                message: 'Missing required fields: nameEn, nameFa, descriptionEn, descriptionFa'
+            });
+        }
+
+        const products = await loadProducts();
+
+        if (id) {
+            // Update existing product
+            const index = products.findIndex(p => p.id === id);
+            if (index !== -1) {
+                products[index] = {
+                    id,
+                    nameEn,
+                    nameFa,
+                    taglineEn: taglineEn || '',
+                    taglineFa: taglineFa || '',
+                    descriptionEn,
+                    descriptionFa,
+                    featuresEn: featuresEn || [],
+                    featuresFa: featuresFa || [],
+                    url: url || '',
+                    status: status || 'live',
+                    category: category || '',
+                    updatedAt: new Date().toISOString()
+                };
+
+                await saveProducts(products);
+
+                res.json({
+                    success: true,
+                    message: 'Product updated successfully',
+                    product: products[index]
+                });
+            } else {
+                return res.status(404).json({
+                    success: false,
+                    message: 'Product not found'
+                });
+            }
+        } else {
+            // Create new product
+            const newProduct = {
+                id: Date.now().toString(),
+                nameEn,
+                nameFa,
+                taglineEn: taglineEn || '',
+                taglineFa: taglineFa || '',
+                descriptionEn,
+                descriptionFa,
+                featuresEn: featuresEn || [],
+                featuresFa: featuresFa || [],
+                url: url || '',
+                status: status || 'live',
+                category: category || '',
+                createdAt: new Date().toISOString()
+            };
+
+            // Add to beginning of products array (newest first)
+            products.unshift(newProduct);
+
+            // Save products
+            await saveProducts(products);
+
+            res.json({
+                success: true,
+                message: 'Product created successfully',
+                product: newProduct
+            });
+        }
+
+    } catch (error) {
+        console.error('❌ Error managing product:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to manage product',
+            error: error.message
+        });
+    }
+});
+
+// API: GET all products
+app.get('/api/products', async (req, res) => {
+    try {
+        const products = await loadProducts();
+        res.json({ success: true, products });
+    } catch (error) {
+        console.error('❌ Error loading products:', error);
+        res.status(500).json({ success: false, message: 'Failed to load products' });
+    }
+});
+
+// API: DELETE a product (Admin only)
+app.delete('/api/products/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { password } = req.body;
+
+        // Simple password protection
+        if (password !== process.env.ADMIN_PASSWORD) {
+            return res.status(401).json({
+                success: false,
+                message: 'Unauthorized: Invalid password'
+            });
+        }
+
+        const products = await loadProducts();
+        const filteredProducts = products.filter(p => p.id !== id);
+
+        if (filteredProducts.length === products.length) {
+            return res.status(404).json({
+                success: false,
+                message: 'Product not found'
+            });
+        }
+
+        await saveProducts(filteredProducts);
+
+        res.json({
+            success: true,
+            message: 'Product deleted successfully'
+        });
+
+    } catch (error) {
+        console.error('❌ Error deleting product:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to delete product',
+            error: error.message
+        });
+    }
+});
+// --- END: PRODUCTS API ROUTES ---
+
+// --- FAQS API ROUTES ---
+// API: Create/Update an FAQ (Admin only)
+app.post('/api/faqs', async (req, res) => {
+    try {
+        const {
+            id,
+            questionEn,
+            questionFa,
+            answerEn,
+            answerFa,
+            password
+        } = req.body;
+
+        // Simple password protection
+        if (password !== process.env.ADMIN_PASSWORD) {
+            return res.status(401).json({
+                success: false,
+                message: 'Unauthorized: Invalid password'
+            });
+        }
+
+        // Validate required fields
+        if (!questionEn || !questionFa || !answerEn || !answerFa) {
+            return res.status(400).json({
+                success: false,
+                message: 'Missing required fields: questionEn, questionFa, answerEn, answerFa'
+            });
+        }
+
+        const faqs = await loadFaqs();
+
+        if (id) {
+            // Update existing FAQ
+            const index = faqs.findIndex(f => f.id === id);
+            if (index !== -1) {
+                faqs[index] = {
+                    id,
+                    questionEn,
+                    questionFa,
+                    answerEn,
+                    answerFa,
+                    updatedAt: new Date().toISOString()
+                };
+
+                await saveFaqs(faqs);
+
+                res.json({
+                    success: true,
+                    message: 'FAQ updated successfully',
+                    faq: faqs[index]
+                });
+            } else {
+                return res.status(404).json({
+                    success: false,
+                    message: 'FAQ not found'
+                });
+            }
+        } else {
+            // Create new FAQ
+            const newFaq = {
+                id: Date.now().toString(),
+                questionEn,
+                questionFa,
+                answerEn,
+                answerFa,
+                createdAt: new Date().toISOString()
+            };
+
+            // Add to beginning of FAQs array
+            faqs.unshift(newFaq);
+
+            // Save FAQs
+            await saveFaqs(faqs);
+
+            res.json({
+                success: true,
+                message: 'FAQ created successfully',
+                faq: newFaq
+            });
+        }
+
+    } catch (error) {
+        console.error('❌ Error managing FAQ:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to manage FAQ',
+            error: error.message
+        });
+    }
+});
+
+// API: GET all FAQs
+app.get('/api/faqs', async (req, res) => {
+    try {
+        const faqs = await loadFaqs();
+        res.json({ success: true, faqs });
+    } catch (error) {
+        console.error('❌ Error loading FAQs:', error);
+        res.status(500).json({ success: false, message: 'Failed to load FAQs' });
+    }
+});
+
+// API: DELETE an FAQ (Admin only)
+app.delete('/api/faqs/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { password } = req.body;
+
+        // Simple password protection
+        if (password !== process.env.ADMIN_PASSWORD) {
+            return res.status(401).json({
+                success: false,
+                message: 'Unauthorized: Invalid password'
+            });
+        }
+
+        const faqs = await loadFaqs();
+        const filteredFaqs = faqs.filter(f => f.id !== id);
+
+        if (filteredFaqs.length === faqs.length) {
+            return res.status(404).json({
+                success: false,
+                message: 'FAQ not found'
+            });
+        }
+
+        await saveFaqs(filteredFaqs);
+
+        res.json({
+            success: true,
+            message: 'FAQ deleted successfully'
+        });
+
+    } catch (error) {
+        console.error('❌ Error deleting FAQ:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to delete FAQ',
+            error: error.message
+        });
+    }
+});
+// --- END: FAQS API ROUTES ---
 
 // Initialize email transporter on startup
 setupEmailTransporter();
