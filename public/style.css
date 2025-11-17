@@ -1916,6 +1916,10 @@ html[dir="rtl"] .faq-icon {
   padding: 2rem;
 }
 
+html[dir="rtl"] .products-wrapper {
+  text-align: center;
+}
+
 .products-header {
   text-align: center;
   margin: 3rem 0;
