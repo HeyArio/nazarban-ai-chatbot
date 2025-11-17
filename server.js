@@ -268,6 +268,147 @@ async function sendLeadNotification(userEmail, conversationHistory) {
     }
 }
 
+// Function to send confirmation email to customer
+async function sendCustomerConfirmation(userEmail, language = 'fa') {
+    if (!emailTransporter) {
+        console.log('⚠️ Email not configured, skipping customer confirmation');
+        return;
+    }
+
+    try {
+        // Bilingual email content
+        const emailContent = language === 'fa' ? {
+            subject: 'تایید دریافت درخواست شما | Nazarban Analytics',
+            html: `
+                <!DOCTYPE html>
+                <html dir="rtl" lang="fa">
+                <head>
+                    <meta charset="UTF-8">
+                    <style>
+                        body { font-family: Tahoma, Arial, sans-serif; line-height: 1.8; color: #333; }
+                        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+                        .content { background: #ffffff; padding: 30px; border: 1px solid #e0e0e0; }
+                        .footer { background: #f8f9fa; padding: 20px; text-align: center; font-size: 0.9em; color: #666; border-radius: 0 0 10px 10px; }
+                        .highlight { background: #f0f4ff; padding: 15px; border-right: 4px solid #667eea; margin: 20px 0; }
+                        .button { display: inline-block; background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1 style="margin: 0;">🎯 Nazarban Analytics</h1>
+                            <p style="margin: 10px 0 0 0;">AI Consulting & Implementation</p>
+                        </div>
+                        <div class="content">
+                            <h2>با تشکر از تماس شما!</h2>
+                            <p>سلام،</p>
+                            <p>از اینکه با ما در مورد نیازهای هوش مصنوعی خود صحبت کردید، متشکریم. درخواست شما با موفقیت دریافت شد و تیم تخصصی ما در حال بررسی جزئیات پروژه شماست.</p>
+                            
+                            <div class="highlight">
+                                <strong>⏰ مراحل بعدی:</strong><br>
+                                • تیم ما ظرف ۲۴ تا ۴۸ ساعت آینده با شما تماس خواهد گرفت<br>
+                                • یک تماس Discovery ۳۰ دقیقه‌ای برنامه‌ریزی خواهیم کرد<br>
+                                • محدوده پروژه و شاخص‌های کلیدی (KPI) را نهایی می‌کنیم<br>
+                                • در صورت نیاز، نمونه‌های داده را بررسی خواهیم کرد
+                            </div>
+
+                            <p><strong>🔒 حریم خصوصی:</strong> تمام بحث‌ها و اطلاعات به اشتراک گذاشته شده کاملاً محرمانه است.</p>
+                            
+                            <p>اگر سوال فوری دارید، می‌توانید مستقیماً با ما تماس بگیرید:</p>
+                            <p>
+                                📧 Email: <a href="mailto:info@nazarbanai.com">info@nazarbanai.com</a><br>
+                                📱 Phone: <a href="tel:+989120437502">+98 912 043 7502</a>
+                            </p>
+                            
+                            <a href="https://nazarbanai.com" class="button">بازگشت به وبسایت</a>
+                        </div>
+                        <div class="footer">
+                            <p><strong>Nazarban Analytics</strong></p>
+                            <p>End-to-End AI Consulting & Implementation</p>
+                            <p style="font-size: 0.85em; color: #999; margin-top: 15px;">
+                                This is an automated confirmation email. Please do not reply directly to this email.
+                            </p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `
+        } : {
+            subject: 'Request Confirmation | Nazarban Analytics',
+            html: `
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <style>
+                        body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; line-height: 1.8; color: #333; }
+                        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+                        .content { background: #ffffff; padding: 30px; border: 1px solid #e0e0e0; }
+                        .footer { background: #f8f9fa; padding: 20px; text-align: center; font-size: 0.9em; color: #666; border-radius: 0 0 10px 10px; }
+                        .highlight { background: #f0f4ff; padding: 15px; border-left: 4px solid #667eea; margin: 20px 0; }
+                        .button { display: inline-block; background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1 style="margin: 0;">🎯 Nazarban Analytics</h1>
+                            <p style="margin: 10px 0 0 0;">AI Consulting & Implementation</p>
+                        </div>
+                        <div class="content">
+                            <h2>Thank You for Reaching Out!</h2>
+                            <p>Hello,</p>
+                            <p>Thank you for discussing your AI needs with us. We've successfully received your inquiry and our specialist team is now reviewing your project details.</p>
+                            
+                            <div class="highlight">
+                                <strong>⏰ Next Steps:</strong><br>
+                                • Our team will contact you within 24-48 hours<br>
+                                • We'll schedule a 30-minute Discovery call<br>
+                                • We'll finalize the project scope and KPIs<br>
+                                • If needed, we'll review any data samples
+                            </div>
+
+                            <p><strong>🔒 Privacy:</strong> All discussions and shared information remain strictly confidential.</p>
+                            
+                            <p>If you have any urgent questions, feel free to contact us directly:</p>
+                            <p>
+                                📧 Email: <a href="mailto:info@nazarbanai.com">info@nazarbanai.com</a><br>
+                                📱 Phone (WhatsApp): <a href="https://wa.me/19165870145">+1 (916) 587-0145</a>
+                            </p>
+                            
+                            <a href="https://nazarbanai.com" class="button">Visit Our Website</a>
+                        </div>
+                        <div class="footer">
+                            <p><strong>Nazarban Analytics</strong></p>
+                            <p>End-to-End AI Consulting & Implementation</p>
+                            <p style="font-size: 0.85em; color: #999; margin-top: 15px;">
+                                This is an automated confirmation email. Please do not reply directly to this email.
+                            </p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `
+        };
+
+        const mailOptions = {
+            from: process.env.ZOHO_EMAIL,
+            to: userEmail,
+            subject: emailContent.subject,
+            html: emailContent.html
+        };
+
+        await emailTransporter.sendMail(mailOptions);
+        console.log(`✅ Customer confirmation email sent to ${userEmail}`);
+    } catch (error) {
+        console.error('❌ Failed to send customer confirmation:', error);
+    }
+}
+
+
+
 // --- BLOG API ROUTES ---
 // API: POST a new blog post (for n8n or manual use)
 app.post('/api/blog/post', async (req, res) => {
@@ -538,8 +679,9 @@ app.post('/api/chat', async (req, res) => {
         
         if (emailMatch && !userEmail) {
     await sendLeadNotification(emailMatch[0], conversationHistory);
+    await sendCustomerConfirmation(emailMatch[0], language);  // ← ADD THIS LINE
     
-    const farewell = language === 'fa' 
+    const farewell = language === 'fa'
         ? `عالیه! ایمیل شما رو دریافت کردم: ${emailMatch[0]}. از علاقه‌تون به خدمات هوش مصنوعی نظربان متشکریم. تیم ما نیازهای شما رو بررسی می‌کنه و ظرف ۲۴ تا ۴۸ ساعت یه پیشنهاد شخصی‌سازی‌شده براتون ارسال می‌کنه. روز خوبی داشته باشید!`
         : `Perfect! I've got your email: ${emailMatch[0]}. Thank you for your interest in Nazarban's AI services. Our team will review your requirements and get back to you within 24-48 hours with a personalized proposal. Have a great day!`;
     
