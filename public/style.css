@@ -1810,6 +1810,7 @@ html[dir="rtl"] .menu-toggle {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  font-family: inherit;
 }
 
 .faq-subtitle {
@@ -1817,6 +1818,7 @@ html[dir="rtl"] .menu-toggle {
   color: var(--muted);
   font-size: 1.1rem;
   margin-bottom: 3rem;
+  font-family: inherit;
 }
 
 .faq-accordion {
@@ -1849,6 +1851,7 @@ html[dir="rtl"] .menu-toggle {
   color: var(--ink);
   font-size: 1.1rem;
   font-weight: 600;
+  font-family: inherit;
   text-align: left;
   cursor: pointer;
   transition: color 0.2s ease;
@@ -1888,6 +1891,7 @@ html[dir="rtl"] .menu-toggle {
   color: var(--muted);
   line-height: 1.7;
   margin: 0;
+  font-family: inherit;
 }
 
 .faq-empty {
@@ -1895,6 +1899,7 @@ html[dir="rtl"] .menu-toggle {
   padding: 3rem;
   color: var(--muted);
   font-size: 1.1rem;
+  font-family: inherit;
 }
 
 /* RTL Support for FAQ */
