@@ -527,7 +527,7 @@ app.get('/api/test', (req, res) => {
 // Main chat endpoint
 app.post('/api/chat', async (req, res) => {
     try {
-        const { message, conversationHistory = [], conversationStage = 'initial', userEmail } = req.body;
+        const { message, conversationHistory = [], conversationStage = 'initial', userEmail, language = 'fa' } = req.body;
         
         if (!process.env.GOOGLE_API_KEY) {
             return res.status(500).json({ success: false, message: "Server configuration error: Missing Google API key." });
@@ -537,37 +537,54 @@ app.post('/api/chat', async (req, res) => {
         const emailMatch = message.match(emailRegex);
         
         if (emailMatch && !userEmail) {
-            await sendLeadNotification(emailMatch[0], conversationHistory);
-            return res.json({
-                success: true,
-                message: `Perfect! I've got your email: ${emailMatch[0]}. Thank you for your interest in Nazarban's AI services. Our team will review your requirements and get back to you within 24-48 hours with a personalized proposal. Have a great day!`,
-                conversationStage: 'completion',
-                userEmail: emailMatch[0],
-                conversationComplete: true
-            });
-        }
-
+    await sendLeadNotification(emailMatch[0], conversationHistory);
+    
+    const farewell = language === 'fa' 
+        ? `عالیه! ایمیل شما رو دریافت کردم: ${emailMatch[0]}. از علاقه‌تون به خدمات هوش مصنوعی نظربان متشکریم. تیم ما نیازهای شما رو بررسی می‌کنه و ظرف ۲۴ تا ۴۸ ساعت یه پیشنهاد شخصی‌سازی‌شده براتون ارسال می‌کنه. روز خوبی داشته باشید!`
+        : `Perfect! I've got your email: ${emailMatch[0]}. Thank you for your interest in Nazarban's AI services. Our team will review your requirements and get back to you within 24-48 hours with a personalized proposal. Have a great day!`;
+    
+    return res.json({
+        success: true,
+        message: farewell,
+        conversationStage: 'completion',
+        userEmail: emailMatch[0],
+        conversationComplete: true
+    });
+}
         let responseMessage = '';
         try {
             let apiMessages = conversationHistory.length > 0 ? conversationHistory.slice(-8) : [];
-            apiMessages.push({ role: 'user', content: message });
-            
-            const systemPrompt = prompts.mainSystemPrompt;
+apiMessages.push({ role: 'user', content: message });
 
-            console.log('🤖 Calling Google Gemini API with', apiMessages.length, 'messages...');
-            
-            responseMessage = await callGoogleGeminiWithRetry(apiMessages, systemPrompt);
+let systemPrompt = prompts.mainSystemPrompt;
 
-            if (conversationHistory.length >= 4 && !userEmail && conversationStage === 'initial') {
-                if (!responseMessage.toLowerCase().includes('email')) {
-                    responseMessage += "\n\nI'd love to have our AI specialists prepare a detailed proposal for you. Could you share your email address so we can send you a consultation summary and next steps?";
-                }
-            }
+if (language === 'fa') {
+    systemPrompt += "\n\n**CRITICAL INSTRUCTION**: You MUST respond in Persian (Farsi) language ONLY. Do not use English in your responses. پاسخ‌های خود را به زبان فارسی بنویسید.";
+} else {
+    systemPrompt += "\n\n**CRITICAL INSTRUCTION**: You MUST respond in English language ONLY. Do not use Persian/Farsi in your responses.";
+}
+
+console.log('🤖 Calling Google Gemini API with', apiMessages.length, 'messages in', language === 'fa' ? 'Farsi' : 'English');
+
+responseMessage = await callGoogleGeminiWithRetry(apiMessages, systemPrompt);
+
+// ✅ ADD THIS ENTIRE BLOCK HERE (Change 4):
+if (conversationHistory.length >= 4 && !userEmail && conversationStage === 'initial') {
+    if (!responseMessage.toLowerCase().includes('email') && !responseMessage.includes('ایمیل')) {
+        const emailPrompt = language === 'fa'
+            ? "\n\nدوست دارم متخصصان هوش مصنوعی ما یه پیشنهاد جامع براتون آماده کنن. می‌تونید ایمیل‌تون رو به اشتراک بگذارید تا خلاصه مشاوره و مراحل بعدی رو براتون ارسال کنیم؟"
+            : "\n\nI'd love to have our AI specialists prepare a detailed proposal for you. Could you share your email address so we can send you a consultation summary and next steps?";
+        responseMessage += emailPrompt;
+    }
+}
+// ✅ END OF ADDED BLOCK
 
         } catch (apiError) {
-            console.error('❌ Final Google Gemini API error:', apiError.message);
-            responseMessage = "I apologize, but I'm encountering a technical issue and can't process your request right now. Please try again in a few moments.";
-        }
+    console.error('❌ Final Google Gemini API error:', apiError.message);
+    responseMessage = language === 'fa'
+        ? "متأسفم، در حال حاضر با یک مشکل فنی مواجه هستم و نمی‌تونم درخواست شما رو پردازش کنم. لطفاً چند لحظه دیگه دوباره تلاش کنید."
+        : "I apologize, but I'm encountering a technical issue and can't process your request right now. Please try again in a few moments.";
+}
 
         res.json({
             success: true,
