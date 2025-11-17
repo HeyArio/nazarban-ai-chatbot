@@ -1,1 +1,66 @@
-[]
+[
+  {
+    "id": "1",
+    "questionEn": "What is the 7-Day Data Readiness Audit?",
+    "questionFa": "ممیزی آمادگی داده ۷ روزه چیست؟",
+    "answerEn": "Our 7-Day Data Readiness Audit is a comprehensive evaluation of your organization's data quality, structure, and availability. We assess your current data infrastructure, identify gaps, and map out how AI can address your specific business KPIs. The deliverable is a detailed report with feasibility scores and a clear roadmap for AI implementation.",
+    "answerFa": "ممیزی آمادگی داده ۷ روزه ما یک ارزیابی جامع از کیفیت، ساختار و در دسترس بودن داده‌های سازمان شماست. ما زیرساخت داده فعلی شما را بررسی می‌کنیم، شکاف‌ها را شناسایی می‌کنیم و نقشه‌ای از اینکه هوش مصنوعی چگونه می‌تواند به شاخص‌های کلیدی کسب‌وکار شما پاسخ دهد ترسیم می‌کنیم. نتیجه کار یک گزارش دقیق با امتیازهای امکان‌سنجی و نقشه راه واضح برای پیاده‌سازی هوش مصنوعی است.",
+    "createdAt": "2025-01-17T00:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "questionEn": "How long does a typical AI project take with Nazarban?",
+    "questionFa": "یک پروژه هوش مصنوعی با نظربان چقدر طول می‌کشد؟",
+    "answerEn": "We follow a proven 7+14 methodology. After a 7-Day Data Readiness Audit, we deliver a working Proof of Concept (PoC) in just 14 days on your own infrastructure. This means you can see tangible AI results on real KPIs in as little as 21 days total. After PoC validation, we move to full deployment and scaling.",
+    "answerFa": "ما از روش‌شناسی اثبات‌شده ۷+۱۴ پیروی می‌کنیم. پس از ممیزی آمادگی داده ۷ روزه، یک اثبات مفهوم (PoC) کاربردی را در عرض ۱۴ روز روی زیرساخت خودتان تحویل می‌دهیم. این بدان معناست که می‌توانید نتایج ملموس هوش مصنوعی را بر روی شاخص‌های واقعی در کمتر از ۲۱ روز ببینید. پس از تأیید PoC، به استقرار کامل و مقیاس‌پذیری می‌رویم.",
+    "createdAt": "2025-01-17T00:00:00.000Z"
+  },
+  {
+    "id": "3",
+    "questionEn": "Do you support on-premise and hybrid deployments?",
+    "questionFa": "آیا از استقرار در محل (On-Premise) و ترکیبی (Hybrid) پشتیبانی می‌کنید؟",
+    "answerEn": "Yes, we specialize in 'Secure by Design' solutions. We prioritize on-premise and hybrid deployments to ensure data sovereignty and meet strict security requirements. All our AI models can be deployed on your infrastructure with full RBAC (role-based access control), audit logs, and NDA/DPA compliance.",
+    "answerFa": "بله، ما در راه‌حل‌های «امن در طراحی» تخصص داریم. ما استقرارهای در محل و ترکیبی را در اولویت قرار می‌دهیم تا حاکمیت داده را تضمین کرده و الزامات امنیتی سخت‌گیرانه را برآورده کنیم. تمام مدل‌های هوش مصنوعی ما می‌توانند روی زیرساخت شما با کنترل دسترسی کامل (RBAC)، گزارش‌های ممیزی و رعایت NDA/DPA مستقر شوند.",
+    "createdAt": "2025-01-17T00:00:00.000Z"
+  },
+  {
+    "id": "4",
+    "questionEn": "What is included in the 14-Day Proof of Concept?",
+    "questionFa": "اثبات مفهوم ۱۴ روزه شامل چه مواردی است؟",
+    "answerEn": "The 14-Day PoC includes: (1) A working AI model trained on your actual data, (2) Integration with your existing systems (API, ERP, CRM), (3) KPI tracking dashboard showing before/after metrics, (4) Performance reports demonstrating measurable business impact, and (5) A clear roadmap for full deployment and scaling. All work is done on your infrastructure for security.",
+    "answerFa": "اثبات مفهوم ۱۴ روزه شامل موارد زیر است: (۱) یک مدل هوش مصنوعی کاربردی آموزش‌دیده بر روی داده‌های واقعی شما، (۲) یکپارچه‌سازی با سیستم‌های موجود شما (API، ERP، CRM)، (۳) داشبورد ردیابی KPI که معیارهای قبل و بعد را نشان می‌دهد، (۴) گزارش‌های عملکرد که تأثیر قابل اندازه‌گیری کسب‌وکار را نشان می‌دهند، و (۵) نقشه راه واضح برای استقرار کامل و مقیاس‌پذیری. تمام کارها روی زیرساخت شما برای امنیت انجام می‌شود.",
+    "createdAt": "2025-01-17T00:00:00.000Z"
+  },
+  {
+    "id": "5",
+    "questionEn": "Do you support Persian/Farsi language processing?",
+    "questionFa": "آیا از پردازش زبان فارسی پشتیبانی می‌کنید؟",
+    "answerEn": "Yes! We specialize in Persian NLP (Natural Language Processing) including document extraction from invoices and contracts, ticket classification and routing, sentiment analysis, and chatbot development in Farsi. Our models are trained specifically for Persian language nuances and business contexts common in Iran.",
+    "answerFa": "بله! ما در پردازش زبان طبیعی فارسی (NLP) تخصص داریم، از جمله استخراج اسناد از فاکتورها و قراردادها، طبقه‌بندی و مسیریابی تیکت‌ها، تحلیل احساسات و توسعه چت‌بات به زبان فارسی. مدل‌های ما به طور خاص برای ظرافت‌های زبان فارسی و زمینه‌های کسب‌وکار رایج در ایران آموزش دیده‌اند.",
+    "createdAt": "2025-01-17T00:00:00.000Z"
+  },
+  {
+    "id": "6",
+    "questionEn": "What industries do you serve?",
+    "questionFa": "به چه صنایعی خدمات می‌دهید؟",
+    "answerEn": "We serve retail and e-commerce (shelf analysis, demand forecasting), logistics and supply chain (route optimization, inventory management), finance (fraud detection, document processing), manufacturing (quality control, predictive maintenance), and healthcare sectors. Our AI solutions are customized for each industry's specific challenges and compliance requirements.",
+    "answerFa": "ما به خرده‌فروشی و تجارت الکترونیک (تحلیل قفسه، پیش‌بینی تقاضا)، لجستیک و زنجیره تأمین (بهینه‌سازی مسیر، مدیریت موجودی)، مالی (تشخیص تقلب، پردازش اسناد)، تولید (کنترل کیفیت، نگهداری پیش‌بینانه) و بخش مراقبت‌های بهداشتی خدمت می‌دهیم. راه‌حل‌های هوش مصنوعی ما برای چالش‌های خاص هر صنعت و الزامات انطباق سفارشی‌سازی می‌شوند.",
+    "createdAt": "2025-01-17T00:00:00.000Z"
+  },
+  {
+    "id": "7",
+    "questionEn": "Can you integrate AI with our existing ERP, CRM, or business systems?",
+    "questionFa": "آیا می‌توانید هوش مصنوعی را با ERP، CRM یا سیستم‌های کسب‌وکار موجود ما یکپارچه کنید؟",
+    "answerEn": "Absolutely. We use low-code workflow automation platforms like n8n to build robust integration pipelines that connect your AI models to existing business systems. This includes ERPs, CRMs, messaging tools, databases, and APIs. Our integrations automate repetitive tasks, trigger intelligent actions, and ensure seamless data flow across your tech stack.",
+    "answerFa": "قطعاً. ما از پلتفرم‌های اتوماسیون گردش کار لو-کد مانند n8n برای ساخت خطوط لوله یکپارچه‌سازی قوی استفاده می‌کنیم که مدل‌های هوش مصنوعی شما را به سیستم‌های کسب‌وکار موجود متصل می‌کند. این شامل ERP‌ها، CRM‌ها، ابزارهای پیام‌رسانی، پایگاه‌های داده و API‌ها می‌شود. یکپارچه‌سازی‌های ما کارهای تکراری را خودکار می‌کنند، اقدامات هوشمند را فعال می‌کنند و جریان بی‌درز داده را در پشته فناوری شما تضمین می‌کنند.",
+    "createdAt": "2025-01-17T00:00:00.000Z"
+  },
+  {
+    "id": "8",
+    "questionEn": "Do you provide ongoing support and MLOps services?",
+    "questionFa": "آیا خدمات پشتیبانی مداوم و MLOps ارائه می‌دهید؟",
+    "answerEn": "Yes, we offer comprehensive MLOps (Machine Learning Operations) services including model monitoring, performance tracking, drift detection, automated retraining pipelines, SLA dashboards, and 24/7 technical support. We ensure your AI models remain accurate, efficient, and aligned with evolving business needs over time.",
+    "answerFa": "بله، ما خدمات جامع MLOps (عملیات یادگیری ماشین) از جمله نظارت بر مدل، ردیابی عملکرد، تشخیص انحراف، خطوط لوله بازآموزی خودکار، داشبوردهای SLA و پشتیبانی فنی ۲۴/۷ ارائه می‌دهیم. ما اطمینان حاصل می‌کنیم که مدل‌های هوش مصنوعی شما در طول زمان دقیق، کارآمد و هماهنگ با نیازهای در حال تحول کسب‌وکار باقی بمانند.",
+    "createdAt": "2025-01-17T00:00:00.000Z"
+  }
+]
