@@ -111,6 +111,13 @@ window.translations = {
     chat_error_generic: "Something went wrong. Please try again.",
     chat_error_connection: "I'm sorry – connection issue. Please try again.",
     chat_farewell: "Thanks! Start a new topic anytime.",
+    // Email popup
+    email_popup_title: "Stay Connected!",
+    email_popup_subtitle: "Get personalized AI insights and updates. We'll follow up on your conversation.",
+    email_popup_placeholder: "your@email.com",
+    email_popup_submit: "Subscribe",
+    email_popup_privacy: "We respect your privacy. No spam, ever.",
+    email_popup_success: "Thank you! We'll be in touch.",
     // Contact links
     contact_email: "info@nazarbanai.com",
     contact_phone: "+1 (916) 587 0145",
@@ -274,7 +281,14 @@ window.translations = {
     chat_error_generic: "مشکلی پیش آمده. لطفاً دوباره تلاش کنید.",
     chat_error_connection: "متأسفم - مشکل در ارتباط. لطفاً دوباره امتحان کنید.",
     chat_farewell: "ممنون! هر زمان می‌تونی موضوع جدیدی رو شروع کنی.",
-     // Contact links
+    // Email popup
+    email_popup_title: "در ارتباط بمانید!",
+    email_popup_subtitle: "بینش‌های شخصی‌سازی شده AI و به‌روزرسانی‌ها را دریافت کنید. پیگیری گفتگوی شما با ما خواهد بود.",
+    email_popup_placeholder: "ایمیل شما",
+    email_popup_submit: "عضویت",
+    email_popup_privacy: "ما به حریم خصوصی شما احترام می‌گذاریم. بدون اسپم.",
+    email_popup_success: "با تشکر! به زودی با شما تماس می‌گیریم.",
+    // Contact links
     contact_email: "info@nazarbanai.com", // Email stays the same
     contact_phone: "+۹۸ ۹۱۲ ۰۴۳ ۷۵۰۲", // Farsi phone number
     // New Blog Page

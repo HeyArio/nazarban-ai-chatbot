@@ -168,6 +168,42 @@
     </div>
   </div>
 
+  <!-- Email Collection Popup -->
+  <div class="email-popup-overlay" id="emailPopupOverlay">
+    <div class="email-popup">
+      <button class="email-popup-close" id="emailPopupClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="email-popup-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M22 6l-10 7L2 6" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <h3 class="email-popup-title" data-lang-key="email_popup_title">Stay Connected!</h3>
+      <p class="email-popup-subtitle" data-lang-key="email_popup_subtitle">Get personalized AI insights and updates. We'll follow up on your conversation.</p>
+      <form class="email-popup-form" id="emailPopupForm">
+        <input
+          type="email"
+          class="email-popup-input"
+          id="emailPopupInput"
+          placeholder="your@email.com"
+          data-lang-key="email_popup_placeholder"
+          required
+        />
+        <button type="submit" class="email-popup-submit" id="emailPopupSubmit">
+          <span data-lang-key="email_popup_submit">Subscribe</span>
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </form>
+      <p class="email-popup-privacy" data-lang-key="email_popup_privacy">We respect your privacy. No spam, ever.</p>
+    </div>
+  </div>
+
   <script src="js/main.js"></script>
   <script src="js/chat.js"></script>
   <script src="js/translations.js"></script>

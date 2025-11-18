@@ -9,6 +9,144 @@
 let conversationHistory = [];
 let userEmail = null;
 let conversationStage = 'initial';
+let messageCount = 0;
+let emailPopupShown = false;
+
+// =====================================================
+// EMAIL POPUP FUNCTIONALITY
+// =====================================================
+
+const EMAIL_POPUP_TRIGGER_COUNT = 3; // Show popup after this many message exchanges
+
+function initEmailPopup() {
+  const overlay = document.getElementById('emailPopupOverlay');
+  const closeBtn = document.getElementById('emailPopupClose');
+  const form = document.getElementById('emailPopupForm');
+  const input = document.getElementById('emailPopupInput');
+
+  if (!overlay || !closeBtn || !form) return;
+
+  // Check if already dismissed or email already collected
+  if (localStorage.getItem('emailPopupDismissed') || localStorage.getItem('userEmailCollected')) {
+    emailPopupShown = true;
+    return;
+  }
+
+  // Close button handler
+  closeBtn.addEventListener('click', () => {
+    hideEmailPopup();
+    localStorage.setItem('emailPopupDismissed', 'true');
+  });
+
+  // Click outside to close
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      hideEmailPopup();
+      localStorage.setItem('emailPopupDismissed', 'true');
+    }
+  });
+
+  // Escape key to close
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay.classList.contains('active')) {
+      hideEmailPopup();
+      localStorage.setItem('emailPopupDismissed', 'true');
+    }
+  });
+
+  // Form submission
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = input.value.trim();
+
+    if (email && isValidEmail(email)) {
+      userEmail = email;
+      localStorage.setItem('userEmailCollected', email);
+
+      // Send email to server
+      try {
+        await fetch('/api/collect-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, source: 'popup' })
+        });
+      } catch (err) {
+        console.error('Failed to save email:', err);
+      }
+
+      // Show success feedback
+      showEmailSuccess();
+
+      // Hide popup after delay
+      setTimeout(() => {
+        hideEmailPopup();
+      }, 2000);
+    }
+  });
+}
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function showEmailPopup() {
+  if (emailPopupShown) return;
+
+  const overlay = document.getElementById('emailPopupOverlay');
+  if (!overlay) return;
+
+  emailPopupShown = true;
+  overlay.classList.add('active');
+
+  // Focus input after animation
+  setTimeout(() => {
+    const input = document.getElementById('emailPopupInput');
+    if (input) input.focus();
+  }, 300);
+}
+
+function hideEmailPopup() {
+  const overlay = document.getElementById('emailPopupOverlay');
+  if (!overlay) return;
+
+  overlay.classList.remove('active');
+}
+
+function showEmailSuccess() {
+  const popup = document.querySelector('.email-popup');
+  if (!popup) return;
+
+  const currentLang = localStorage.getItem('preferredLanguage') || 'fa';
+  const successMsg = currentLang === 'fa' ? 'با تشکر! ایمیل شما ثبت شد.' : 'Thank you! We\'ll be in touch.';
+
+  popup.innerHTML = `
+    <div class="email-popup-success active">
+      <div class="email-popup-success-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h3 class="email-popup-title">${successMsg}</h3>
+    </div>
+  `;
+}
+
+function checkEmailPopupTrigger() {
+  // Only trigger after X message exchanges and if not already shown
+  if (messageCount >= EMAIL_POPUP_TRIGGER_COUNT && !emailPopupShown) {
+    // Small delay to let the bot response appear first
+    setTimeout(() => {
+      showEmailPopup();
+    }, 1500);
+  }
+}
+
+// Initialize popup on page load
+document.addEventListener('DOMContentLoaded', initEmailPopup);
+
+// =====================================================
+// END EMAIL POPUP FUNCTIONALITY
+// =====================================================
 
 const messagesContainer = document.getElementById('messages');
 const messageInput = document.getElementById('messageInput');
@@ -280,6 +418,10 @@ async function sendMessage() {
       if (data.conversationComplete) {
         setTimeout(() => addMessage(getChatTranslation('chat_farewell'), false), 1500);
       }
+
+      // Increment message count and check if we should show email popup
+      messageCount++;
+      checkEmailPopupTrigger();
     } else {
       addMessage(data.message || getChatTranslation('chat_error_generic'), false);
     }

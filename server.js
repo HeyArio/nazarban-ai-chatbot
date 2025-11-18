@@ -1031,6 +1031,44 @@ app.get('/api/test', (req, res) => {
     res.json({ status: 'Server is working!' });
 });
 
+// Email collection endpoint (from popup)
+app.post('/api/collect-email', async (req, res) => {
+    try {
+        const { email, source } = req.body;
+
+        if (!email || !email.includes('@')) {
+            return res.status(400).json({ success: false, message: 'Invalid email' });
+        }
+
+        // Log the collected email (you can also save to a file or database)
+        console.log(`📧 Email collected from ${source || 'unknown'}: ${email}`);
+
+        // Optionally save to a JSON file
+        const emailsPath = path.join(__dirname, 'collectedEmails.json');
+        let emails = [];
+        try {
+            const data = await fs.readFile(emailsPath, 'utf-8');
+            emails = JSON.parse(data);
+        } catch (err) {
+            // File doesn't exist yet, start fresh
+        }
+
+        // Add new email with timestamp
+        emails.push({
+            email,
+            source: source || 'popup',
+            timestamp: new Date().toISOString()
+        });
+
+        await fs.writeFile(emailsPath, JSON.stringify(emails, null, 2));
+
+        res.json({ success: true, message: 'Email collected successfully' });
+    } catch (err) {
+        console.error('Error collecting email:', err);
+        res.status(500).json({ success: false, message: 'Failed to collect email' });
+    }
+});
+
 // Admin login verification endpoint
 app.post('/api/admin/verify-login', (req, res) => {
     const { password } = req.body;
