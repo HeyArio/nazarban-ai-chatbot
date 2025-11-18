@@ -118,7 +118,8 @@ window.translations = {
     blog_header_title: "AI Product Highlights",
     blog_header_subtitle: "Daily insights from Product Hunt's top AI innovations", // This key is no longer used, but we can leave it
     blog_loading: "Loading posts...",
-    blog_updated_prefix: "Last Update ", // <-- ADD THIS
+    blog_updated_prefix: "Last Update ",
+    crypto_ticker_desc: "Tracking AI-focused cryptocurrencies and blockchain projects",
 
     // Benchmark Page (This is the full, correct section)
     benchmark_page_title: "Nazarban AI - LLM Data Hub",
@@ -280,7 +281,8 @@ window.translations = {
     blog_header_title: "محصولات برجسته هوش مصنوعی",
     blog_header_subtitle: "بینش‌های روزانه از نوآوری‌های برتر Product Hunt", // This key is no longer used, but we can leave it
     blog_loading: "در حال بارگذاری...",
-    blog_updated_prefix: " آخرین به روز رسانی ", // <-- ADD THIS
+    blog_updated_prefix: " آخرین به روز رسانی ",
+    crypto_ticker_desc: "رمزارزها و پروژه‌های بلاکچین مرتبط با هوش مصنوعی",
     
     // Benchmark Page (This is the full, correct section)
     benchmark_page_title: "Nazarban AI - مرکز داده مدل‌های زبان",
