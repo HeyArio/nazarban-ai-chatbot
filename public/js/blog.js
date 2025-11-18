@@ -69,34 +69,69 @@ document.addEventListener('DOMContentLoaded', async () => {
     const card = document.createElement('article');
     card.className = 'blog-post-card';
     card.dataset.postId = post.id || Math.random().toString(36).substr(2, 9);
-    
+
     const summary = lang === 'fa' ? post.summaryFarsi : post.summaryEnglish;
     const formattedDate = formatDate(post.date, lang);
-    
+
+    // Truncate summary to ~150 characters for preview
+    const truncateText = (html, maxLength = 150) => {
+      // Strip HTML tags for character count
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = html;
+      const text = tempDiv.textContent || tempDiv.innerText || '';
+
+      if (text.length <= maxLength) return html;
+
+      // Find a good breaking point
+      let truncated = text.substring(0, maxLength);
+      const lastSpace = truncated.lastIndexOf(' ');
+      if (lastSpace > maxLength - 30) {
+        truncated = truncated.substring(0, lastSpace);
+      }
+      return truncated + '...';
+    };
+
+    const truncatedSummary = truncateText(summary);
+
     card.innerHTML = `
       <div class="post-header">
         <h2 class="post-title">${post.title}</h2>
         <div class="post-meta">
           <span class="post-date">${formattedDate}</span>
-          ${post.votes ? `<span class="post-votes">⭐ ${post.votes} ${lang === 'fa' ? 'رأی' : 'upvotes'}</span>` : ''}
+          ${post.votes ? `<span class="post-votes">${post.votes} ${lang === 'fa' ? 'رأی' : 'upvotes'}</span>` : ''}
         </div>
       </div>
       <div class="post-content">
-        ${summary}
+        <p>${truncatedSummary}</p>
       </div>
-      ${post.url ? `
-        <div class="post-footer">
+      <div class="post-footer">
+        <button class="read-more-btn" onclick="event.stopPropagation()">
+          ${lang === 'fa' ? 'ادامه مطلب' : 'Read More'}
+          <svg class="link-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        ${post.url ? `
           <a href="${post.url}" target="_blank" rel="noopener noreferrer" class="post-link" onclick="event.stopPropagation()">
-            ${lang === 'fa' ? 'مشاهده در Product Hunt' : 'View on Product Hunt'}
+            ${lang === 'fa' ? 'Product Hunt' : 'Product Hunt'}
             <svg class="link-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </a>
-        </div>
-      ` : ''}
+        ` : ''}
+      </div>
     `;
-    
+
+    // Add click handler for the whole card and the read more button
     card.addEventListener('click', () => openModal(post, lang));
+    const readMoreBtn = card.querySelector('.read-more-btn');
+    if (readMoreBtn) {
+      readMoreBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openModal(post, lang);
+      });
+    }
+
     return card;
   };
 
