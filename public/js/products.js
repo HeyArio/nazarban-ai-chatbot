@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const card = document.createElement('article');
     card.className = 'product-card';
     card.dataset.productId = product.id;
+    card.style.cursor = 'pointer';
 
     const name = lang === 'fa' ? product.nameFa : product.nameEn;
     const tagline = lang === 'fa' ? product.taglineFa : product.taglineEn;
@@ -49,6 +50,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     card.innerHTML = `
       <div class="product-header">
         ${statusBadge}
+        ${product.imageUrl ? `
+          <div class="product-image" style="width: 100%; height: 200px; overflow: hidden; border-radius: 12px; margin-bottom: 1rem;">
+            <img src="${product.imageUrl}" alt="${name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.style.display='none'">
+          </div>
+        ` : ''}
         <h2 class="product-name">${name}</h2>
         <p class="product-tagline">${tagline}</p>
         <div class="product-category">${categoryText}</div>
@@ -62,22 +68,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         ` : ''}
       </div>
       <div class="product-footer">
-        ${product.url ? `
-          <a href="${product.url}" target="_blank" rel="noopener noreferrer" class="product-link" onclick="event.stopPropagation()">
-            ${lang === 'fa' ? 'مشاهده محصول' : 'Visit Product'}
-            <svg class="link-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-        ` : `
-          <button class="product-link disabled" disabled>
-            ${lang === 'fa' ? 'به زودی' : 'Coming Soon'}
-          </button>
-        `}
+        <a href="product-detail.html?id=${product.id}" class="product-link" style="background: linear-gradient(135deg, var(--brand1), var(--brand2)); color: white;">
+          ${lang === 'fa' ? 'مشاهده جزئیات' : 'View Details'}
+          <svg class="link-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
       </div>
     `;
 
-    card.addEventListener('click', () => openModal(product, lang));
     return card;
   };
 

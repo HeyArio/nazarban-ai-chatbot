@@ -211,7 +211,10 @@ function editProduct(id) {
     document.getElementById('productTaglineFa').value = product.taglineFa || '';
     document.getElementById('productDescEn').value = product.descriptionEn;
     document.getElementById('productDescFa').value = product.descriptionFa;
+    document.getElementById('productFullDescEn').value = product.fullDescriptionEn || '';
+    document.getElementById('productFullDescFa').value = product.fullDescriptionFa || '';
     document.getElementById('productUrl').value = product.url || '';
+    document.getElementById('productImageUrl').value = product.imageUrl || '';
     document.getElementById('productCategory').value = product.category || '';
     document.getElementById('productStatus').value = product.status || 'live';
 
@@ -300,9 +303,12 @@ document.getElementById('saveProductBtn').addEventListener('click', async () => 
         taglineFa: document.getElementById('productTaglineFa').value,
         descriptionEn,
         descriptionFa,
+        fullDescriptionEn: document.getElementById('productFullDescEn').value,
+        fullDescriptionFa: document.getElementById('productFullDescFa').value,
         featuresEn,
         featuresFa,
         url: document.getElementById('productUrl').value,
+        imageUrl: document.getElementById('productImageUrl').value,
         category: document.getElementById('productCategory').value,
         status: document.getElementById('productStatus').value,
         password
@@ -336,7 +342,10 @@ function clearProductForm() {
     document.getElementById('productTaglineFa').value = '';
     document.getElementById('productDescEn').value = '';
     document.getElementById('productDescFa').value = '';
+    document.getElementById('productFullDescEn').value = '';
+    document.getElementById('productFullDescFa').value = '';
     document.getElementById('productUrl').value = '';
+    document.getElementById('productImageUrl').value = '';
     document.getElementById('productCategory').value = '';
     document.getElementById('productStatus').value = 'live';
     document.getElementById('productPassword').value = '';

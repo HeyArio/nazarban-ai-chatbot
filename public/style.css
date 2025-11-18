@@ -2242,3 +2242,123 @@ html[dir="rtl"] .product-features-list li::before {
     padding: 2rem 1.5rem;
   }
 }
+
+/* --- Floating Chat Widget --- */
+.floating-chat-widget {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+html[dir="rtl"] .floating-chat-widget {
+  right: auto;
+  left: 2rem;
+  align-items: flex-start;
+}
+
+.chat-widget-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand1), var(--brand2));
+  border: none;
+  box-shadow: 0 4px 20px var(--shadow-color), 0 0 0 0 rgba(129, 140, 248, 0.7);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  animation: pulse 2s infinite;
+  position: relative;
+}
+
+.chat-widget-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 30px var(--shadow-color);
+}
+
+.chat-widget-button:active {
+  transform: scale(0.95);
+}
+
+.chat-widget-button svg {
+  width: 28px;
+  height: 28px;
+  fill: white;
+  transition: transform 0.3s ease;
+}
+
+.chat-widget-button:hover svg {
+  transform: scale(1.1);
+}
+
+.chat-widget-tooltip {
+  position: absolute;
+  right: 70px;
+  background: var(--panel);
+  color: var(--ink);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+}
+
+html[dir="rtl"] .chat-widget-tooltip {
+  right: auto;
+  left: 70px;
+}
+
+.chat-widget-button:hover .chat-widget-tooltip {
+  opacity: 1;
+}
+
+/* Pulse animation */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 4px 20px var(--shadow-color), 0 0 0 0 rgba(129, 140, 248, 0.7);
+  }
+  50% {
+    box-shadow: 0 4px 20px var(--shadow-color), 0 0 0 15px rgba(129, 140, 248, 0);
+  }
+  100% {
+    box-shadow: 0 4px 20px var(--shadow-color), 0 0 0 0 rgba(129, 140, 248, 0);
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .floating-chat-widget {
+    bottom: 1.5rem;
+    right: 1.5rem;
+  }
+
+  html[dir="rtl"] .floating-chat-widget {
+    right: auto;
+    left: 1.5rem;
+  }
+
+  .chat-widget-button {
+    width: 56px;
+    height: 56px;
+  }
+
+  .chat-widget-button svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .chat-widget-tooltip {
+    display: none; /* Hide tooltip on mobile */
+  }
+}

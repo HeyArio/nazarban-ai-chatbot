@@ -327,22 +327,39 @@
 
             <div class="two-col">
                 <div class="form-group">
+                    <label for="productFullDescEn">Full Description (English)</label>
+                    <textarea id="productFullDescEn" style="min-height: 150px;" placeholder="Detailed description for the product detail page"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="productFullDescFa">Full Description (Persian)</label>
+                    <textarea id="productFullDescFa" style="min-height: 150px;" placeholder="توضیحات کامل برای صفحه جزئیات محصول"></textarea>
+                </div>
+            </div>
+
+            <div class="two-col">
+                <div class="form-group">
                     <label for="productUrl">Product URL</label>
                     <input type="url" id="productUrl" placeholder="https://example.com">
                 </div>
                 <div class="form-group">
-                    <label for="productCategory">Category</label>
-                    <input type="text" id="productCategory" placeholder="e.g., Retail Analytics">
+                    <label for="productImageUrl">Product Image URL</label>
+                    <input type="url" id="productImageUrl" placeholder="https://example.com/image.jpg">
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="productStatus">Status</label>
-                <select id="productStatus">
-                    <option value="live">Live</option>
-                    <option value="beta">Beta</option>
-                    <option value="coming_soon">Coming Soon</option>
-                </select>
+            <div class="two-col">
+                <div class="form-group">
+                    <label for="productCategory">Category</label>
+                    <input type="text" id="productCategory" placeholder="e.g., Retail Analytics">
+                </div>
+                <div class="form-group">
+                    <label for="productStatus">Status</label>
+                    <select id="productStatus">
+                        <option value="live">Live</option>
+                        <option value="beta">Beta</option>
+                        <option value="coming_soon">Coming Soon</option>
+                    </select>
+                </div>
             </div>
 
             <div class="controls">

@@ -1,1 +1,174 @@
-[]
+[
+  {
+    "id": "1731953100001",
+    "nameEn": "Shelfzar",
+    "nameFa": "شلف‌زار",
+    "taglineEn": "AI-Powered Retail Intelligence Platform",
+    "taglineFa": "پلتفرم هوشمند تحلیل خرده‌فروشی",
+    "descriptionEn": "Transform retail operations with computer vision and AI analytics for shelf monitoring, planogram compliance, and inventory optimization.",
+    "descriptionFa": "عملیات خرده‌فروشی خود را با بینایی ماشین و تحلیل هوش مصنوعی برای نظارت بر قفسه‌ها، انطباق با طرح‌بندی و بهینه‌سازی موجودی تحول دهید.",
+    "fullDescriptionEn": "Shelfzar is our flagship retail analytics platform that leverages advanced computer vision and machine learning to revolutionize how retailers manage their shelf space. The system automatically detects out-of-stock items, monitors planogram compliance, analyzes share of shelf, and provides real-time insights to optimize product placement and inventory management. Built for the modern retail environment, Shelfzar integrates seamlessly with existing POS and ERP systems to deliver actionable intelligence that drives sales and operational efficiency.",
+    "fullDescriptionFa": "شلف‌زار پلتفرم پیشرو تحلیل خرده‌فروشی ما است که از بینایی ماشین پیشرفته و یادگیری ماشین برای متحول کردن نحوه مدیریت فضای قفسه توسط خرده‌فروشان استفاده می‌کند. این سیستم به طور خودکار کالاهای ناموجود را شناسایی، انطباق با طرح‌بندی را نظارت، سهم قفسه را تحلیل و بینش‌های لحظه‌ای برای بهینه‌سازی جایگذاری محصول و مدیریت موجودی ارائه می‌دهد. شلف‌زار که برای محیط خرده‌فروشی مدرن ساخته شده، به طور یکپارچه با سیستم‌های POS و ERP موجود ادغام می‌شود تا هوش عملیاتی قابل اجرا را ارائه دهد.",
+    "featuresEn": [
+      "Real-time shelf monitoring with computer vision",
+      "Automated planogram compliance checking",
+      "Out-of-stock detection and alerts",
+      "Share of shelf analytics",
+      "Competitor product tracking",
+      "Integration with POS/ERP systems",
+      "Customizable dashboards and reports"
+    ],
+    "featuresFa": [
+      "نظارت لحظه‌ای قفسه با بینایی ماشین",
+      "بررسی خودکار انطباق با طرح‌بندی",
+      "تشخیص و هشدار کالای ناموجود",
+      "تحلیل سهم قفسه",
+      "ردیابی محصولات رقبا",
+      "یکپارچگی با سیستم‌های POS/ERP",
+      "داشبوردها و گزارش‌های قابل تنظیم"
+    ],
+    "url": "https://shelfzar.com",
+    "imageUrl": "",
+    "status": "live",
+    "category": "Retail Analytics",
+    "createdAt": "2024-11-18T17:45:00.001Z"
+  },
+  {
+    "id": "1731953100002",
+    "nameEn": "LinkedIn Post Automation",
+    "nameFa": "اتوماسیون پست لینکدین",
+    "taglineEn": "AI-Driven Professional Content Publishing",
+    "taglineFa": "انتشار هوشمند محتوای حرفه‌ای",
+    "descriptionEn": "Automate your LinkedIn presence with AI-powered content generation, scheduling, and engagement optimization for maximum professional impact.",
+    "descriptionFa": "حضور خود در لینکدین را با تولید محتوای مبتنی بر هوش مصنوعی، زمان‌بندی و بهینه‌سازی تعامل برای حداکثر تأثیر حرفه‌ای خودکار کنید.",
+    "fullDescriptionEn": "Our LinkedIn automation solution transforms how businesses and professionals manage their LinkedIn presence. Built on n8n workflows, this intelligent system analyzes your content strategy, generates engaging posts tailored to your industry, schedules them at optimal times, and tracks engagement metrics. The AI learns from your best-performing content to continuously improve post quality and relevance, ensuring consistent professional visibility without the manual effort.",
+    "fullDescriptionFa": "راه‌حل اتوماسیون لینکدین ما نحوه مدیریت حضور حرفه‌ای کسب‌وکارها و افراد در لینکدین را متحول می‌کند. این سیستم هوشمند که بر پایه گردش‌کار n8n ساخته شده، استراتژی محتوای شما را تحلیل، پست‌های جذاب متناسب با صنعت شما را تولید، آن‌ها را در زمان‌های بهینه زمان‌بندی و معیارهای تعامل را ردیابی می‌کند. هوش مصنوعی از محتوای با بهترین عملکرد شما یاد می‌گیرد تا به طور مداوم کیفیت و ارتباط پست‌ها را بهبود بخشد.",
+    "featuresEn": [
+      "AI-powered content generation",
+      "Optimal posting time recommendations",
+      "Automated scheduling and publishing",
+      "Engagement analytics and insights",
+      "Industry-specific content customization",
+      "Multi-account management",
+      "Performance tracking and reporting"
+    ],
+    "featuresFa": [
+      "تولید محتوای مبتنی بر هوش مصنوعی",
+      "توصیه زمان بهینه انتشار",
+      "زمان‌بندی و انتشار خودکار",
+      "تحلیل و بینش تعامل",
+      "سفارشی‌سازی محتوای خاص صنعت",
+      "مدیریت چند حساب کاربری",
+      "ردیابی عملکرد و گزارش‌دهی"
+    ],
+    "url": "",
+    "imageUrl": "",
+    "status": "beta",
+    "category": "Marketing Automation",
+    "createdAt": "2024-11-18T17:45:00.002Z"
+  },
+  {
+    "id": "1731953100003",
+    "nameEn": "Telegram Content Automation",
+    "nameFa": "اتوماسیون محتوای تلگرام",
+    "taglineEn": "Smart Channel & Group Management",
+    "taglineFa": "مدیریت هوشمند کانال و گروه",
+    "descriptionEn": "Streamline your Telegram content distribution with intelligent automation, scheduled posting, and audience engagement tools.",
+    "descriptionFa": "توزیع محتوای تلگرام خود را با اتوماسیون هوشمند، پست زمان‌بندی شده و ابزارهای تعامل با مخاطبان ساده کنید.",
+    "fullDescriptionEn": "Our Telegram automation platform empowers content creators and businesses to efficiently manage their Telegram channels and groups. Powered by n8n workflows and AI, the system handles content scheduling, cross-posting, media optimization, and audience interaction. It supports multi-channel management, automatic content repurposing, and provides detailed analytics to understand audience preferences and optimize engagement strategies.",
+    "fullDescriptionFa": "پلتفرم اتوماسیون تلگرام ما به تولیدکنندگان محتوا و کسب‌وکارها قدرت می‌دهد تا کانال‌ها و گروه‌های تلگرام خود را به طور کارآمد مدیریت کنند. این سیستم که توسط گردش‌کارهای n8n و هوش مصنوعی قدرت می‌گیرد، زمان‌بندی محتوا، انتشار متقابل، بهینه‌سازی رسانه و تعامل با مخاطبان را مدیریت می‌کند. از مدیریت چند کانال، بازیافت خودکار محتوا پشتیبانی می‌کند و تحلیل‌های دقیقی برای درک ترجیحات مخاطب ارائه می‌دهد.",
+    "featuresEn": [
+      "Automated content scheduling",
+      "Multi-channel distribution",
+      "Media optimization and conversion",
+      "Audience engagement tracking",
+      "Cross-platform content repurposing",
+      "Custom bot integration",
+      "Real-time analytics dashboard"
+    ],
+    "featuresFa": [
+      "زمان‌بندی خودکار محتوا",
+      "توزیع چند کاناله",
+      "بهینه‌سازی و تبدیل رسانه",
+      "ردیابی تعامل مخاطب",
+      "بازیافت محتوای بین‌پلتفرمی",
+      "یکپارچگی ربات سفارشی",
+      "داشبورد تحلیل لحظه‌ای"
+    ],
+    "url": "",
+    "imageUrl": "",
+    "status": "beta",
+    "category": "Social Media Automation",
+    "createdAt": "2024-11-18T17:45:00.003Z"
+  },
+  {
+    "id": "1731953100004",
+    "nameEn": "Podcast Automation Suite",
+    "nameFa": "مجموعه اتوماسیون پادکست",
+    "taglineEn": "End-to-End Podcast Production & Distribution",
+    "taglineFa": "تولید و توزیع کامل پادکست",
+    "descriptionEn": "Automate your podcast workflow from recording to publishing with AI-powered editing, transcription, and multi-platform distribution.",
+    "descriptionFa": "گردش کار پادکست خود را از ضبط تا انتشار با ویرایش، رونویسی و توزیع چندپلتفرمی مبتنی بر هوش مصنوعی خودکار کنید.",
+    "fullDescriptionEn": "Transform your podcast production with our comprehensive automation suite built on n8n workflows. The system handles audio enhancement, AI-powered editing, automatic transcription in multiple languages, show notes generation, and simultaneous distribution to all major podcast platforms. It includes intelligent chapter markers, SEO-optimized descriptions, and social media snippet creation to maximize your podcast's reach and discoverability.",
+    "fullDescriptionFa": "تولید پادکست خود را با مجموعه اتوماسیون جامع ما که بر پایه گردش‌کارهای n8n ساخته شده، متحول کنید. این سیستم بهبود صدا، ویرایش مبتنی بر هوش مصنوعی، رونویسی خودکار به چندین زبان، تولید یادداشت‌های نمایش و توزیع همزمان در تمام پلتفرم‌های اصلی پادکست را مدیریت می‌کند. شامل نشانگرهای فصل هوشمند، توضیحات بهینه‌شده SEO و ایجاد کلیپ شبکه‌های اجتماعی است.",
+    "featuresEn": [
+      "AI-powered audio editing and enhancement",
+      "Automatic multi-language transcription",
+      "Show notes and summary generation",
+      "Multi-platform distribution automation",
+      "Chapter markers and timestamps",
+      "SEO optimization for podcast directories",
+      "Social media content generation"
+    ],
+    "featuresFa": [
+      "ویرایش و بهبود صدای مبتنی بر AI",
+      "رونویسی خودکار چند زبانه",
+      "تولید یادداشت‌ها و خلاصه نمایش",
+      "اتوماسیون توزیع چندپلتفرمی",
+      "نشانگرهای فصل و زمان‌بندی",
+      "بهینه‌سازی SEO برای فهرست‌های پادکست",
+      "تولید محتوای شبکه‌های اجتماعی"
+    ],
+    "url": "",
+    "imageUrl": "",
+    "status": "beta",
+    "category": "Content Automation",
+    "createdAt": "2024-11-18T17:45:00.004Z"
+  },
+  {
+    "id": "1731953100005",
+    "nameEn": "Website Blog Automation",
+    "nameFa": "اتوماسیون وبلاگ وب‌سایت",
+    "taglineEn": "Intelligent Content Publishing & Management",
+    "taglineFa": "انتشار و مدیریت هوشمند محتوا",
+    "descriptionEn": "Automate your blog content lifecycle with AI-assisted writing, SEO optimization, scheduling, and performance analytics.",
+    "descriptionFa": "چرخه حیات محتوای وبلاگ خود را با نوشتن به کمک هوش مصنوعی، بهینه‌سازی SEO، زمان‌بندی و تحلیل عملکرد خودکار کنید.",
+    "fullDescriptionEn": "Our blog automation solution revolutionizes content management for websites and businesses. Built on n8n automation workflows, it streamlines the entire blogging process from ideation to publication. The system offers AI-assisted content generation, automatic SEO optimization, image sourcing and optimization, scheduled publishing, cross-platform syndication, and comprehensive performance tracking. Perfect for maintaining consistent content output while ensuring high quality and search engine visibility.",
+    "fullDescriptionFa": "راه‌حل اتوماسیون وبلاگ ما مدیریت محتوا را برای وب‌سایت‌ها و کسب‌وکارها متحول می‌کند. این سیستم که بر پایه گردش‌کارهای اتوماسیون n8n ساخته شده، کل فرآیند وبلاگ‌نویسی را از ایده‌پردازی تا انتشار ساده می‌کند. سیستم تولید محتوای به کمک هوش مصنوعی، بهینه‌سازی خودکار SEO، تأمین و بهینه‌سازی تصویر، انتشار زمان‌بندی شده، توزیع بین‌پلتفرمی و ردیابی جامع عملکرد را ارائه می‌دهد.",
+    "featuresEn": [
+      "AI-assisted content writing and ideation",
+      "Automatic SEO optimization",
+      "Smart image sourcing and optimization",
+      "Content scheduling and publishing",
+      "Multi-platform syndication",
+      "Performance analytics and insights",
+      "Automatic internal linking",
+      "Content calendar management"
+    ],
+    "featuresFa": [
+      "نوشتن و ایده‌پردازی محتوا با کمک AI",
+      "بهینه‌سازی خودکار SEO",
+      "تأمین و بهینه‌سازی هوشمند تصویر",
+      "زمان‌بندی و انتشار محتوا",
+      "توزیع چندپلتفرمی",
+      "تحلیل و بینش عملکرد",
+      "لینک‌سازی داخلی خودکار",
+      "مدیریت تقویم محتوا"
+    ],
+    "url": "",
+    "imageUrl": "",
+    "status": "live",
+    "category": "Content Automation",
+    "createdAt": "2024-11-18T17:45:00.005Z"
+  }
+]
