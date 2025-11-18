@@ -282,12 +282,12 @@ window.translations = {
     chat_error_connection: "متأسفم - مشکل در ارتباط. لطفاً دوباره امتحان کنید.",
     chat_farewell: "ممنون! هر زمان می‌تونی موضوع جدیدی رو شروع کنی.",
     // Email popup
-    email_popup_title: "پیشنهاد رایگان AI خود را دریافت کنید",
+    email_popup_title: "پروپوزال رایگان AI خود را دریافت کنید",
     email_popup_subtitle: "تیم ما نیازهای شما را تحلیل کرده و ظرف ۲۴ ساعت یک پیشنهاد پیاده‌سازی AI شخصی‌سازی شده برایتان ارسال می‌کند.",
     email_popup_placeholder: "ایمیل شما",
-    email_popup_submit: "پیشنهادم را بفرست",
+    email_popup_submit: "دریافت پروپوزال",
     email_popup_privacy: "خلاصه این گفتگو هم برایتان ارسال می‌شود.",
-    email_popup_success: "درخواست پیشنهاد ارسال شد! صندوق ورودی‌تان را چک کنید.",
+    email_popup_success: "پروپوزال ارسال شد! صندوق ورودی‌تان را چک کنید.",
     // Contact links
     contact_email: "info@nazarbanai.com", // Email stays the same
     contact_phone: "+۹۸ ۹۱۲ ۰۴۳ ۷۵۰۲", // Farsi phone number
