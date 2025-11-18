@@ -1,401 +1,138 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Nazarban Analytics</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #020617;
-            --panel: #0f172a;
-            --ink: #f8fafc;
-            --muted: #94a3b8;
-            --brand1: #818cf8;
-            --brand2: #c084fc;
-            --border: rgba(148, 163, 184, .2);
-            --success: #4ade80;
-            --error: #f87171;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Space Grotesk', sans-serif;
-            background-color: var(--bg);
-            color: var(--ink);
-            padding: 2rem;
-        }
-        .container { max-width: 1200px; margin: 0 auto; }
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, var(--brand1), var(--brand2));
-            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .subtitle { color: var(--muted); margin-bottom: 2rem; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>About Nazarban AI - Our Mission & Team | درباره ما - نظربان</title>
+  <meta name="title" content="About Nazarban AI - Our Mission & Team | درباره ما - نظربان">
+  <meta name="description" content="Learn about Nazarban Analytics FZCO. We are an AI consulting firm dedicated to helping Iranian businesses implement machine learning, NLP, and computer vision. | درباره ماموریت و تیم نظربان آنالیتیکس بیاموزید.">
+  <meta name="keywords" content="About Nazarban AI, Nazarban team, AI consulting Iran, machine learning consulting, MLOps, data science consulting, درباره نظربان, تیم نظربان, مشاوره هوش مصنوعی, یادگیری ماشین">
+  <meta name="author" content="Nazarban Analytics FZCO">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="Persian, English">
+  
+  <link rel="canonical" href="https://nazarbanai.com/about.html" />
+  
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://nazarbanai.com/about.html">
+  <meta property="og:title" content="About Nazarban AI - Our Mission & Team | درباره ما - نظربان">
+  <meta property="og:description" content="Learn about our mission to bring advanced, on-premise AI solutions to Iranian businesses.">
+  <meta property="og:image" content="https://nazarbanai.com/logo.png">
+  <meta property="og:locale" content="fa_IR">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:site_name" content="Nazarban Analytics">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://nazarbanai.com/about.html">
+  <meta name="twitter:title" content="About Nazarban AI - Our Mission & Team">
+  <meta name="twitter:description" content="Learn about our mission to bring advanced, on-premise AI solutions to Iranian businesses.">
+  <meta name="twitter:image" content="https://nazarbanai.com/logo.png">
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About Nazarban AI | درباره ما",
+    "url": "https://nazarbanai.com/about.html",
+    "mainEntity": {
+      "@type": "ProfessionalService",
+      "name": "Nazarban Analytics FZCO",
+      "description": "AI consultation and implementation services for Iranian businesses",
+      "url": "https://nazarbanai.com",
+      "logo": "https://nazarbanai.com/logo.png",
+      "image": "https://nazarbanai.com/logo.png",
+      "email": "info@nazarbanai.com",
+      "telephone": "+989120437502",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "QA",
+        "addressLocality": "Doha"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "Iran"
+      }
+    }
+  }
+  </script>
 
-        /* Tabs */
-        .tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--border);
-        }
-        .tab {
-            padding: 1rem 1.5rem;
-            background: transparent;
-            border: none;
-            color: var(--muted);
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: color .2s, border-color .2s;
-            border-bottom: 2px solid transparent;
-        }
-        .tab:hover { color: var(--ink); }
-        .tab.active {
-            color: var(--brand1);
-            border-bottom-color: var(--brand1);
-        }
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+  <link rel="icon" href="favicon.ico" />
+  <link rel="apple-touch-icon" href="logo.png" />
 
-        /* Tab content */
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-        /* Form groups */
-        .form-group { margin-bottom: 1.5rem; }
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--ink);
-        }
-        textarea, input[type="text"], input[type="password"], input[type="url"], select {
-            width: 100%;
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
-            color: var(--ink);
-            font-size: 1rem;
-            font-family: inherit;
-            transition: border-color .2s, box-shadow .2s;
-        }
-        textarea { resize: vertical; min-height: 150px; }
-        textarea:focus, input:focus, select:focus {
-            outline: none;
-            border-color: var(--brand1);
-            box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.4);
-        }
-
-        /* Buttons */
-        button {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            background: var(--brand1);
-            color: var(--ink);
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform .15s, opacity .15s;
-        }
-        button:hover { transform: translateY(-2px); }
-        button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-        button.secondary {
-            background: var(--panel);
-            border: 1px solid var(--border);
-        }
-        button.danger {
-            background: var(--error);
-        }
-
-        /* Controls */
-        .controls {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            background: var(--panel);
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            margin-top: 1.5rem;
-        }
-
-        /* Status messages */
-        .status {
-            font-size: 0.9rem;
-            transition: color .3s;
-            margin-left: 1rem;
-        }
-        .success { color: var(--success); }
-        .error { color: var(--error); }
-
-        /* Product/FAQ lists */
-        .item-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-        .item-card {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1.5rem;
-        }
-        .item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 1rem;
-        }
-        .item-title { font-size: 1.25rem; font-weight: 600; }
-        .item-meta { font-size: 0.9rem; color: var(--muted); margin-top: 0.5rem; }
-        .item-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-        .item-actions button {
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-        }
-
-        /* Two column layout */
-        .two-col {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        /* Feature list builder */
-        .features-builder {
-            margin-top: 0.5rem;
-        }
-        .feature-item {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-        .feature-item input {
-            flex: 1;
-        }
-        .feature-item button {
-            padding: 0.5rem 1rem;
-        }
-        .add-feature-btn {
-            margin-top: 0.5rem;
-            background: var(--panel);
-            border: 1px dashed var(--border);
-        }
-
-        /* Login screen */
-        .login-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: var(--bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-        .login-box {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 3rem;
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
-        .login-box h1 {
-            margin-bottom: 0.5rem;
-        }
-        .login-box .subtitle {
-            margin-bottom: 2rem;
-        }
-        .login-box .form-group {
-            margin-bottom: 1.5rem;
-            text-align: left;
-        }
-    </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <!-- LOGIN SCREEN -->
-    <div id="loginScreen" class="login-screen">
-        <div class="login-box">
-            <h1>Admin Login</h1>
-            <p class="subtitle">Enter password to access admin panel</p>
-            <div class="form-group">
-                <input type="password" id="loginPassword" placeholder="Admin Password" autofocus>
-            </div>
-            <button id="loginBtn" style="width: 100%;">Login</button>
-            <span class="status" id="loginStatus" style="margin-left: 0; margin-top: 1rem; display: block; text-align: center;"></span>
+
+  <header class="header">
+    <a href="index.html" class="logo-section">
+      <div class="logo-badge"> <img class="logo" src="logo.png" alt="Nazarban Logo" /> </div>
+      <div class="brand-text">
+        <div class="brand-name">NAZARBAN</div>
+        <div class="brand-tagline">ANALYTICS · FZCO</div>
+      </div>
+    </a>
+
+    <div class="header-right-group">
+        <nav class="nav-desktop">
+          <a href="benchmark.html" data-lang-key="nav_insight">Benchmarks</a>
+          <a href="about.html" class="active-page" data-lang-key="nav_about">About</a>
+          <a href="blog.html" data-lang-key="nav_blog">Blog</a>
+          <a href="products.html" data-lang-key="nav_products">Products</a>
+          <a href="services.html" data-lang-key="nav_services">Services</a>
+          <a href="whitepaper.html" data-lang-key="nav_whitepaper">White Paper</a>
+        </nav>
+
+        <div class="language-switcher">
+          <a href="#" data-lang="en" data-lang-key="lang_en">EN</a>
+          <a href="#" data-lang="fa" class="active" data-lang-key="lang_fa">FA</a>
         </div>
+
+        <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+          <span class="bar"></span> <span class="bar"></span> <span class="bar"></span>
+        </button>
+    </div> </header>
+
+  <ul class="nav-mobile-overlay">
+      <li><a href="benchmark.html" data-lang-key="nav_insight">Benchmarks</a></li>
+      <li><a href="about.html" class="active-page" data-lang-key="nav_about">About</a></li>
+      <li><a href="blog.html" data-lang-key="nav_blog">Blog</a></li>
+      <li><a href="products.html" data-lang-key="nav_products">Products</a></li>
+      <li><a href="services.html" data-lang-key="nav_services">Services</a></li>
+      <li><a href="whitepaper.html" data-lang-key="nav_whitepaper">White Paper</a></li>
+
+      <div class="language-switcher">
+      <a href="#" data-lang="en" data-lang-key="lang_en">EN</a>
+      <a href="#" data-lang="fa" class="active" data-lang-key="lang_fa">FA</a>
+    </div>
+  </ul>
+
+  <main class="content-wrapper">
+    <h1 data-lang-key="about_title">About Nazarban AI</h1>
+    <p data-lang-key="about_intro">Learn about our company, our mission, and our commitment to bringing advanced AI solutions to businesses in Iran.</p>
+
+    <h2 data-lang-key="about_mission_title">Our Mission</h2>
+    <p data-lang-key="about_mission_text">Our mission is to empower Iranian businesses by making sophisticated, secure, and cost-effective AI and Machine Learning solutions accessible, enabling them to compete and innovate on a global scale.</p>
+    <div class="download-button-wrapper">
+      <a href="nazarban_doc.pdf" download="Nazarban_Analytics_PRD.pdf" class="download-button">
+        <span class="button-text" data-lang-key="download_pdf">Download PDF</span> 
+      </a>
     </div>
 
-    <!-- ADMIN PANEL (hidden until login) -->
-    <div class="container" id="adminPanel" style="display: none;">
-        <h1>Admin Panel</h1>
-        <p class="subtitle">Manage prompts, products, and FAQs</p>
-
-        <div class="tabs">
-            <button class="tab active" data-tab="prompts">Prompts</button>
-            <button class="tab" data-tab="products">Products</button>
-            <button class="tab" data-tab="faqs">FAQs</button>
-        </div>
-
-        <!-- PROMPTS TAB -->
-        <div class="tab-content active" id="prompts-tab">
-            <div class="form-group">
-                <label for="mainSystemPrompt">Main Chatbot System Prompt</label>
-                <textarea id="mainSystemPrompt"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="summaryPrompt">Conversation Summary Prompt</label>
-                <textarea id="summaryPrompt"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="proposalPrompt">Proposal Generation Prompt</label>
-                <textarea id="proposalPrompt"></textarea>
-            </div>
-
-            <div class="controls">
-                <input type="password" id="promptPassword" placeholder="Admin Password" required style="flex: 1; max-width: 250px;">
-                <button id="savePromptsBtn">Save Prompts</button>
-                <span class="status" id="promptStatus"></span>
-            </div>
-        </div>
-
-        <!-- PRODUCTS TAB -->
-        <div class="tab-content" id="products-tab">
-            <h2 style="margin-bottom: 1.5rem;">Add/Edit Product</h2>
-
-            <input type="hidden" id="productId">
-
-            <div class="two-col">
-                <div class="form-group">
-                    <label for="productNameEn">Product Name (English)</label>
-                    <input type="text" id="productNameEn" placeholder="e.g., Shelfzar">
-                </div>
-                <div class="form-group">
-                    <label for="productNameFa">Product Name (Persian)</label>
-                    <input type="text" id="productNameFa" placeholder="e.g., شلف‌زار">
-                </div>
-            </div>
-
-            <div class="two-col">
-                <div class="form-group">
-                    <label for="productTaglineEn">Tagline (English)</label>
-                    <input type="text" id="productTaglineEn" placeholder="Brief tagline">
-                </div>
-                <div class="form-group">
-                    <label for="productTaglineFa">Tagline (Persian)</label>
-                    <input type="text" id="productTaglineFa" placeholder="توضیح مختصر">
-                </div>
-            </div>
-
-            <div class="two-col">
-                <div class="form-group">
-                    <label for="productDescEn">Description (English)</label>
-                    <textarea id="productDescEn" style="min-height: 100px;"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="productDescFa">Description (Persian)</label>
-                    <textarea id="productDescFa" style="min-height: 100px;"></textarea>
-                </div>
-            </div>
-
-            <div class="two-col">
-                <div class="form-group">
-                    <label>Features (English)</label>
-                    <div class="features-builder" id="featuresEnBuilder"></div>
-                    <button class="add-feature-btn" onclick="addFeatureInput('En')">+ Add Feature</button>
-                </div>
-                <div class="form-group">
-                    <label>Features (Persian)</label>
-                    <div class="features-builder" id="featuresFaBuilder"></div>
-                    <button class="add-feature-btn" onclick="addFeatureInput('Fa')">+ Add Feature</button>
-                </div>
-            </div>
-
-            <div class="two-col">
-                <div class="form-group">
-                    <label for="productUrl">Product URL</label>
-                    <input type="url" id="productUrl" placeholder="https://example.com">
-                </div>
-                <div class="form-group">
-                    <label for="productCategory">Category</label>
-                    <input type="text" id="productCategory" placeholder="e.g., Retail Analytics">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="productStatus">Status</label>
-                <select id="productStatus">
-                    <option value="live">Live</option>
-                    <option value="beta">Beta</option>
-                    <option value="coming_soon">Coming Soon</option>
-                </select>
-            </div>
-
-            <div class="controls">
-                <input type="password" id="productPassword" placeholder="Admin Password" required style="flex: 1; max-width: 250px;">
-                <button id="saveProductBtn">Save Product</button>
-                <button class="secondary" onclick="clearProductForm()">Clear Form</button>
-                <span class="status" id="productStatus"></span>
-            </div>
-
-            <h2 style="margin-top: 3rem; margin-bottom: 1rem;">Existing Products</h2>
-            <div class="item-list" id="productsList"></div>
-        </div>
-
-        <!-- FAQS TAB -->
-        <div class="tab-content" id="faqs-tab">
-            <h2 style="margin-bottom: 1.5rem;">Add/Edit FAQ</h2>
-
-            <input type="hidden" id="faqId">
-
-            <div class="two-col">
-                <div class="form-group">
-                    <label for="faqQuestionEn">Question (English)</label>
-                    <input type="text" id="faqQuestionEn">
-                </div>
-                <div class="form-group">
-                    <label for="faqQuestionFa">Question (Persian)</label>
-                    <input type="text" id="faqQuestionFa">
-                </div>
-            </div>
-
-            <div class="two-col">
-                <div class="form-group">
-                    <label for="faqAnswerEn">Answer (English)</label>
-                    <textarea id="faqAnswerEn" style="min-height: 100px;"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="faqAnswerFa">Answer (Persian)</label>
-                    <textarea id="faqAnswerFa" style="min-height: 100px;"></textarea>
-                </div>
-            </div>
-
-            <div class="controls">
-                <input type="password" id="faqPassword" placeholder="Admin Password" required style="flex: 1; max-width: 250px;">
-                <button id="saveFaqBtn">Save FAQ</button>
-                <button class="secondary" onclick="clearFaqForm()">Clear Form</button>
-                <span class="status" id="faqStatus"></span>
-            </div>
-
-            <h2 style="margin-top: 3rem; margin-bottom: 1rem;">Existing FAQs</h2>
-            <div class="item-list" id="faqsList"></div>
-        </div>
+    <div class="pdf-viewer-container">
+      <object data="nazarban_doc.pdf#toolbar=0&navpanes=0" type="application/pdf">
+        <p data-lang-key="pdf_fallback">Your browser does not support PDF viewing. You can <a href="nazarban_doc.pdf">download the PDF</a> instead.</p>
+      </object>
     </div>
-
-    <script src="js/admin.js"></script>
+  </main>
+  
+  <script src="js/main.js"></script>
+  <script src="js/translations.js"></script> 
+  <script src="js/language.js"></script> 
 </body>
 </html>
