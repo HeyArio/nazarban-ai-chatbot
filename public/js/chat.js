@@ -63,12 +63,18 @@ function initEmailPopup() {
       userEmail = email;
       localStorage.setItem('userEmailCollected', email);
 
-      // Send email to server
+      // Send email to server with conversation history
+      const currentLang = localStorage.getItem('preferredLanguage') || 'fa';
       try {
         await fetch('/api/collect-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, source: 'popup' })
+          body: JSON.stringify({
+            email,
+            source: 'popup',
+            conversationHistory,
+            language: currentLang
+          })
         });
       } catch (err) {
         console.error('Failed to save email:', err);

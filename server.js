@@ -1031,19 +1031,19 @@ app.get('/api/test', (req, res) => {
     res.json({ status: 'Server is working!' });
 });
 
-// Email collection endpoint (from popup)
+// Email collection endpoint (from popup) - sends proposal to both parties
 app.post('/api/collect-email', async (req, res) => {
     try {
-        const { email, source } = req.body;
+        const { email, source, conversationHistory = [], language = 'fa' } = req.body;
 
         if (!email || !email.includes('@')) {
             return res.status(400).json({ success: false, message: 'Invalid email' });
         }
 
-        // Log the collected email (you can also save to a file or database)
+        // Log the collected email
         console.log(`📧 Email collected from ${source || 'unknown'}: ${email}`);
 
-        // Optionally save to a JSON file
+        // Save to JSON file
         const emailsPath = path.join(__dirname, 'collectedEmails.json');
         let emails = [];
         try {
@@ -1053,19 +1053,150 @@ app.post('/api/collect-email', async (req, res) => {
             // File doesn't exist yet, start fresh
         }
 
-        // Add new email with timestamp
-        emails.push({
+        // Add new lead with conversation
+        const leadData = {
             email,
             source: source || 'popup',
-            timestamp: new Date().toISOString()
-        });
+            timestamp: new Date().toISOString(),
+            language,
+            conversationHistory
+        };
+        emails.push(leadData);
 
         await fs.writeFile(emailsPath, JSON.stringify(emails, null, 2));
 
-        res.json({ success: true, message: 'Email collected successfully' });
+        // Format conversation for email
+        const formatConversation = (history) => {
+            if (!history || history.length === 0) return 'No conversation recorded.';
+            return history.map(msg => {
+                const role = msg.role === 'user' ? '👤 User' : '🤖 AI';
+                return `${role}:\n${msg.content}`;
+            }).join('\n\n---\n\n');
+        };
+
+        const conversationText = formatConversation(conversationHistory);
+
+        // Send emails if transporter is configured
+        if (emailTransporter) {
+            const isFarsi = language === 'fa';
+
+            // Email to the user
+            const userSubject = isFarsi
+                ? 'درخواست پیشنهاد AI شما - نظربان'
+                : 'Your AI Proposal Request - Nazarban';
+
+            const userHtml = isFarsi ? `
+                <div style="font-family: Tahoma, Arial, sans-serif; direction: rtl; text-align: right; max-width: 600px; margin: 0 auto; padding: 20px;">
+                    <h2 style="color: #818cf8;">با تشکر از درخواست شما!</h2>
+                    <p>سلام،</p>
+                    <p>ما درخواست پیشنهاد AI شما را دریافت کردیم. تیم ما در حال بررسی نیازهای شما است و <strong>ظرف ۲۴ ساعت</strong> یک پیشنهاد شخصی‌سازی شده برای شما ارسال خواهد شد.</p>
+
+                    <h3 style="color: #818cf8; margin-top: 30px;">خلاصه گفتگوی شما:</h3>
+                    <div style="background: #f1f5f9; padding: 15px; border-radius: 8px; white-space: pre-wrap; font-size: 14px;">
+                        ${conversationText}
+                    </div>
+
+                    <p style="margin-top: 30px;">اگر سوالی دارید، می‌توانید مستقیماً به این ایمیل پاسخ دهید.</p>
+
+                    <p style="margin-top: 20px;">با احترام،<br><strong>تیم نظربان</strong></p>
+
+                    <hr style="margin-top: 30px; border: none; border-top: 1px solid #e2e8f0;">
+                    <p style="font-size: 12px; color: #64748b;">
+                        نظربان - مشاوره و پیاده‌سازی هوش مصنوعی<br>
+                        info@nazarbanai.com | nazarbanai.com
+                    </p>
+                </div>
+            ` : `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                    <h2 style="color: #818cf8;">Thank You for Your Request!</h2>
+                    <p>Hello,</p>
+                    <p>We've received your AI proposal request. Our team is reviewing your needs and will send you a <strong>personalized proposal within 24 hours</strong>.</p>
+
+                    <h3 style="color: #818cf8; margin-top: 30px;">Your Conversation Summary:</h3>
+                    <div style="background: #f1f5f9; padding: 15px; border-radius: 8px; white-space: pre-wrap; font-size: 14px;">
+                        ${conversationText}
+                    </div>
+
+                    <p style="margin-top: 30px;">If you have any questions, feel free to reply directly to this email.</p>
+
+                    <p style="margin-top: 20px;">Best regards,<br><strong>Nazarban Team</strong></p>
+
+                    <hr style="margin-top: 30px; border: none; border-top: 1px solid #e2e8f0;">
+                    <p style="font-size: 12px; color: #64748b;">
+                        Nazarban - AI Consulting & Implementation<br>
+                        info@nazarbanai.com | nazarbanai.com
+                    </p>
+                </div>
+            `;
+
+            // Email to Nazarban team (internal notification)
+            const teamSubject = `🎯 New AI Lead: ${email}`;
+            const teamHtml = `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                    <h2 style="color: #10b981;">New Lead from Chat Widget</h2>
+
+                    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                        <tr>
+                            <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><strong>Email:</strong></td>
+                            <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">${email}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><strong>Language:</strong></td>
+                            <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">${language === 'fa' ? 'Farsi' : 'English'}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><strong>Time:</strong></td>
+                            <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">${new Date().toLocaleString()}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;"><strong>Messages:</strong></td>
+                            <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">${conversationHistory.length}</td>
+                        </tr>
+                    </table>
+
+                    <h3 style="color: #818cf8;">Full Conversation:</h3>
+                    <div style="background: #f1f5f9; padding: 15px; border-radius: 8px; white-space: pre-wrap; font-size: 14px;">
+                        ${conversationText}
+                    </div>
+
+                    <p style="margin-top: 20px; padding: 15px; background: #fef3c7; border-radius: 8px;">
+                        <strong>⚡ Action Required:</strong> Send a personalized proposal to this lead within 24 hours.
+                    </p>
+                </div>
+            `;
+
+            // Send both emails
+            try {
+                // Email to user
+                await emailTransporter.sendMail({
+                    from: `"Nazarban AI" <${process.env.ZOHO_EMAIL}>`,
+                    to: email,
+                    subject: userSubject,
+                    html: userHtml
+                });
+                console.log(`✅ Confirmation email sent to user: ${email}`);
+
+                // Email to team
+                await emailTransporter.sendMail({
+                    from: `"Nazarban Leads" <${process.env.ZOHO_EMAIL}>`,
+                    to: process.env.ZOHO_EMAIL, // Send to your own email
+                    subject: teamSubject,
+                    html: teamHtml
+                });
+                console.log(`✅ Lead notification sent to team`);
+
+            } catch (emailErr) {
+                console.error('❌ Error sending emails:', emailErr);
+                // Don't fail the request if email fails - data is still saved
+            }
+        } else {
+            console.log('⚠️ Email transporter not configured - emails not sent');
+        }
+
+        res.json({ success: true, message: 'Proposal request received' });
     } catch (err) {
         console.error('Error collecting email:', err);
-        res.status(500).json({ success: false, message: 'Failed to collect email' });
+        res.status(500).json({ success: false, message: 'Failed to process request' });
     }
 });
 

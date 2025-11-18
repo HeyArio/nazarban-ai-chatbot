@@ -112,12 +112,12 @@ window.translations = {
     chat_error_connection: "I'm sorry – connection issue. Please try again.",
     chat_farewell: "Thanks! Start a new topic anytime.",
     // Email popup
-    email_popup_title: "Stay Connected!",
-    email_popup_subtitle: "Get personalized AI insights and updates. We'll follow up on your conversation.",
+    email_popup_title: "Get Your Free AI Proposal",
+    email_popup_subtitle: "Our team will analyze your needs and send you a personalized AI implementation proposal within 24 hours.",
     email_popup_placeholder: "your@email.com",
-    email_popup_submit: "Subscribe",
-    email_popup_privacy: "We respect your privacy. No spam, ever.",
-    email_popup_success: "Thank you! We'll be in touch.",
+    email_popup_submit: "Send Me My Proposal",
+    email_popup_privacy: "We'll also send you a summary of this conversation.",
+    email_popup_success: "Proposal request sent! Check your inbox.",
     // Contact links
     contact_email: "info@nazarbanai.com",
     contact_phone: "+1 (916) 587 0145",
@@ -282,12 +282,12 @@ window.translations = {
     chat_error_connection: "متأسفم - مشکل در ارتباط. لطفاً دوباره امتحان کنید.",
     chat_farewell: "ممنون! هر زمان می‌تونی موضوع جدیدی رو شروع کنی.",
     // Email popup
-    email_popup_title: "در ارتباط بمانید!",
-    email_popup_subtitle: "بینش‌های شخصی‌سازی شده AI و به‌روزرسانی‌ها را دریافت کنید. پیگیری گفتگوی شما با ما خواهد بود.",
+    email_popup_title: "پیشنهاد رایگان AI خود را دریافت کنید",
+    email_popup_subtitle: "تیم ما نیازهای شما را تحلیل کرده و ظرف ۲۴ ساعت یک پیشنهاد پیاده‌سازی AI شخصی‌سازی شده برایتان ارسال می‌کند.",
     email_popup_placeholder: "ایمیل شما",
-    email_popup_submit: "عضویت",
-    email_popup_privacy: "ما به حریم خصوصی شما احترام می‌گذاریم. بدون اسپم.",
-    email_popup_success: "با تشکر! به زودی با شما تماس می‌گیریم.",
+    email_popup_submit: "پیشنهادم را بفرست",
+    email_popup_privacy: "خلاصه این گفتگو هم برایتان ارسال می‌شود.",
+    email_popup_success: "درخواست پیشنهاد ارسال شد! صندوق ورودی‌تان را چک کنید.",
     // Contact links
     contact_email: "info@nazarbanai.com", // Email stays the same
     contact_phone: "+۹۸ ۹۱۲ ۰۴۳ ۷۵۰۲", // Farsi phone number
