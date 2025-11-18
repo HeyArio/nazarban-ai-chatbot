@@ -73,8 +73,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const summary = lang === 'fa' ? post.summaryFarsi : post.summaryEnglish;
     const formattedDate = formatDate(post.date, lang);
 
-    // Truncate summary to ~150 characters for preview
-    const truncateText = (html, maxLength = 150) => {
+    // Truncate summary to ~300 characters for preview
+    const truncateText = (html, maxLength = 300) => {
       // Strip HTML tags for character count
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = html;

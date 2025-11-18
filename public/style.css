@@ -1362,6 +1362,7 @@ html[dir="rtl"] .menu-toggle {
   border: none;
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
+  font-family: 'Nunito Sans', 'Sahel', sans-serif;
   font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;
@@ -1385,6 +1386,7 @@ html[dir="rtl"] .menu-toggle {
   gap: 0.5rem;
   color: var(--muted);
   text-decoration: none;
+  font-family: 'Nunito Sans', 'Sahel', sans-serif;
   font-weight: 500;
   font-size: 0.9rem;
   transition: all 0.2s ease;
