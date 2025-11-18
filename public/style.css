@@ -2297,6 +2297,47 @@ html[dir="rtl"] .floating-chat-widget {
   transform: scale(1.1);
 }
 
+/* WhatsApp Widget Button */
+.whatsapp-widget-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #25D366;
+  border: none;
+  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  position: relative;
+  text-decoration: none;
+}
+
+.whatsapp-widget-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 30px rgba(37, 211, 102, 0.5);
+}
+
+.whatsapp-widget-button:active {
+  transform: scale(0.95);
+}
+
+.whatsapp-widget-button svg {
+  width: 28px;
+  height: 28px;
+  fill: white;
+  transition: transform 0.3s ease;
+}
+
+.whatsapp-widget-button:hover svg {
+  transform: scale(1.1);
+}
+
+.whatsapp-widget-button:hover .chat-widget-tooltip {
+  opacity: 1;
+}
+
 .chat-widget-tooltip {
   position: absolute;
   right: 70px;
@@ -2360,5 +2401,15 @@ html[dir="rtl"] .chat-widget-tooltip {
 
   .chat-widget-tooltip {
     display: none; /* Hide tooltip on mobile */
+  }
+
+  .whatsapp-widget-button {
+    width: 56px;
+    height: 56px;
+  }
+
+  .whatsapp-widget-button svg {
+    width: 24px;
+    height: 24px;
   }
 }
