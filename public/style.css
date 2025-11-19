@@ -2736,7 +2736,7 @@ html[dir="rtl"] .chat-widget-tooltip {
   margin-top: 1.5rem;
   padding: 1rem 2rem;
   background: linear-gradient(135deg, var(--brand1), var(--brand2));
-  color: white;
+  color: white !important;
   text-decoration: none;
   font-family: 'Nunito Sans', 'Sahel', sans-serif;
   font-size: 1.1rem;
@@ -2751,6 +2751,11 @@ html[dir="rtl"] .chat-widget-tooltip {
 .cta-button:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 25px rgba(129, 140, 248, 0.45);
+  color: white !important;
+}
+
+.cta-button:visited {
+  color: white !important;
 }
 
 .cta-button:active {
