@@ -115,6 +115,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         <h1 class="product-detail-title">${name}</h1>
         <p class="product-detail-tagline">${tagline}</p>
         ${statusBadge}
+        ${videoEmbedUrl ? `
+          <a href="#product-video" class="watch-video-link" onclick="event.preventDefault(); document.getElementById('product-video').scrollIntoView({ behavior: 'smooth' });">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <polygon points="5,3 19,12 5,21" fill="currentColor"/>
+            </svg>
+            ${lang === 'fa' ? 'مشاهده ویدیو' : 'Watch Demo Video'}
+          </a>
+        ` : ''}
       </div>
 
       <div class="product-detail-content">
@@ -156,7 +164,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       </div>
 
       ${videoEmbedUrl ? `
-        <div class="product-video-section">
+        <div id="product-video" class="product-video-section">
           <h3>${lang === 'fa' ? 'ویدیوی معرفی محصول' : 'Product Demo Video'}</h3>
           <div class="video-container">
             <iframe
