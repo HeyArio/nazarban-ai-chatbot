@@ -24,24 +24,16 @@ function initEmailPopup() {
   const form = document.getElementById('emailPopupForm');
   const input = document.getElementById('emailPopupInput');
 
-  console.log('📧 Email popup init - overlay found:', !!overlay, 'closeBtn:', !!closeBtn, 'form:', !!form);
-
-  if (!overlay || !closeBtn || !form) {
-    console.log('❌ Email popup elements not found');
-    return;
-  }
+  if (!overlay || !closeBtn || !form) return;
 
   // Check if already dismissed or email already collected
   const dismissed = localStorage.getItem('emailPopupDismissed');
   const collected = localStorage.getItem('userEmailCollected');
 
   if (dismissed || collected) {
-    console.log('📧 Email popup blocked - dismissed:', dismissed, 'collected:', collected);
     emailPopupShown = true;
     return;
   }
-
-  console.log('✅ Email popup initialized and ready');
 
   // Close button handler
   closeBtn.addEventListener('click', () => {
@@ -149,11 +141,8 @@ function showEmailSuccess() {
 }
 
 function checkEmailPopupTrigger() {
-  console.log('📧 Checking popup trigger - messageCount:', messageCount, 'threshold:', EMAIL_POPUP_TRIGGER_COUNT, 'alreadyShown:', emailPopupShown);
-
   // Only trigger after X message exchanges and if not already shown
   if (messageCount >= EMAIL_POPUP_TRIGGER_COUNT && !emailPopupShown) {
-    console.log('🎯 Triggering email popup!');
     // Small delay to let the bot response appear first
     setTimeout(() => {
       showEmailPopup();
