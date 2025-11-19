@@ -5,7 +5,7 @@
   <!-- Main Chat Page -->
   <url>
     <loc>https://nazarbanai.com/</loc>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/?lang=fa"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/?lang=en"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/"/>
     <lastmod>2025-01-19</lastmod>
@@ -16,7 +16,7 @@
   <!-- About Page -->
   <url>
     <loc>https://nazarbanai.com/about.html</loc>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/about.html?lang=fa"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/about.html"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/about.html?lang=en"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/about.html"/>
     <lastmod>2025-01-19</lastmod>
@@ -27,7 +27,7 @@
   <!-- Blog Page -->
   <url>
     <loc>https://nazarbanai.com/blog.html</loc>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/blog.html?lang=fa"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/blog.html"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/blog.html?lang=en"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/blog.html"/>
     <lastmod>2025-01-19</lastmod>
@@ -38,7 +38,7 @@
   <!-- Products Page -->
   <url>
     <loc>https://nazarbanai.com/products.html</loc>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/products.html?lang=fa"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/products.html"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/products.html?lang=en"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/products.html"/>
     <lastmod>2025-01-19</lastmod>
@@ -49,7 +49,7 @@
   <!-- Services Page -->
   <url>
     <loc>https://nazarbanai.com/services.html</loc>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/services.html?lang=fa"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/services.html"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/services.html?lang=en"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/services.html"/>
     <lastmod>2025-01-19</lastmod>
@@ -60,7 +60,7 @@
   <!-- White Paper Page -->
   <url>
     <loc>https://nazarbanai.com/whitepaper.html</loc>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/whitepaper.html?lang=fa"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/whitepaper.html"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/whitepaper.html?lang=en"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/whitepaper.html"/>
     <lastmod>2025-01-19</lastmod>
@@ -71,7 +71,7 @@
   <!-- Benchmark Page -->
   <url>
     <loc>https://nazarbanai.com/benchmark.html</loc>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/benchmark.html?lang=fa"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/benchmark.html"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/benchmark.html?lang=en"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/benchmark.html"/>
     <lastmod>2025-01-19</lastmod>
@@ -82,7 +82,7 @@
   <!-- Product Detail Page (Dynamic) -->
   <url>
     <loc>https://nazarbanai.com/product-detail.html</loc>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/product-detail.html?lang=fa"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/product-detail.html"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/product-detail.html?lang=en"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/product-detail.html"/>
     <lastmod>2025-01-19</lastmod>
