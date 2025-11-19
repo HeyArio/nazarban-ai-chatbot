@@ -52,9 +52,20 @@ function initEmailPopup() {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = input.value.trim();
+    const submitBtn = document.getElementById('emailPopupSubmit');
 
     if (email && isValidEmail(email)) {
       userEmail = email;
+
+      // Show loading state
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.classList.add('loading');
+        submitBtn.innerHTML = `
+          <span class="loading-spinner"></span>
+          <span data-lang-key="email_popup_loading">${localStorage.getItem('preferredLanguage') === 'fa' ? 'در حال ارسال...' : 'Sending...'}</span>
+        `;
+      }
 
       // Send email to server with conversation history
       const currentLang = localStorage.getItem('preferredLanguage') || 'fa';
