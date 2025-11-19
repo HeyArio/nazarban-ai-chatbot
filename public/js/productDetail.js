@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       <div class="product-detail-content">
         <div class="product-image-section">
           ${product.imageUrl
-            ? `<img src="${product.imageUrl}" alt="${name}" class="product-detail-image" onerror="this.parentElement.innerHTML='<div class=&quot;product-image-placeholder&quot;>${lang === 'fa' ? 'تصویر موجود نیست' : 'Image not available'}</div>'">`
+            ? `<img src="${product.imageUrl}" alt="${name}" class="product-detail-image" loading="lazy" onerror="this.parentElement.innerHTML='<div class=&quot;product-image-placeholder&quot;>${lang === 'fa' ? 'تصویر موجود نیست' : 'Image not available'}</div>'">`
             : `<div class="product-image-placeholder">${lang === 'fa' ? 'تصویر موجود نیست' : 'Image not available'}</div>`
           }
         </div>
