@@ -4,7 +4,9 @@ const cors = require('cors');
 const nodemailer = require('nodemailer');
 const axios = require('axios');
 const fs = require('fs').promises; // Added for file operations
+const fsSync = require('fs'); // For sync operations
 const cron = require('node-cron'); // NEW: For scheduling tasks
+const multer = require('multer'); // For file uploads
 require('dotenv').config();
 
 const app = express();
@@ -14,6 +16,47 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// --- IMAGE UPLOAD CONFIGURATION ---
+const uploadDir = path.join(__dirname, 'public', 'uploads', 'products');
+
+// Ensure upload directory exists
+if (!fsSync.existsSync(uploadDir)) {
+    fsSync.mkdirSync(uploadDir, { recursive: true });
+}
+
+// Configure multer storage
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+        // Generate unique filename with timestamp
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const ext = path.extname(file.originalname);
+        cb(null, 'product-' + uniqueSuffix + ext);
+    }
+});
+
+// File filter - only allow images
+const fileFilter = (req, file, cb) => {
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+    if (allowedTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error('Invalid file type. Only JPEG, PNG, WebP, and GIF are allowed.'), false);
+    }
+};
+
+// Multer upload instance
+const upload = multer({
+    storage: storage,
+    fileFilter: fileFilter,
+    limits: {
+        fileSize: 5 * 1024 * 1024 // 5MB limit
+    }
+});
+// --- END IMAGE UPLOAD CONFIGURATION ---
 
 // --- BLOG POST PATHS ---
 const blogPostsPath = path.join(__dirname, 'blogPosts.json');
@@ -704,6 +747,54 @@ app.get('/api/crypto/data', async (req, res) => {
     }
 });
 // --- END: CRYPTO API ROUTES ---
+
+// --- IMAGE UPLOAD API ---
+// API: Upload product image
+app.post('/api/upload/product-image', upload.single('image'), (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({
+                success: false,
+                message: 'No image file provided'
+            });
+        }
+
+        // Return the URL path to the uploaded image
+        const imageUrl = `/uploads/products/${req.file.filename}`;
+
+        console.log('✅ Product image uploaded:', imageUrl);
+
+        res.json({
+            success: true,
+            imageUrl: imageUrl,
+            filename: req.file.filename
+        });
+    } catch (error) {
+        console.error('❌ Image upload error:', error);
+        res.status(500).json({
+            success: false,
+            message: error.message || 'Failed to upload image'
+        });
+    }
+});
+
+// Handle multer errors
+app.use((error, req, res, next) => {
+    if (error instanceof multer.MulterError) {
+        if (error.code === 'LIMIT_FILE_SIZE') {
+            return res.status(400).json({
+                success: false,
+                message: 'File too large. Maximum size is 5MB.'
+            });
+        }
+        return res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+    next(error);
+});
+// --- END: IMAGE UPLOAD API ---
 
 // --- PRODUCTS API ROUTES ---
 // API: Create/Update a product (Admin only)

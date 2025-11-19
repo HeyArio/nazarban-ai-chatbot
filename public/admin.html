@@ -89,6 +89,71 @@
             box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.4);
         }
 
+        /* Image upload section */
+        .image-upload-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .upload-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .btn-upload {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            background: linear-gradient(135deg, var(--brand1), var(--brand2));
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        .btn-upload:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(129, 140, 248, 0.3);
+        }
+        .upload-info {
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+        .image-preview {
+            position: relative;
+            display: inline-block;
+            max-width: 300px;
+            margin-top: 0.5rem;
+        }
+        .image-preview img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        .btn-remove-image {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 24px;
+            height: 24px;
+            padding: 0;
+            border-radius: 50%;
+            background: var(--error);
+            color: white;
+            font-size: 16px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-remove-image:hover {
+            transform: scale(1.1);
+        }
+        .upload-loading {
+            color: var(--brand1);
+            font-size: 0.9rem;
+        }
+
         /* Buttons */
         button {
             padding: 0.75rem 1.5rem;
@@ -342,15 +407,31 @@
                     <input type="url" id="productUrl" placeholder="https://example.com">
                 </div>
                 <div class="form-group">
-                    <label for="productImageUrl">Product Image URL</label>
-                    <input type="url" id="productImageUrl" placeholder="https://example.com/image.jpg">
+                    <label for="productImageUrl">Product Image</label>
+                    <div class="image-upload-section">
+                        <div class="upload-controls">
+                            <input type="file" id="productImageFile" accept="image/jpeg,image/png,image/webp,image/gif" style="display: none;">
+                            <button type="button" id="uploadImageBtn" class="btn-upload">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                                </svg>
+                                Upload Image
+                            </button>
+                            <span class="upload-info">or paste URL below</span>
+                        </div>
+                        <input type="url" id="productImageUrl" placeholder="https://example.com/image.jpg">
+                        <div id="imagePreview" class="image-preview" style="display: none;">
+                            <img id="previewImg" src="" alt="Preview">
+                            <button type="button" id="removeImageBtn" class="btn-remove-image">&times;</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="two-col">
                 <div class="form-group">
-                    <label for="productVideoUrl">Product Video URL (YouTube/Vimeo)</label>
-                    <input type="url" id="productVideoUrl" placeholder="https://youtube.com/watch?v=... or https://vimeo.com/...">
+                    <label for="productVideoUrl">Product Video URL (YouTube/Vimeo/Aparat)</label>
+                    <input type="url" id="productVideoUrl" placeholder="https://youtube.com/watch?v=... or https://vimeo.com/... or https://aparat.com/v/...">
                 </div>
                 <div class="form-group">
                     <label for="productCategory">Category</label>
