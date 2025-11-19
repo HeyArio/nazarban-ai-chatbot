@@ -2766,27 +2766,49 @@ html[dir="rtl"] .chat-widget-tooltip {
    CONTACT FORM
    ========================================================================== */
 .contact-form-container {
-  background: var(--card);
-  border: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.9));
+  border: 1px solid transparent;
   border-radius: var(--radius-lg);
-  padding: 2rem;
+  padding: 2.5rem;
   margin-top: 2rem;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(129, 140, 248, 0.1);
+}
+
+/* Gradient border effect */
+.contact-form-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  padding: 1px;
+  background: linear-gradient(135deg, var(--brand1), var(--brand2), var(--brand3));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.5;
 }
 
 .contact-form-container h3 {
   margin-bottom: 1.5rem;
   color: var(--foreground);
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   text-align: center;
+  font-weight: 600;
+  background: linear-gradient(90deg, var(--brand1), var(--brand2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .contact-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
 .form-row {
@@ -2804,35 +2826,79 @@ html[dir="rtl"] .chat-widget-tooltip {
 .form-group label {
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--foreground);
+  color: var(--muted);
 }
 
 .form-group input,
 .form-group select {
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--background);
+  padding: 0.875rem 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: var(--radius-md);
+  background: rgba(2, 6, 23, 0.6);
   color: var(--foreground);
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   font-family: inherit;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.3s ease;
+}
+
+.form-group input:hover,
+.form-group select:hover {
+  border-color: rgba(129, 140, 248, 0.4);
 }
 
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
   border-color: var(--brand1);
-  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.1);
+  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15), 0 0 20px rgba(129, 140, 248, 0.1);
+  background: rgba(2, 6, 23, 0.8);
 }
 
 .form-group input::placeholder {
   color: var(--muted);
 }
 
+/* Select dropdown styling */
+.form-group select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 1rem center;
+  padding-left: 2.5rem;
+}
+
+[dir="ltr"] .form-group select {
+  background-position: right 1rem center;
+  padding-left: 1rem;
+  padding-right: 2.5rem;
+}
+
+/* Fix dropdown options readability */
+.form-group select option {
+  background: #1e293b;
+  color: #f8fafc;
+  padding: 0.75rem;
+}
+
 .contact-form .cta-button {
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
   width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--brand1), var(--brand2));
+  border: none;
+  border-radius: var(--radius-md);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(129, 140, 248, 0.3);
+}
+
+.contact-form .cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(129, 140, 248, 0.4);
 }
 
 .form-privacy {
@@ -2840,18 +2906,26 @@ html[dir="rtl"] .chat-widget-tooltip {
   color: var(--muted);
   text-align: center;
   margin: 0.5rem 0;
+  opacity: 0.8;
 }
 
 .form-urgent-contact {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: var(--muted);
   text-align: center;
   margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
 }
 
 .form-urgent-contact a {
   color: var(--brand1);
   font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.form-urgent-contact a:hover {
+  color: var(--brand2);
 }
 
 .form-success {
@@ -2876,5 +2950,7 @@ html[dir="rtl"] .chat-widget-tooltip {
 
   .contact-form-container {
     padding: 1.5rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
   }
 }
