@@ -44,14 +44,32 @@ document.addEventListener('DOMContentLoaded', () => {
   const languageSwitchers = document.querySelectorAll('.language-switcher a');
   const htmlEl = document.documentElement; // Target the <html> tag
 
+  // Helper function to get URL parameter
+  const getUrlParam = (param) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  };
+
+  // Helper function to update URL with language parameter
+  const updateUrlWithLang = (lang) => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('lang', lang);
+    window.history.replaceState({}, '', url.toString());
+  };
+
   // Function to update text content based on selected language
-  const setLanguage = (lang) => {
-    
+  const setLanguage = (lang, updateUrl = true) => {
+
     // *** THIS IS THE KEY CHANGE ***
     // Call the global function to do all the work
     localStorage.setItem('preferredLanguage', lang);
-    window.updateContent(); 
+    window.updateContent();
     // *****************************
+
+    // Update URL parameter for SEO
+    if (updateUrl) {
+      updateUrlWithLang(lang);
+    }
 
     // Update active state on language switchers
     languageSwitchers.forEach(sw => {
@@ -69,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         phoneLink.href = 'https://wa.me/19165870145';
       }
     }
-    
+
     // ✨ NEW: Dispatch custom event for blog page
     document.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang } }));
   };
@@ -92,7 +110,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Initial language setup: Check localStorage, otherwise default to Farsi
-  const preferredLanguage = localStorage.getItem('preferredLanguage') || 'fa';
-  setLanguage(preferredLanguage);
+  // Initial language setup: Priority is URL param > localStorage > default 'fa'
+  const urlLang = getUrlParam('lang');
+  let preferredLanguage;
+
+  if (urlLang && (urlLang === 'en' || urlLang === 'fa')) {
+    // URL parameter takes priority (important for SEO)
+    preferredLanguage = urlLang;
+    setLanguage(preferredLanguage, false); // Don't update URL since it's already there
+  } else {
+    // Fall back to localStorage or default
+    preferredLanguage = localStorage.getItem('preferredLanguage') || 'fa';
+    setLanguage(preferredLanguage, true); // Update URL with the language
+  }
 });
