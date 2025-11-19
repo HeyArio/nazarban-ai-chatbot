@@ -1,8 +1,20 @@
 # Nazarban Analytics - robots.txt
-# Allow all web crawlers access to all content
+# Allow all web crawlers access to public content
 
 User-agent: *
-Disallow:
+
+# Block sensitive/admin pages
+Disallow: /admin.html
+Disallow: /js/admin.js
+
+# Block uploaded content from indexing (optional)
+Disallow: /uploads/
+
+# Block 404 page
+Disallow: /404.html
+
+# Allow everything else
+Allow: /
 
 # Sitemap location
 Sitemap: https://nazarbanai.com/sitemap.xml
