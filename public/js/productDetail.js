@@ -50,6 +50,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   };
 
+  // Convert YouTube/Vimeo URL to embed URL
+  const getEmbedUrl = (url) => {
+    if (!url) return null;
+
+    // YouTube
+    const youtubeMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    if (youtubeMatch) {
+      return `https://www.youtube.com/embed/${youtubeMatch[1]}`;
+    }
+
+    // Vimeo
+    const vimeoMatch = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+    if (vimeoMatch) {
+      return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+    }
+
+    return null;
+  };
+
   // Display product details
   const displayProduct = (product) => {
     const lang = getCurrentLanguage();
@@ -59,6 +78,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const description = lang === 'fa' ? product.descriptionFa : product.descriptionEn;
     const fullDescription = lang === 'fa' ? product.fullDescriptionFa : product.fullDescriptionEn;
     const features = lang === 'fa' ? product.featuresFa : product.featuresEn;
+    const videoEmbedUrl = getEmbedUrl(product.videoUrl);
 
     // Update page title
     document.getElementById('page-title').textContent = `${name} - Nazarban AI`;
@@ -128,6 +148,20 @@ document.addEventListener('DOMContentLoaded', async () => {
           </div>
         </div>
       </div>
+
+      ${videoEmbedUrl ? `
+        <div class="product-video-section">
+          <h3>${lang === 'fa' ? 'ویدیوی معرفی محصول' : 'Product Demo Video'}</h3>
+          <div class="video-container">
+            <iframe
+              src="${videoEmbedUrl}"
+              title="${name} video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
+        </div>
+      ` : ''}
     `;
 
     loadingState.style.display = 'none';

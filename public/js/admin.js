@@ -215,6 +215,7 @@ function editProduct(id) {
     document.getElementById('productFullDescFa').value = product.fullDescriptionFa || '';
     document.getElementById('productUrl').value = product.url || '';
     document.getElementById('productImageUrl').value = product.imageUrl || '';
+    document.getElementById('productVideoUrl').value = product.videoUrl || '';
     document.getElementById('productCategory').value = product.category || '';
     document.getElementById('productStatus').value = product.status || 'live';
 
@@ -309,6 +310,7 @@ document.getElementById('saveProductBtn').addEventListener('click', async () => 
         featuresFa,
         url: document.getElementById('productUrl').value,
         imageUrl: document.getElementById('productImageUrl').value,
+        videoUrl: document.getElementById('productVideoUrl').value,
         category: document.getElementById('productCategory').value,
         status: document.getElementById('productStatus').value,
         password
@@ -346,6 +348,7 @@ function clearProductForm() {
     document.getElementById('productFullDescFa').value = '';
     document.getElementById('productUrl').value = '';
     document.getElementById('productImageUrl').value = '';
+    document.getElementById('productVideoUrl').value = '';
     document.getElementById('productCategory').value = '';
     document.getElementById('productStatus').value = 'live';
     document.getElementById('productPassword').value = '';
