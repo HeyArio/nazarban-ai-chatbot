@@ -723,6 +723,7 @@ app.post('/api/products', async (req, res) => {
             featuresFa,
             url,
             imageUrl,
+            videoUrl,
             status,
             category,
             password
@@ -764,6 +765,7 @@ app.post('/api/products', async (req, res) => {
                     featuresFa: featuresFa || [],
                     url: url || '',
                     imageUrl: imageUrl || '',
+                    videoUrl: videoUrl || '',
                     status: status || 'live',
                     category: category || '',
                     updatedAt: new Date().toISOString()
@@ -798,6 +800,7 @@ app.post('/api/products', async (req, res) => {
                 featuresFa: featuresFa || [],
                 url: url || '',
                 imageUrl: imageUrl || '',
+                videoUrl: videoUrl || '',
                 status: status || 'live',
                 category: category || '',
                 createdAt: new Date().toISOString()
