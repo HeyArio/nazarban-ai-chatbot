@@ -78,4 +78,7 @@ Desktop.ini
 .idea/
 *.swp
 *.swo
-*~
+*~"benchmarkData.json" 
+"blogPosts.json" 
+"cryptoData.json" 
+"collectedEmails.json" 
