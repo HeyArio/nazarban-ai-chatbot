@@ -180,11 +180,119 @@ document.addEventListener('DOMContentLoaded', async () => {
           </div>
         </div>
       ` : ''}
+
+      <!-- Contact Form Section -->
+      <div class="product-contact-section">
+        <div class="contact-form-container">
+          <h3>${lang === 'fa' ? 'در ۳۰ ثانیه بگو چه کمکی از نظربان می‌خواهی' : 'Tell us how Nazarban can help you in 30 seconds'}</h3>
+
+          <form id="productContactForm" class="contact-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fullName">${lang === 'fa' ? 'نام و نام خانوادگی' : 'Full Name'}</label>
+                <input type="text" id="fullName" name="fullName" required>
+              </div>
+              <div class="form-group">
+                <label for="organization">${lang === 'fa' ? 'نام سازمان' : 'Organization Name'}</label>
+                <input type="text" id="organization" name="organization" required>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">${lang === 'fa' ? 'ایمیل' : 'Email'}</label>
+                <input type="email" id="email" name="email" required>
+              </div>
+              <div class="form-group">
+                <label for="phone">${lang === 'fa' ? 'شماره موبایل یا واتساپ' : 'Mobile or WhatsApp Number'}</label>
+                <input type="tel" id="phone" name="phone" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="service">${lang === 'fa' ? 'بیشتر روی کدام خدمت نظربان تمرکز دارید؟' : 'Which Nazarban service are you most interested in?'}</label>
+              <select id="service" name="service" required>
+                <option value="">${lang === 'fa' ? 'انتخاب کنید...' : 'Select...'}</option>
+                <option value="automation">${lang === 'fa' ? 'اتوماسیون' : 'Automation'}</option>
+                <option value="strategy">${lang === 'fa' ? 'استراتژی کسب‌وکار AI' : 'AI Business Strategy'}</option>
+                <option value="cv">${lang === 'fa' ? 'بینایی ماشین' : 'Computer Vision'}</option>
+                <option value="consulting">${lang === 'fa' ? 'مشاوره' : 'Consultation'}</option>
+                <option value="other">${lang === 'fa' ? 'سایر' : 'Other'}</option>
+              </select>
+            </div>
+
+            <p class="form-privacy">${lang === 'fa' ? 'اطلاعات شما فقط برای ارسال پیشنهاد و تماس استفاده می‌شود.' : 'Your information will only be used to send you a proposal and contact you.'}</p>
+
+            <button type="submit" class="cta-button">${lang === 'fa' ? 'ارسال' : 'Submit'}</button>
+
+            <p class="form-urgent-contact">${lang === 'fa'
+              ? 'برای موارد فوری: <a href="https://wa.me/989120437502">۰۹۱۲۰۴۳۷۵۰۲</a>'
+              : 'For urgent matters: <a href="https://wa.me/19165870145">+1 (916) 587 0145</a>'}</p>
+          </form>
+
+          <div id="productFormSuccess" class="form-success" style="display: none;">
+            <p>${lang === 'fa'
+              ? 'درخواست شما ثبت شد. تیم نظربان حداکثر تا ۲۴ ساعت آینده از طریق واتساپ یا ایمیل با شما تماس می‌گیرد.'
+              : 'Your request has been submitted. The Nazarban team will contact you via WhatsApp or email within 24 hours.'}</p>
+            <p>${lang === 'fa'
+              ? 'اگر موضوع فوریتی است، همین حالا به این شماره پیام بدهید: <a href="https://wa.me/989120437502">۰۹۱۲۰۴۳۷۵۰۲</a>'
+              : 'If it\'s urgent, send a message to this number now: <a href="https://wa.me/19165870145">+1 (916) 587 0145</a>'}</p>
+          </div>
+        </div>
+      </div>
     `;
 
     loadingState.style.display = 'none';
     productContent.innerHTML = productHTML;
     productContent.style.display = 'block';
+
+    // Setup form handler after content is rendered
+    const form = document.getElementById('productContactForm');
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="btn-spinner"></span>';
+        submitBtn.style.opacity = '0.7';
+
+        const formData = {
+          fullName: document.getElementById('fullName').value,
+          organization: document.getElementById('organization').value,
+          email: document.getElementById('email').value,
+          phone: document.getElementById('phone').value,
+          service: document.getElementById('service').value
+        };
+
+        try {
+          const response = await fetch('/api/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+          });
+
+          if (response.ok) {
+            form.style.display = 'none';
+            document.getElementById('productFormSuccess').style.display = 'block';
+          } else {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+            submitBtn.style.opacity = '1';
+            alert(lang === 'fa' ? 'خطا در ارسال فرم. لطفاً دوباره تلاش کنید.' : 'Error submitting form. Please try again.');
+          }
+        } catch (error) {
+          console.error('Form submission error:', error);
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+          submitBtn.style.opacity = '1';
+          alert(lang === 'fa' ? 'خطا در ارسال فرم. لطفاً دوباره تلاش کنید.' : 'Error submitting form. Please try again.');
+        }
+      });
+    }
   };
 
   // Show error state

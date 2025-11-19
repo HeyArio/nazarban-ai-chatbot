@@ -2765,6 +2765,14 @@ html[dir="rtl"] .chat-widget-tooltip {
 /* ==========================================================================
    CONTACT FORM
    ========================================================================== */
+
+/* Product page contact section */
+.product-contact-section {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
 .contact-form-container {
   background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.9));
   border: 1px solid transparent;
