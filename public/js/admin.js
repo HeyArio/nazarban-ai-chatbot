@@ -219,6 +219,13 @@ function editProduct(id) {
     document.getElementById('productCategory').value = product.category || '';
     document.getElementById('productStatus').value = product.status || 'live';
 
+    // Show image preview if image URL exists
+    if (product.imageUrl) {
+        showImagePreview(product.imageUrl);
+    } else {
+        hideImagePreview();
+    }
+
     // Load features
     const featuresEnBuilder = document.getElementById('featuresEnBuilder');
     const featuresFaBuilder = document.getElementById('featuresFaBuilder');
@@ -354,6 +361,112 @@ function clearProductForm() {
     document.getElementById('productPassword').value = '';
     document.getElementById('featuresEnBuilder').innerHTML = '';
     document.getElementById('featuresFaBuilder').innerHTML = '';
+
+    // Clear image preview
+    hideImagePreview();
+}
+
+// ====================
+// IMAGE UPLOAD HANDLING
+// ====================
+const uploadImageBtn = document.getElementById('uploadImageBtn');
+const productImageFile = document.getElementById('productImageFile');
+const productImageUrl = document.getElementById('productImageUrl');
+const imagePreview = document.getElementById('imagePreview');
+const previewImg = document.getElementById('previewImg');
+const removeImageBtn = document.getElementById('removeImageBtn');
+
+// Trigger file input when upload button is clicked
+uploadImageBtn.addEventListener('click', () => {
+    productImageFile.click();
+});
+
+// Handle file selection
+productImageFile.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file size (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+        alert('File too large. Maximum size is 5MB.');
+        return;
+    }
+
+    // Show loading state
+    uploadImageBtn.disabled = true;
+    uploadImageBtn.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spin">
+            <circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="32"/>
+        </svg>
+        Uploading...
+    `;
+
+    try {
+        const formData = new FormData();
+        formData.append('image', file);
+
+        const response = await fetch('/api/upload/product-image', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Set the URL in the input field
+            productImageUrl.value = result.imageUrl;
+            // Show preview
+            showImagePreview(result.imageUrl);
+            showStatus('productStatus', 'Image uploaded successfully!', false);
+        } else {
+            alert(result.message || 'Failed to upload image');
+        }
+    } catch (error) {
+        console.error('Upload error:', error);
+        alert('Failed to upload image. Please try again.');
+    } finally {
+        // Reset button state
+        uploadImageBtn.disabled = false;
+        uploadImageBtn.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+            </svg>
+            Upload Image
+        `;
+        // Clear file input for re-selection
+        productImageFile.value = '';
+    }
+});
+
+// Handle URL input change - show preview
+productImageUrl.addEventListener('input', (e) => {
+    const url = e.target.value.trim();
+    if (url) {
+        showImagePreview(url);
+    } else {
+        hideImagePreview();
+    }
+});
+
+// Remove image button
+removeImageBtn.addEventListener('click', () => {
+    productImageUrl.value = '';
+    hideImagePreview();
+});
+
+function showImagePreview(url) {
+    previewImg.src = url;
+    imagePreview.style.display = 'inline-block';
+
+    // Handle image load error
+    previewImg.onerror = () => {
+        hideImagePreview();
+    };
+}
+
+function hideImagePreview() {
+    imagePreview.style.display = 'none';
+    previewImg.src = '';
 }
 
 function addFeatureInput(lang, value = '') {
