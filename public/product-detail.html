@@ -72,6 +72,32 @@
       border: 1px solid rgba(251, 113, 133, 0.3);
     }
 
+    .watch-video-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--brand1);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 50px;
+      background: rgba(129, 140, 248, 0.1);
+      border: 1px solid rgba(129, 140, 248, 0.2);
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+    }
+
+    .watch-video-link:hover {
+      background: rgba(129, 140, 248, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(129, 140, 248, 0.2);
+    }
+
+    .watch-video-link svg {
+      flex-shrink: 0;
+    }
+
     .product-detail-content {
       display: grid;
       grid-template-columns: 1fr 1fr;
