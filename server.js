@@ -1065,7 +1065,7 @@ app.post('/api/collect-email', async (req, res) => {
 
         await fs.writeFile(emailsPath, JSON.stringify(emails, null, 2));
 
-        // Format conversation for email
+        // Format conversation for team email (full chat)
         const formatConversation = (history) => {
             if (!history || history.length === 0) return 'No conversation recorded.';
             return history.map(msg => {
@@ -1076,11 +1076,43 @@ app.post('/api/collect-email', async (req, res) => {
 
         const conversationText = formatConversation(conversationHistory);
 
+        // Generate AI summary of user's request for their email
+        let requestSummary = '';
+        const isFarsi = language === 'fa';
+
+        if (conversationHistory.length > 0) {
+            try {
+                const summaryPrompt = isFarsi
+                    ? `بر اساس گفتگوی زیر، یک خلاصه حرفه‌ای و مختصر (3-5 جمله) از درخواست و نیازهای کاربر بنویس. این خلاصه باید نشان دهد که ما نیازهای آنها را درک کرده‌ایم. فقط خلاصه را بنویس، بدون مقدمه یا توضیح اضافی.`
+                    : `Based on the conversation below, write a professional and concise summary (3-5 sentences) of the user's request and needs. This summary should demonstrate that we understand their requirements. Write only the summary, no introduction or extra explanation.`;
+
+                const conversationForAI = conversationHistory.map(msg => ({
+                    role: msg.role,
+                    content: msg.content
+                }));
+
+                conversationForAI.push({
+                    role: 'user',
+                    content: summaryPrompt
+                });
+
+                const summaryResponse = await callGoogleGeminiWithRetry(conversationForAI, '', 2);
+                requestSummary = summaryResponse || (isFarsi ? 'درخواست شما دریافت شد.' : 'Your request has been received.');
+            } catch (err) {
+                console.error('Error generating summary:', err);
+                requestSummary = isFarsi
+                    ? 'درخواست شما برای راه‌حل‌های هوش مصنوعی دریافت شد.'
+                    : 'Your request for AI solutions has been received.';
+            }
+        } else {
+            requestSummary = isFarsi
+                ? 'درخواست شما برای راه‌حل‌های هوش مصنوعی دریافت شد.'
+                : 'Your request for AI solutions has been received.';
+        }
+
         // Send emails if transporter is configured
         if (emailTransporter) {
-            const isFarsi = language === 'fa';
-
-            // Email to the user
+            // Email to the user (with summary, not full chat)
             const userSubject = isFarsi
                 ? 'درخواست پیشنهاد AI شما - نظربان'
                 : 'Your AI Proposal Request - Nazarban';
@@ -1091,12 +1123,12 @@ app.post('/api/collect-email', async (req, res) => {
                     <p>سلام،</p>
                     <p>ما درخواست پیشنهاد AI شما را دریافت کردیم. تیم ما در حال بررسی نیازهای شما است و <strong>ظرف ۲۴ ساعت</strong> یک پیشنهاد شخصی‌سازی شده برای شما ارسال خواهد شد.</p>
 
-                    <h3 style="color: #818cf8; margin-top: 30px;">خلاصه گفتگوی شما:</h3>
-                    <div style="background: #f1f5f9; padding: 15px; border-radius: 8px; white-space: pre-wrap; font-size: 14px;">
-                        ${conversationText}
+                    <h3 style="color: #818cf8; margin-top: 30px;">درک ما از نیازهای شما:</h3>
+                    <div style="background: #f1f5f9; padding: 15px; border-radius: 8px; font-size: 14px; line-height: 1.6;">
+                        ${requestSummary}
                     </div>
 
-                    <p style="margin-top: 30px;">اگر سوالی دارید، می‌توانید مستقیماً به این ایمیل پاسخ دهید.</p>
+                    <p style="margin-top: 30px;">اگر سوالی دارید یا می‌خواهید جزئیات بیشتری اضافه کنید، می‌توانید مستقیماً به این ایمیل پاسخ دهید.</p>
 
                     <p style="margin-top: 20px;">با احترام،<br><strong>تیم نظربان</strong></p>
 
@@ -1112,12 +1144,12 @@ app.post('/api/collect-email', async (req, res) => {
                     <p>Hello,</p>
                     <p>We've received your AI proposal request. Our team is reviewing your needs and will send you a <strong>personalized proposal within 24 hours</strong>.</p>
 
-                    <h3 style="color: #818cf8; margin-top: 30px;">Your Conversation Summary:</h3>
-                    <div style="background: #f1f5f9; padding: 15px; border-radius: 8px; white-space: pre-wrap; font-size: 14px;">
-                        ${conversationText}
+                    <h3 style="color: #818cf8; margin-top: 30px;">Our Understanding of Your Needs:</h3>
+                    <div style="background: #f1f5f9; padding: 15px; border-radius: 8px; font-size: 14px; line-height: 1.6;">
+                        ${requestSummary}
                     </div>
 
-                    <p style="margin-top: 30px;">If you have any questions, feel free to reply directly to this email.</p>
+                    <p style="margin-top: 30px;">If you have any questions or would like to add more details, feel free to reply directly to this email.</p>
 
                     <p style="margin-top: 20px;">Best regards,<br><strong>Nazarban Team</strong></p>
 
@@ -1129,7 +1161,7 @@ app.post('/api/collect-email', async (req, res) => {
                 </div>
             `;
 
-            // Email to Nazarban team (internal notification)
+            // Email to Nazarban team (internal notification with FULL conversation)
             const teamSubject = `🎯 New AI Lead: ${email}`;
             const teamHtml = `
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
