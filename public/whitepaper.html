@@ -188,9 +188,56 @@
     </section>
 
     <section class="whitepaper-section">
-      <h2 data-lang-key="whitepaper_cta_title">Call to Action</h2>
-      <p data-lang-key="whitepaper_cta_text">Start with a 7-Day Data Readiness Audit and an executable 14-Day PoC.</p>
-      <a href="index.html" class="cta-button" data-lang-key="whitepaper_cta_button">Get Started</a>
+      <h2 data-lang-key="whitepaper_cta_title">دعوت به اقدام</h2>
+      <p data-lang-key="whitepaper_cta_text">فرم را پر کن تا حداکثر تا ۲۴ ساعت یک پیشنهاد اولیه و زمان جلسه از طرف ما دریافت کنی</p>
+
+      <div class="contact-form-container">
+        <h3 data-lang-key="form_title">در ۳۰ ثانیه بگو چه کمکی از نظربان می‌خواهی</h3>
+
+        <form id="contactForm" class="contact-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fullName" data-lang-key="form_name">نام و نام خانوادگی</label>
+              <input type="text" id="fullName" name="fullName" required>
+            </div>
+            <div class="form-group">
+              <label for="organization" data-lang-key="form_organization">نام سازمان</label>
+              <input type="text" id="organization" name="organization" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email" data-lang-key="form_email">ایمیل</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+              <label for="phone" data-lang-key="form_phone">شماره موبایل یا واتساپ</label>
+              <input type="tel" id="phone" name="phone" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="service" data-lang-key="form_service">بیشتر روی کدام خدمت نظربان تمرکز دارید؟</label>
+            <select id="service" name="service" required>
+              <option value="" data-lang-key="form_service_select">انتخاب کنید...</option>
+              <option value="nlp" data-lang-key="form_service_nlp">پردازش زبان طبیعی (NLP)</option>
+              <option value="cv" data-lang-key="form_service_cv">بینایی ماشین</option>
+              <option value="mlops" data-lang-key="form_service_mlops">MLOps و زیرساخت</option>
+              <option value="automation" data-lang-key="form_service_automation">اتوماسیون و n8n</option>
+              <option value="consulting" data-lang-key="form_service_consulting">مشاوره استراتژی AI</option>
+              <option value="other" data-lang-key="form_service_other">سایر</option>
+            </select>
+          </div>
+
+          <button type="submit" class="cta-button" data-lang-key="form_submit">ارسال</button>
+        </form>
+
+        <div id="formSuccess" class="form-success" style="display: none;">
+          <p data-lang-key="form_success">درخواست شما ثبت شد. تیم نظربان حداکثر تا ۲۴ ساعت آینده از طریق واتساپ یا ایمیل با شما تماس می‌گیرد.</p>
+          <p data-lang-key="form_urgent">اگر موضوع فوریتی است، همین حالا به این شماره پیام بدهید: <a href="https://wa.me/989120437502">۰۹۱۲۰۴۳۷۵۰۲</a></p>
+        </div>
+      </div>
     </section>
   </main>
   
@@ -198,5 +245,37 @@
   <script src="js/translations.js"></script>
   <script src="js/language.js"></script>
   <script src="js/chatWidget.js"></script>
+  <script>
+    // Contact Form Handler
+    document.getElementById('contactForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = {
+        fullName: document.getElementById('fullName').value,
+        organization: document.getElementById('organization').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        service: document.getElementById('service').value
+      };
+
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        if (response.ok) {
+          document.getElementById('contactForm').style.display = 'none';
+          document.getElementById('formSuccess').style.display = 'block';
+        } else {
+          alert('Error submitting form. Please try again.');
+        }
+      } catch (error) {
+        console.error('Form submission error:', error);
+        alert('Error submitting form. Please try again.');
+      }
+    });
+  </script>
 </body>
 </html>

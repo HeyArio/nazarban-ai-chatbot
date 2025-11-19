@@ -1125,6 +1125,78 @@ app.get('/api/test', (req, res) => {
     res.json({ status: 'Server is working!' });
 });
 
+// Contact form submission endpoint
+app.post('/api/contact', async (req, res) => {
+    try {
+        const { fullName, organization, email, phone, service } = req.body;
+
+        if (!fullName || !email || !phone) {
+            return res.status(400).json({ success: false, message: 'Missing required fields' });
+        }
+
+        console.log(`📋 Contact form submission from ${fullName} (${organization})`);
+
+        // Save to JSON file
+        const contactsPath = path.join(__dirname, 'contactSubmissions.json');
+        let contacts = [];
+        try {
+            const data = await fs.readFile(contactsPath, 'utf-8');
+            contacts = JSON.parse(data);
+        } catch (err) {
+            // File doesn't exist yet, start fresh
+        }
+
+        const contactData = {
+            fullName,
+            organization,
+            email,
+            phone,
+            service,
+            timestamp: new Date().toISOString()
+        };
+        contacts.push(contactData);
+
+        await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+
+        // Send notification email to team
+        const serviceLabels = {
+            nlp: 'Natural Language Processing (NLP)',
+            cv: 'Computer Vision',
+            mlops: 'MLOps & Infrastructure',
+            automation: 'Automation & n8n',
+            consulting: 'AI Strategy Consulting',
+            other: 'Other'
+        };
+
+        const teamEmailHtml = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #818cf8;">New Contact Form Submission</h2>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Name:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${fullName}</td></tr>
+                    <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Organization:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${organization}</td></tr>
+                    <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Email:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${email}</td></tr>
+                    <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Phone/WhatsApp:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${phone}</td></tr>
+                    <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Service Interest:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${serviceLabels[service] || service}</td></tr>
+                    <tr><td style="padding: 8px;"><strong>Submitted:</strong></td><td style="padding: 8px;">${new Date().toLocaleString('fa-IR')}</td></tr>
+                </table>
+                <p style="margin-top: 20px; color: #666;">Please contact this lead within 24 hours as promised.</p>
+            </div>
+        `;
+
+        await transporter.sendMail({
+            from: `"Nazarban AI" <${process.env.SMTP_USER}>`,
+            to: process.env.TEAM_EMAIL || 'info@nazarbanai.com',
+            subject: `🆕 New Lead: ${fullName} - ${organization}`,
+            html: teamEmailHtml
+        });
+
+        res.json({ success: true, message: 'Form submitted successfully' });
+    } catch (error) {
+        console.error('Contact form error:', error);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
 // Email collection endpoint (from popup) - sends proposal to both parties
 app.post('/api/collect-email', async (req, res) => {
     try {
