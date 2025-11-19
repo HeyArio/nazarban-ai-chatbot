@@ -2901,6 +2901,28 @@ html[dir="rtl"] .chat-widget-tooltip {
   box-shadow: 0 6px 25px rgba(129, 140, 248, 0.4);
 }
 
+.contact-form .cta-button:disabled {
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Loading spinner for button */
+.btn-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .form-privacy {
   font-size: 0.75rem;
   color: var(--muted);

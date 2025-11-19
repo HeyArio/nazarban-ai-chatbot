@@ -253,6 +253,14 @@
     document.getElementById('contactForm').addEventListener('submit', async (e) => {
       e.preventDefault();
 
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+
+      // Show loading state
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="btn-spinner"></span>';
+      submitBtn.style.opacity = '0.7';
+
       const formData = {
         fullName: document.getElementById('fullName').value,
         organization: document.getElementById('organization').value,
@@ -272,10 +280,18 @@
           document.getElementById('contactForm').style.display = 'none';
           document.getElementById('formSuccess').style.display = 'block';
         } else {
+          // Reset button on error
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+          submitBtn.style.opacity = '1';
           alert('Error submitting form. Please try again.');
         }
       } catch (error) {
         console.error('Form submission error:', error);
+        // Reset button on error
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+        submitBtn.style.opacity = '1';
         alert('Error submitting form. Please try again.');
       }
     });
