@@ -2723,3 +2723,36 @@ html[dir="rtl"] .chat-widget-tooltip {
     font-size: 0.875rem;
   }
 }
+
+/* ========================================
+   CTA BUTTON
+   ======================================== */
+
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, var(--brand1), var(--brand2));
+  color: white;
+  text-decoration: none;
+  font-family: 'Nunito Sans', 'Sahel', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(129, 140, 248, 0.3);
+}
+
+.cta-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(129, 140, 248, 0.45);
+}
+
+.cta-button:active {
+  transform: translateY(-1px);
+}

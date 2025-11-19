@@ -99,6 +99,7 @@ window.translations = {
     whitepaper_success_text: "Time-to-Value proven on executive KPIs within 21 days.",
     whitepaper_cta_title: "Call to Action",
     whitepaper_cta_text: "Start with a 7-Day Data Readiness Audit and an executable 14-Day PoC.",
+    whitepaper_cta_button: "Get Started",
 
     // Chat input placeholder
     chat_placeholder: "Type your message…",
@@ -269,8 +270,9 @@ window.translations = {
     whitepaper_success_text: "اثبات ارزش‌آفرینی بر اساس شاخص‌های مدیریتی در کمتر از ۲۱ روز.",
     whitepaper_cta_title: "دعوت به اقدام",
     whitepaper_cta_text: "با ممیزی آمادگی داده ۷ روزه و اثبات مفهوم ۱۴ روزه شروع کنید.",
+    whitepaper_cta_button: "شروع کنید",
 
-     // Chat input placeholder
+    // Chat input placeholder
     chat_placeholder: "پیام خود را تایپ کنید...",
     // Suggestion pills
     suggestion_1: "می‌خوام برای کسب‌وکارم از AI استفاده کنم",
