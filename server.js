@@ -1185,7 +1185,7 @@ app.post('/api/contact', async (req, res) => {
 
             try {
                 await emailTransporter.sendMail({
-                    from: `"Nazarban AI" <${process.env.ZOHO_USER}>`,
+                    from: `"Nazarban AI" <${process.env.ZOHO_EMAIL}>`,
                     to: process.env.TEAM_EMAIL || 'info@nazarbanai.com',
                     subject: `🆕 New Lead: ${fullName} - ${organization}`,
                     html: teamEmailHtml
