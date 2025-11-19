@@ -1158,37 +1158,46 @@ app.post('/api/contact', async (req, res) => {
 
         await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
 
-        // Send notification email to team
+        // Send notification email to team if configured
         const serviceLabels = {
-            nlp: 'Natural Language Processing (NLP)',
+            automation: 'Automation',
+            strategy: 'AI Business Strategy',
             cv: 'Computer Vision',
-            mlops: 'MLOps & Infrastructure',
-            automation: 'Automation & n8n',
-            consulting: 'AI Strategy Consulting',
+            consulting: 'Consultation',
             other: 'Other'
         };
 
-        const teamEmailHtml = `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                <h2 style="color: #818cf8;">New Contact Form Submission</h2>
-                <table style="width: 100%; border-collapse: collapse;">
-                    <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Name:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${fullName}</td></tr>
-                    <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Organization:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${organization}</td></tr>
-                    <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Email:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${email}</td></tr>
-                    <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Phone/WhatsApp:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${phone}</td></tr>
-                    <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Service Interest:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${serviceLabels[service] || service}</td></tr>
-                    <tr><td style="padding: 8px;"><strong>Submitted:</strong></td><td style="padding: 8px;">${new Date().toLocaleString('fa-IR')}</td></tr>
-                </table>
-                <p style="margin-top: 20px; color: #666;">Please contact this lead within 24 hours as promised.</p>
-            </div>
-        `;
+        if (emailTransporter) {
+            const teamEmailHtml = `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: #818cf8;">New Contact Form Submission</h2>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Name:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${fullName}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Organization:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${organization}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Email:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${email}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Phone/WhatsApp:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${phone}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Service Interest:</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${serviceLabels[service] || service}</td></tr>
+                        <tr><td style="padding: 8px;"><strong>Submitted:</strong></td><td style="padding: 8px;">${new Date().toLocaleString('fa-IR')}</td></tr>
+                    </table>
+                    <p style="margin-top: 20px; color: #666;">Please contact this lead within 24 hours as promised.</p>
+                </div>
+            `;
 
-        await transporter.sendMail({
-            from: `"Nazarban AI" <${process.env.SMTP_USER}>`,
-            to: process.env.TEAM_EMAIL || 'info@nazarbanai.com',
-            subject: `🆕 New Lead: ${fullName} - ${organization}`,
-            html: teamEmailHtml
-        });
+            try {
+                await emailTransporter.sendMail({
+                    from: `"Nazarban AI" <${process.env.ZOHO_USER}>`,
+                    to: process.env.TEAM_EMAIL || 'info@nazarbanai.com',
+                    subject: `🆕 New Lead: ${fullName} - ${organization}`,
+                    html: teamEmailHtml
+                });
+                console.log(`✅ Contact form email sent for ${fullName}`);
+            } catch (emailError) {
+                console.error('Email sending failed:', emailError);
+                // Don't fail the request - data is still saved
+            }
+        } else {
+            console.log('⚠️ Email not sent - transporter not configured');
+        }
 
         res.json({ success: true, message: 'Form submitted successfully' });
     } catch (error) {
