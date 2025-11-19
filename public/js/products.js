@@ -51,8 +51,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       <div class="product-header">
         ${statusBadge}
         ${product.imageUrl ? `
-          <div class="product-image" style="width: 100%; height: 200px; overflow: hidden; border-radius: 12px; margin-bottom: 1rem;">
-            <img src="${product.imageUrl}" alt="${name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.style.display='none'">
+          <div class="product-image" style="width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 12px; margin-bottom: 1rem; background: linear-gradient(135deg, rgba(129, 140, 248, 0.1), rgba(192, 132, 252, 0.1));">
+            <img src="${product.imageUrl}" alt="${name}" style="width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" onerror="this.parentElement.style.display='none'">
           </div>
         ` : ''}
         <h2 class="product-name">${name}</h2>
