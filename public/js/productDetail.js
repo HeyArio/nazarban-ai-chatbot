@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   };
 
-  // Convert YouTube/Vimeo URL to embed URL
+  // Convert YouTube/Vimeo/Aparat URL to embed URL
   const getEmbedUrl = (url) => {
     if (!url) return null;
 
@@ -64,6 +64,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const vimeoMatch = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
     if (vimeoMatch) {
       return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+    }
+
+    // Aparat (Iranian video platform)
+    const aparatMatch = url.match(/aparat\.com\/v\/([a-zA-Z0-9]+)/);
+    if (aparatMatch) {
+      return `https://www.aparat.com/video/video/embed/videohash/${aparatMatch[1]}/vt/frame`;
     }
 
     return null;
