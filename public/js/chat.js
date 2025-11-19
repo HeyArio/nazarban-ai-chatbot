@@ -26,26 +26,17 @@ function initEmailPopup() {
 
   if (!overlay || !closeBtn || !form) return;
 
-  // Check if already dismissed or email already collected
-  const dismissed = localStorage.getItem('emailPopupDismissed');
-  const collected = localStorage.getItem('userEmailCollected');
-
-  if (dismissed || collected) {
-    emailPopupShown = true;
-    return;
-  }
-
-  // Close button handler
+  // Close button handler - only dismiss for this session
   closeBtn.addEventListener('click', () => {
     hideEmailPopup();
-    localStorage.setItem('emailPopupDismissed', 'true');
+    emailPopupShown = true; // Prevent showing again this session
   });
 
   // Click outside to close
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) {
       hideEmailPopup();
-      localStorage.setItem('emailPopupDismissed', 'true');
+      emailPopupShown = true;
     }
   });
 
@@ -53,7 +44,7 @@ function initEmailPopup() {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && overlay.classList.contains('active')) {
       hideEmailPopup();
-      localStorage.setItem('emailPopupDismissed', 'true');
+      emailPopupShown = true;
     }
   });
 
@@ -64,7 +55,6 @@ function initEmailPopup() {
 
     if (email && isValidEmail(email)) {
       userEmail = email;
-      localStorage.setItem('userEmailCollected', email);
 
       // Send email to server with conversation history
       const currentLang = localStorage.getItem('preferredLanguage') || 'fa';
