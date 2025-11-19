@@ -101,6 +101,12 @@ window.translations = {
     whitepaper_cta_text: "Start with a 7-Day Data Readiness Audit and an executable 14-Day PoC.",
     whitepaper_cta_button: "Get Started",
 
+    // 404 Error page
+    error_404_title: "Page Not Found",
+    error_404_message: "The page you're looking for doesn't exist or has been moved. Let's get you back on track.",
+    error_404_home: "Go Home",
+    error_404_products: "View Products",
+
     // Chat input placeholder
     chat_placeholder: "Type your message…",
     // Suggestion pills
@@ -271,6 +277,12 @@ window.translations = {
     whitepaper_cta_title: "دعوت به اقدام",
     whitepaper_cta_text: "با ممیزی آمادگی داده ۷ روزه و اثبات مفهوم ۱۴ روزه شروع کنید.",
     whitepaper_cta_button: "شروع کنید",
+
+    // 404 Error page
+    error_404_title: "صفحه پیدا نشد",
+    error_404_message: "صفحه‌ای که دنبال آن هستید وجود ندارد یا جابجا شده است. بیایید شما را به مسیر درست برگردانیم.",
+    error_404_home: "برو به خانه",
+    error_404_products: "مشاهده محصولات",
 
     // Chat input placeholder
     chat_placeholder: "پیام خود را تایپ کنید...",

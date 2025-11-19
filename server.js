@@ -1352,9 +1352,18 @@ app.get('/', (req, res) => {
 });
 
 // 404 and Error handlers
-app.use((req, res) => { 
+app.use((req, res) => {
     console.log('❌ 404 - Route not found:', req.method, req.url);
-    res.status(404).json({ error: 'Route not found' }); 
+
+    // Check if request expects HTML (browser) or JSON (API)
+    const acceptHeader = req.headers.accept || '';
+    if (acceptHeader.includes('text/html')) {
+        // Serve custom 404 page for browser requests
+        res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
+    } else {
+        // Return JSON for API requests
+        res.status(404).json({ error: 'Route not found' });
+    }
 });
 
 app.use((error, req, res, next) => { 
