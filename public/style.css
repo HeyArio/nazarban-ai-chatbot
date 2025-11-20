@@ -3212,7 +3212,7 @@ html[dir="rtl"] .chat-widget-tooltip {
 /* Footer Responsive */
 @media (max-width: 768px) {
   .site-footer {
-    padding: 1.25rem 1rem 5rem; /* Added 5rem bottom padding for floating widgets */
+    padding: 1.25rem 1rem 2rem; /* Bottom padding for floating widgets */
   }
 
   .footer-content {
