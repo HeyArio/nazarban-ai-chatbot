@@ -198,7 +198,7 @@ window.translations = {
     // Footer
     footer_follow: "Follow Us",
     footer_contact: "Contact Us",
-    footer_copyright: "© 2024 Nazarban Analytics FZCO. All rights reserved.",
+    footer_copyright: "© 2025 Nazarban Analytics FZCO. All rights reserved.",
   },
 
   // Farsi translations
@@ -399,6 +399,6 @@ window.translations = {
     // Footer
     footer_follow: "ما را دنبال کنید",
     footer_contact: "تماس با ما",
-    footer_copyright: "© ۲۰۲۴ نظربان آنالیتیکس FZCO. تمامی حقوق محفوظ است.",
+    footer_copyright: "© ۲۰۲۵ نظربان آنالیتیکس FZCO. تمامی حقوق محفوظ است.",
   }
 };
