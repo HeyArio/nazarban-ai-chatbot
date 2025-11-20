@@ -53,7 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Helper function to update URL with language parameter
   const updateUrlWithLang = (lang) => {
     const url = new URL(window.location.href);
-    url.searchParams.set('lang', lang);
+    if (lang === 'en') {
+      url.searchParams.set('lang', lang);
+    } else {
+      // Farsi is default - use clean URL without query param
+      url.searchParams.delete('lang');
+    }
     window.history.replaceState({}, '', url.toString());
   };
 
