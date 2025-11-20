@@ -152,6 +152,7 @@ window.translations = {
     blog_header_subtitle: "Daily insights from Product Hunt's top AI innovations", // This key is no longer used, but we can leave it
     blog_loading: "Loading posts...",
     blog_updated_prefix: "Last Update ",
+    blog_nazarban_insight: "Nazarban Insight",
     crypto_ticker_desc: "Tracking AI-focused cryptocurrencies and blockchain projects",
 
     // Benchmark Page (This is the full, correct section)
