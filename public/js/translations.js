@@ -194,6 +194,11 @@ window.translations = {
     faq_title: "Frequently Asked Questions",
     faq_subtitle: "Find answers to common questions about our AI services",
     faq_empty: "No FAQs available yet.",
+
+    // Footer
+    footer_follow: "Follow Us",
+    footer_contact: "Contact Us",
+    footer_copyright: "© 2024 Nazarban Analytics FZCO. All rights reserved.",
   },
 
   // Farsi translations
@@ -390,5 +395,10 @@ window.translations = {
     faq_title: "سوالات متداول",
     faq_subtitle: "پاسخ سوالات رایج درباره خدمات هوش مصنوعی ما",
     faq_empty: "هنوز سوالی موجود نیست.",
+
+    // Footer
+    footer_follow: "ما را دنبال کنید",
+    footer_contact: "تماس با ما",
+    footer_copyright: "© ۲۰۲۴ نظربان آنالیتیکس FZCO. تمامی حقوق محفوظ است.",
   }
 };

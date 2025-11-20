@@ -88,6 +88,16 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // Update all footer phone links based on language
+    const footerPhoneLinks = document.querySelectorAll('.footer-phone-link');
+    footerPhoneLinks.forEach(link => {
+      if (lang === 'fa') {
+        link.href = 'tel:+989120437502';
+      } else {
+        link.href = 'tel:+19165870145';
+      }
+    });
+
     // ✨ NEW: Dispatch custom event for blog page
     document.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang } }));
   };
