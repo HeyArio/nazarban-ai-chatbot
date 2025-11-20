@@ -203,6 +203,7 @@ window.translations = {
     footer_link_products: "Products",
     footer_link_services: "Services",
     footer_link_about: "About",
+    footer_powered: "Powered by AI",
     footer_copyright: "© 2025 Nazarban Analytics FZCO. All rights reserved.",
   },
 
@@ -409,6 +410,7 @@ window.translations = {
     footer_link_products: "محصولات",
     footer_link_services: "خدمات",
     footer_link_about: "درباره ما",
+    footer_powered: "قدرت گرفته از هوش مصنوعی",
     footer_copyright: "© ۲۰۲۵ نظربان آنالیتیکس FZCO. تمامی حقوق محفوظ است.",
   }
 };
