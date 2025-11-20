@@ -71,6 +71,17 @@ document.addEventListener('DOMContentLoaded', () => {
       updateUrlWithLang(lang);
     }
 
+    // Update canonical URL to match current language (fixes Lighthouse SEO warning)
+    const canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (canonicalLink) {
+      const baseUrl = canonicalLink.href.split('?')[0]; // Remove any existing query params
+      if (lang === 'en') {
+        canonicalLink.href = baseUrl + '?lang=en';
+      } else {
+        canonicalLink.href = baseUrl;
+      }
+    }
+
     // Update active state on language switchers
     languageSwitchers.forEach(sw => {
       sw.classList.toggle('active', sw.getAttribute('data-lang') === lang);
