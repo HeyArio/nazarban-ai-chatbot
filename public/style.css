@@ -1270,6 +1270,30 @@ html[dir="rtl"] .menu-toggle {
   opacity: 1;
 }
 
+/* Nazarban Insight Badge */
+.nazarban-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: linear-gradient(135deg, var(--brand1), var(--brand2));
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(129, 140, 248, 0.3);
+  z-index: 2;
+  letter-spacing: 0.02em;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+[dir="rtl"] .nazarban-badge {
+  right: auto;
+  left: 1rem;
+}
+
 .post-header {
   margin-bottom: 1.5rem;
 }

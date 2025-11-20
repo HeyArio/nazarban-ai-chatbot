@@ -65,13 +65,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   // --- END FUNCTION TO SET DATE ---
 
 
-  const createPostCard = (post, lang) => {
+  const createPostCard = (post, lang, isCustom = false) => {
     const card = document.createElement('article');
     card.className = 'blog-post-card';
     card.dataset.postId = post.id || Math.random().toString(36).substr(2, 9);
 
-    const summary = lang === 'fa' ? post.summaryFarsi : post.summaryEnglish;
-    const formattedDate = formatDate(post.date, lang);
+    const summary = lang === 'fa' ? (post.summaryFarsi || post.tagline) : (post.summaryEnglish || post.tagline);
+    const title = post.title || post.name;
+    const date = post.date || post.created_at;
+    const formattedDate = formatDate(date, lang);
+    const linkUrl = post.url || post.discussion_url;
 
     // Truncate summary to ~300 characters for preview
     const truncateText = (html, maxLength = 300) => {
@@ -92,10 +95,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     const truncatedSummary = truncateText(summary);
+    const badgeText = window.translations ? window.translations[lang]?.blog_nazarban_insight : (lang === 'fa' ? 'بینش نظربان' : 'Nazarban Insight');
 
     card.innerHTML = `
+      ${isCustom ? `<span class="nazarban-badge">${badgeText}</span>` : ''}
       <div class="post-header">
-        <h2 class="post-title">${post.title}</h2>
+        <h2 class="post-title">${title}</h2>
         <div class="post-meta">
           <span class="post-date">${formattedDate}</span>
           ${post.votes ? `<span class="post-votes">${post.votes} ${lang === 'fa' ? 'رأی' : 'upvotes'}</span>` : ''}
@@ -111,9 +116,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
-        ${post.url ? `
-          <a href="${post.url}" target="_blank" rel="noopener noreferrer" class="post-link" onclick="event.stopPropagation()">
-            ${lang === 'fa' ? 'Product Hunt' : 'Product Hunt'}
+        ${linkUrl ? `
+          <a href="${linkUrl}" target="_blank" rel="noopener noreferrer" class="post-link" onclick="event.stopPropagation()">
+            ${isCustom ? (lang === 'fa' ? 'مقاله کامل' : 'Full Article') : 'Product Hunt'}
             <svg class="link-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -202,46 +207,83 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   };
 
-  // --- Main Blog Post Loader (from your file) ---
+  // --- Main Blog Post Loader ---
   const loadBlogPosts = async () => {
-    // This function will *only* load blog posts.
     try {
       loadingIndicator.style.display = 'block';
       errorMessage.style.display = 'none';
       postsContainer.innerHTML = '';
 
-      const response = await fetch('/api/blog/posts');
-      const data = await response.json();
+      const lang = getCurrentLanguage();
+      let allPosts = [];
 
-      if (data.success && data.posts && data.posts.length > 0) {
-        const lang = getCurrentLanguage();
-        
-        data.posts.forEach(post => {
-          const card = createPostCard(post, lang);
+      // 1. Load custom articles (Nazarban Insight)
+      try {
+        const customResponse = await fetch('/data/custom-articles.json');
+        const customArticles = await customResponse.json();
+
+        // Add custom flag and convert to post format
+        const customPosts = customArticles.map(article => ({
+          ...article,
+          isCustom: true,
+          name: article.title[lang] || article.title.en,
+          tagline: article.summary[lang] || article.summary.en,
+          discussion_url: article.url,
+          thumbnail: { image_url: article.image },
+          created_at: article.date
+        }));
+
+        allPosts = customPosts;
+      } catch (error) {
+        console.log('No custom articles found or error loading:', error);
+      }
+
+      // 2. Load Product Hunt posts
+      try {
+        const phResponse = await fetch('/api/blog/posts');
+        const phData = await phResponse.json();
+
+        if (phData.success && phData.posts && phData.posts.length > 0) {
+          allPosts = [...allPosts, ...phData.posts];
+        }
+      } catch (error) {
+        console.log('Error loading Product Hunt posts:', error);
+      }
+
+      // 3. Sort by date (newest first) and limit to 6
+      allPosts.sort((a, b) => new Date(b.created_at || b.date) - new Date(a.created_at || a.date));
+      const displayPosts = allPosts.slice(0, 6);
+
+      // 4. Display posts
+      if (displayPosts.length > 0) {
+        displayPosts.forEach(post => {
+          const card = createPostCard(post, lang, post.isCustom);
           postsContainer.appendChild(card);
         });
       } else {
         // No posts available
-        const lang = getCurrentLanguage();
         const emptyMessage = document.createElement('div');
         emptyMessage.className = 'empty-state';
         emptyMessage.innerHTML = `
-          <svg class="empty-icon" ...> ... </svg>
+          <svg class="empty-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M9 7h6M9 12h6M9 17h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
           <h3>${lang === 'fa' ? 'مقاله‌ای موجود نیست' : 'No Posts Yet'}</h3>
           <p>${lang === 'fa' ? 'به زودی مقالات جدید منتشر خواهد شد' : 'New posts will be published soon'}</p>
         `;
         postsContainer.appendChild(emptyMessage);
       }
-      
+
       loadingIndicator.style.display = 'none';
 
     } catch (error) {
       console.error('Error loading blog posts:', error);
-      loadingIndicator.style.display = 'none'; // Hide main loading
-      errorMessage.style.display = 'block'; // Show main error
-      
+      loadingIndicator.style.display = 'none';
+      errorMessage.style.display = 'block';
+
       const lang = getCurrentLanguage();
-      errorMessage.textContent = lang === 'fa' 
+      errorMessage.textContent = lang === 'fa'
         ? 'خطا در بارگذاری مقالات. لطفاً دوباره تلاش کنید.'
         : 'Error loading posts. Please try again.';
     }

@@ -500,6 +500,65 @@
             <h2 style="margin-top: 3rem; margin-bottom: 1rem;">Existing FAQs</h2>
             <div class="item-list" id="faqsList"></div>
         </div>
+
+        <!-- ARTICLES TAB -->
+        <div class="tab-content" id="articles-tab">
+            <h2 style="margin-bottom: 1.5rem;">Add/Edit Article</h2>
+
+            <input type="hidden" id="articleId">
+
+            <div class="two-col">
+                <div class="form-group">
+                    <label for="articleTitleEn">Title (English)</label>
+                    <input type="text" id="articleTitleEn" placeholder="Article title in English">
+                </div>
+                <div class="form-group">
+                    <label for="articleTitleFa">Title (Persian)</label>
+                    <input type="text" id="articleTitleFa" placeholder="عنوان مقاله به فارسی">
+                </div>
+            </div>
+
+            <div class="two-col">
+                <div class="form-group">
+                    <label for="articleSummaryEn">Summary (English)</label>
+                    <textarea id="articleSummaryEn" style="min-height: 100px;" placeholder="Brief summary in English"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="articleSummaryFa">Summary (Persian)</label>
+                    <textarea id="articleSummaryFa" style="min-height: 100px;" placeholder="خلاصه کوتاه به فارسی"></textarea>
+                </div>
+            </div>
+
+            <div class="two-col">
+                <div class="form-group">
+                    <label for="articleUrl">Article URL</label>
+                    <input type="url" id="articleUrl" placeholder="https://example.com/article">
+                </div>
+                <div class="form-group">
+                    <label for="articleDate">Date</label>
+                    <input type="date" id="articleDate">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="articleImage">Image URL (optional)</label>
+                <input type="url" id="articleImage" placeholder="https://example.com/image.jpg">
+            </div>
+
+            <div class="controls">
+                <button id="addArticleBtn" class="primary">Add to List</button>
+                <button class="secondary" onclick="clearArticleForm()">Clear Form</button>
+                <span class="status" id="articleStatus"></span>
+            </div>
+
+            <h2 style="margin-top: 3rem; margin-bottom: 1rem;">Articles List</h2>
+            <div class="item-list" id="articlesList"></div>
+
+            <div class="controls" style="margin-top: 2rem;">
+                <button id="copyArticlesJsonBtn" class="primary">Copy JSON to Clipboard</button>
+                <span class="status" id="copyStatus"></span>
+            </div>
+        </div>
     </div>
 
     <script src="js/admin.js"></script>

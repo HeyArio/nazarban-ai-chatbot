@@ -617,6 +617,134 @@ function clearFaqForm() {
 }
 
 // ====================
+// ARTICLES MANAGEMENT
+// ====================
+let articles = [];
+
+function loadArticles() {
+    const articlesList = document.getElementById('articlesList');
+    articlesList.innerHTML = '';
+
+    if (articles.length === 0) {
+        articlesList.innerHTML = '<p style="color: var(--muted); text-align: center; padding: 2rem;">No articles yet. Add your first article above.</p>';
+        return;
+    }
+
+    articles.forEach((article, index) => {
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = `
+            <div class="item-content">
+                <h3>${article.title.en}</h3>
+                <p style="color: var(--muted); font-size: 0.9rem; margin-top: 0.25rem;">${article.title.fa}</p>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">${article.summary.en}</p>
+                <p style="color: var(--muted); font-size: 0.85rem; margin-top: 0.5rem;">Date: ${article.date} | URL: ${article.url}</p>
+            </div>
+            <div class="item-actions">
+                <button class="secondary" onclick="editArticle(${index})">Edit</button>
+                <button class="danger" onclick="deleteArticle(${index})">Delete</button>
+            </div>
+        `;
+        articlesList.appendChild(div);
+    });
+}
+
+function addArticle() {
+    const titleEn = document.getElementById('articleTitleEn').value.trim();
+    const titleFa = document.getElementById('articleTitleFa').value.trim();
+    const summaryEn = document.getElementById('articleSummaryEn').value.trim();
+    const summaryFa = document.getElementById('articleSummaryFa').value.trim();
+    const url = document.getElementById('articleUrl').value.trim();
+    const date = document.getElementById('articleDate').value;
+    const image = document.getElementById('articleImage').value.trim();
+    const articleId = document.getElementById('articleId').value;
+
+    if (!titleEn || !titleFa || !summaryEn || !summaryFa || !url || !date) {
+        showStatus('articleStatus', 'Please fill in all required fields', true);
+        return;
+    }
+
+    const article = {
+        id: articleId || `article-${Date.now()}`,
+        title: { en: titleEn, fa: titleFa },
+        summary: { en: summaryEn, fa: summaryFa },
+        url: url,
+        date: date,
+        image: image || 'https://via.placeholder.com/400x200'
+    };
+
+    if (articleId) {
+        // Edit existing
+        const index = articles.findIndex(a => a.id === articleId);
+        if (index !== -1) {
+            articles[index] = article;
+            showStatus('articleStatus', 'Article updated!', false);
+        }
+    } else {
+        // Add new
+        articles.unshift(article); // Add to beginning
+        showStatus('articleStatus', 'Article added!', false);
+    }
+
+    clearArticleForm();
+    loadArticles();
+}
+
+function editArticle(index) {
+    const article = articles[index];
+    document.getElementById('articleId').value = article.id;
+    document.getElementById('articleTitleEn').value = article.title.en;
+    document.getElementById('articleTitleFa').value = article.title.fa;
+    document.getElementById('articleSummaryEn').value = article.summary.en;
+    document.getElementById('articleSummaryFa').value = article.summary.fa;
+    document.getElementById('articleUrl').value = article.url;
+    document.getElementById('articleDate').value = article.date;
+    document.getElementById('articleImage').value = article.image;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function deleteArticle(index) {
+    if (confirm('Are you sure you want to delete this article?')) {
+        articles.splice(index, 1);
+        loadArticles();
+        showStatus('articleStatus', 'Article deleted', false);
+    }
+}
+
+function clearArticleForm() {
+    document.getElementById('articleId').value = '';
+    document.getElementById('articleTitleEn').value = '';
+    document.getElementById('articleTitleFa').value = '';
+    document.getElementById('articleSummaryEn').value = '';
+    document.getElementById('articleSummaryFa').value = '';
+    document.getElementById('articleUrl').value = '';
+    document.getElementById('articleDate').value = '';
+    document.getElementById('articleImage').value = '';
+}
+
+function copyArticlesJson() {
+    if (articles.length === 0) {
+        showStatus('copyStatus', 'No articles to copy', true);
+        return;
+    }
+
+    const json = JSON.stringify(articles, null, 2);
+    navigator.clipboard.writeText(json).then(() => {
+        showStatus('copyStatus', 'JSON copied! Paste into data/custom-articles.json', false);
+    }).catch(() => {
+        showStatus('copyStatus', 'Failed to copy. Check console for JSON.', true);
+        console.log('Articles JSON:', json);
+    });
+}
+
+// Event listeners for articles
+document.getElementById('addArticleBtn').addEventListener('click', addArticle);
+document.getElementById('copyArticlesJsonBtn').addEventListener('click', copyArticlesJson);
+
+// Set today's date as default
+document.getElementById('articleDate').valueAsDate = new Date();
+
+// ====================
 // UTILITY FUNCTIONS
 // ====================
 function showStatus(elementId, message, isError) {
