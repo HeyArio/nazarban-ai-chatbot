@@ -3078,6 +3078,23 @@ html[dir="rtl"] .chat-widget-tooltip {
   opacity: 1;
 }
 
+.footer-quick-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.footer-quick-link {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.75rem;
+  transition: color 0.2s ease;
+}
+
+.footer-quick-link:hover {
+  color: var(--brand1);
+}
+
 .footer-bottom {
   max-width: 600px;
   margin: 0.75rem auto 0;
@@ -3120,5 +3137,9 @@ html[dir="rtl"] .chat-widget-tooltip {
 
   [dir="rtl"] .footer-contact-link {
     flex-direction: row;
+  }
+
+  .footer-quick-links {
+    align-items: center;
   }
 }

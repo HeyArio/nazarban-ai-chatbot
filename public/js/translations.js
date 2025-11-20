@@ -198,6 +198,11 @@ window.translations = {
     // Footer
     footer_follow: "Follow Us",
     footer_contact: "Contact Us",
+    footer_links: "Quick Links",
+    footer_link_faq: "FAQ",
+    footer_link_products: "Products",
+    footer_link_services: "Services",
+    footer_link_about: "About",
     footer_copyright: "© 2025 Nazarban Analytics FZCO. All rights reserved.",
   },
 
@@ -399,6 +404,11 @@ window.translations = {
     // Footer
     footer_follow: "ما را دنبال کنید",
     footer_contact: "تماس با ما",
+    footer_links: "لینک‌های سریع",
+    footer_link_faq: "سوالات متداول",
+    footer_link_products: "محصولات",
+    footer_link_services: "خدمات",
+    footer_link_about: "درباره ما",
     footer_copyright: "© ۲۰۲۵ نظربان آنالیتیکس FZCO. تمامی حقوق محفوظ است.",
   }
 };
