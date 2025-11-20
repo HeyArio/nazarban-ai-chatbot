@@ -1,16 +1,1 @@
-[
-  {
-    "id": "example-1",
-    "title": {
-      "en": "Example Article Title",
-      "fa": "عنوان مقاله نمونه"
-    },
-    "summary": {
-      "en": "This is a brief summary of your article. You can write about AI trends, company news, or technical insights.",
-      "fa": "این یک خلاصه کوتاه از مقاله شماست. می‌توانید در مورد روندهای هوش مصنوعی، اخبار شرکت یا بینش‌های فنی بنویسید."
-    },
-    "url": "https://example.com/your-article",
-    "date": "2025-01-15",
-    "image": "https://via.placeholder.com/400x200"
-  }
-]
+[]

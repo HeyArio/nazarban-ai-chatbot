@@ -171,10 +171,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   const openModal = (post, lang) => {
     let modal = document.getElementById('blogModal');
     if (!modal) modal = createModal();
-    
+
     const summary = lang === 'fa' ? post.summaryFarsi : post.summaryEnglish;
-    const formattedDate = formatDate(post.date, lang);
-    
+    const date = post.date || post.created_at;
+    const formattedDate = formatDate(date, lang);
+
     modal.querySelector('.modal-title').textContent = post.title;
     modal.querySelector('.modal-meta').innerHTML = `
       <span class="post-date">${formattedDate}</span>
@@ -183,9 +184,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     modal.querySelector('.modal-body').innerHTML = summary;
     
     if (post.url) {
+      // Determine link text based on whether it's a custom article or Product Hunt post
+      const linkText = post.isCustom
+        ? (lang === 'fa' ? 'مقاله کامل' : 'Read Full Article')
+        : (lang === 'fa' ? 'مشاهده در Product Hunt' : 'View on Product Hunt');
+
       modal.querySelector('.modal-footer').innerHTML = `
         <a href="${post.url}" target="_blank" rel="noopener noreferrer" class="modal-link">
-          ${lang === 'fa' ? 'مشاهده در Product Hunt' : 'View on Product Hunt'}
+          ${linkText}
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -226,8 +232,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         const customPosts = customArticles.map(article => ({
           ...article,
           isCustom: true,
+          title: article.title[lang] || article.title.en,
           name: article.title[lang] || article.title.en,
           tagline: article.summary[lang] || article.summary.en,
+          summaryFarsi: article.summary.fa,
+          summaryEnglish: article.summary.en,
           discussion_url: article.url,
           thumbnail: { image_url: article.image },
           created_at: article.date
