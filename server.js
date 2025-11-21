@@ -1523,6 +1523,27 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// --- CLEAN URL ROUTING ---
+// Redirect /index.html to root
+app.get('/index.html', (req, res) => {
+    res.redirect(301, '/');
+});
+
+// Redirect .html URLs to clean URLs (permanent redirect)
+app.get('/*.html', (req, res) => {
+    const cleanUrl = req.path.replace('.html', '');
+    res.redirect(301, cleanUrl);
+});
+
+// Serve HTML pages for clean URLs
+const pages = ['about', 'blog', 'products', 'services', 'whitepaper', 'benchmark', 'product-detail', 'admin'];
+pages.forEach(page => {
+    app.get(`/${page}`, (req, res) => {
+        res.sendFile(path.join(__dirname, 'public', `${page}.html`));
+    });
+});
+// --- END CLEAN URL ROUTING ---
+
 // 404 and Error handlers
 app.use((req, res) => {
     console.log('❌ 404 - Route not found:', req.method, req.url);
