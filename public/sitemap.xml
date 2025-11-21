@@ -8,7 +8,7 @@
     <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/?lang=en"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/"/>
-    <lastmod>2025-11-19</lastmod>
+    <lastmod>2025-11-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -19,161 +19,161 @@
     <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/?lang=en"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/"/>
-    <lastmod>2025-11-19</lastmod>
+    <lastmod>2025-11-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <!-- About Page - Farsi -->
   <url>
-    <loc>https://nazarbanai.com/about.html</loc>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/about.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/about.html?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/about.html"/>
-    <lastmod>2025-11-19</lastmod>
+    <loc>https://nazarbanai.com/about</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/about?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/about"/>
+    <lastmod>2025-11-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- About Page - English -->
   <url>
-    <loc>https://nazarbanai.com/about.html?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/about.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/about.html?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/about.html"/>
-    <lastmod>2025-11-19</lastmod>
+    <loc>https://nazarbanai.com/about?lang=en</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/about?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/about"/>
+    <lastmod>2025-11-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- Blog Page - Farsi -->
   <url>
-    <loc>https://nazarbanai.com/blog.html</loc>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/blog.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/blog.html?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/blog.html"/>
-    <lastmod>2025-11-19</lastmod>
+    <loc>https://nazarbanai.com/blog</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/blog"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/blog?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/blog"/>
+    <lastmod>2025-11-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- Blog Page - English -->
   <url>
-    <loc>https://nazarbanai.com/blog.html?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/blog.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/blog.html?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/blog.html"/>
-    <lastmod>2025-11-19</lastmod>
+    <loc>https://nazarbanai.com/blog?lang=en</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/blog"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/blog?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/blog"/>
+    <lastmod>2025-11-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- Products Page - Farsi -->
   <url>
-    <loc>https://nazarbanai.com/products.html</loc>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/products.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/products.html?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/products.html"/>
-    <lastmod>2025-11-19</lastmod>
+    <loc>https://nazarbanai.com/products</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/products"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/products?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/products"/>
+    <lastmod>2025-11-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <!-- Products Page - English -->
   <url>
-    <loc>https://nazarbanai.com/products.html?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/products.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/products.html?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/products.html"/>
-    <lastmod>2025-11-19</lastmod>
+    <loc>https://nazarbanai.com/products?lang=en</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/products"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/products?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/products"/>
+    <lastmod>2025-11-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <!-- Services Page - Farsi -->
   <url>
-    <loc>https://nazarbanai.com/services.html</loc>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/services.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/services.html?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/services.html"/>
-    <lastmod>2025-11-19</lastmod>
+    <loc>https://nazarbanai.com/services</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/services"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/services?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/services"/>
+    <lastmod>2025-11-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <!-- Services Page - English -->
   <url>
-    <loc>https://nazarbanai.com/services.html?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/services.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/services.html?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/services.html"/>
-    <lastmod>2025-11-19</lastmod>
+    <loc>https://nazarbanai.com/services?lang=en</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/services"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/services?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/services"/>
+    <lastmod>2025-11-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <!-- White Paper Page - Farsi -->
   <url>
-    <loc>https://nazarbanai.com/whitepaper.html</loc>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/whitepaper.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/whitepaper.html?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/whitepaper.html"/>
-    <lastmod>2025-11-19</lastmod>
+    <loc>https://nazarbanai.com/whitepaper</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/whitepaper"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/whitepaper?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/whitepaper"/>
+    <lastmod>2025-11-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- White Paper Page - English -->
   <url>
-    <loc>https://nazarbanai.com/whitepaper.html?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/whitepaper.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/whitepaper.html?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/whitepaper.html"/>
-    <lastmod>2025-11-19</lastmod>
+    <loc>https://nazarbanai.com/whitepaper?lang=en</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/whitepaper"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/whitepaper?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/whitepaper"/>
+    <lastmod>2025-11-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- Benchmark Page - Farsi -->
   <url>
-    <loc>https://nazarbanai.com/benchmark.html</loc>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/benchmark.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/benchmark.html?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/benchmark.html"/>
-    <lastmod>2025-11-19</lastmod>
+    <loc>https://nazarbanai.com/benchmark</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/benchmark"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/benchmark?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/benchmark"/>
+    <lastmod>2025-11-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- Benchmark Page - English -->
   <url>
-    <loc>https://nazarbanai.com/benchmark.html?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/benchmark.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/benchmark.html?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/benchmark.html"/>
-    <lastmod>2025-11-19</lastmod>
+    <loc>https://nazarbanai.com/benchmark?lang=en</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/benchmark"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/benchmark?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/benchmark"/>
+    <lastmod>2025-11-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- Product Detail Page - Farsi -->
   <url>
-    <loc>https://nazarbanai.com/product-detail.html</loc>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/product-detail.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/product-detail.html?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/product-detail.html"/>
-    <lastmod>2025-11-19</lastmod>
+    <loc>https://nazarbanai.com/product-detail</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/product-detail"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/product-detail?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/product-detail"/>
+    <lastmod>2025-11-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- Product Detail Page - English -->
   <url>
-    <loc>https://nazarbanai.com/product-detail.html?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/product-detail.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/product-detail.html?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/product-detail.html"/>
-    <lastmod>2025-11-19</lastmod>
+    <loc>https://nazarbanai.com/product-detail?lang=en</loc>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://nazarbanai.com/product-detail"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nazarbanai.com/product-detail?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nazarbanai.com/product-detail"/>
+    <lastmod>2025-11-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
