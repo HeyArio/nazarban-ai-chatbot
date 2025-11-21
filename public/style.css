@@ -75,9 +75,10 @@
 
 
 :root {
-  --bg: #020617;
-  --panel: #0f172a;
-  --panel-glass: rgba(15, 23, 42, 0.75);
+  --bg: #0a1929;
+  --bg-gradient: linear-gradient(135deg, #0a1929 0%, #0d1b2a 50%, #0a1520 100%);
+  --panel: #1e293b;
+  --panel-glass: rgba(30, 41, 59, 0.75);
   --ink: #f8fafc;
   --muted: #94a3b8;
   --border: rgba(148, 163, 184, 0.15);
@@ -106,7 +107,8 @@
 html {
   font-family: var(--font-fa);
   color: var(--ink);
-  background-color: var(--bg);
+  background: var(--bg-gradient);
+  background-attachment: fixed;
   scroll-behavior: smooth;
   height: 100%;
 }
@@ -157,17 +159,14 @@ body {
   border-radius: 16px;
   display: grid;
   place-items: center;
-  background: #ffffff;
-  border: 1px solid rgba(71, 85, 105, 0.28);
-  box-shadow: 0 8px 28px rgba(129, 140, 248, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  background: transparent;
+  border: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .logo-section:hover .logo-badge {
   transform: scale(1.05);
-  box-shadow: 0 12px 32px rgba(129, 140, 248, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  filter: drop-shadow(0 8px 16px rgba(16, 185, 129, 0.3));
 }
 
 .logo {
