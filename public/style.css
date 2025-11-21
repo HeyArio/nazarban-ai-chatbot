@@ -81,13 +81,13 @@
   --ink: #f8fafc;
   --muted: #94a3b8;
   --border: rgba(148, 163, 184, 0.15);
-  --shadow-color: rgba(129, 140, 248, 0.4);
+  --shadow-color: rgba(16, 185, 129, 0.4);
   --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.35);
   --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.5);
 
-  --brand1: #818cf8;
-  --brand2: #c084fc;
-  --brand3: #fb7185;
+  --brand1: #10b981;
+  --brand2: #14b8a6;
+  --brand3: #06b6d4;
 
   --radius-md: 12px;
   --radius-lg: 18px;
