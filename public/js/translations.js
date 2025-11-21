@@ -203,7 +203,7 @@ window.translations = {
     footer_link_faq: "FAQ",
     footer_link_products: "Products",
     footer_link_services: "Services",
-    footer_link_about: "About",
+    footer_link_forum: "Forum",
     footer_powered: "Powered by AI",
     footer_copyright: "© 2025 Nazarban Analytics FZCO. All rights reserved.",
   },
@@ -406,11 +406,11 @@ window.translations = {
     // Footer
     footer_follow: "ما را دنبال کنید",
     footer_contact: "تماس با ما",
-    footer_links: "لینک‌های سریع",
+    footer_links: "دسترسی سریع",
     footer_link_faq: "سوالات متداول",
     footer_link_products: "محصولات",
     footer_link_services: "خدمات",
-    footer_link_about: "درباره ما",
+    footer_link_forum: "انجمن",
     footer_powered: "قدرت گرفته از هوش مصنوعی",
     footer_copyright: "© ۲۰۲۵ نظربان آنالیتیکس FZCO. تمامی حقوق محفوظ است.",
   }
