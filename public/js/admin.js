@@ -745,6 +745,139 @@ document.getElementById('copyArticlesJsonBtn').addEventListener('click', copyArt
 document.getElementById('articleDate').valueAsDate = new Date();
 
 // ====================
+// ABOUT PAGE VIDEO
+// ====================
+
+// Load current about video URL
+async function loadAboutVideo() {
+    try {
+        const response = await fetch('/api/about/video');
+        const data = await response.json();
+
+        if (data.success && data.videoUrl) {
+            document.getElementById('aboutVideoUrl').value = data.videoUrl;
+        }
+    } catch (error) {
+        console.error('Error loading about video:', error);
+    }
+}
+
+// Save about video URL
+document.getElementById('saveAboutVideoBtn').addEventListener('click', async () => {
+    const videoUrl = document.getElementById('aboutVideoUrl').value.trim();
+    const password = document.getElementById('aboutPassword').value;
+
+    if (!password) {
+        showStatus('aboutStatus', 'Password required', true);
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/about/video', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ videoUrl, password })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            showStatus('aboutStatus', 'Video URL saved successfully', false);
+            document.getElementById('aboutPassword').value = '';
+        } else {
+            showStatus('aboutStatus', data.error || 'Failed to save', true);
+        }
+    } catch (error) {
+        showStatus('aboutStatus', error.message, true);
+    }
+});
+
+// Preview about video
+document.getElementById('previewAboutVideoBtn').addEventListener('click', () => {
+    const videoUrl = document.getElementById('aboutVideoUrl').value.trim();
+
+    if (!videoUrl) {
+        showStatus('aboutStatus', 'Please enter a video URL first', true);
+        return;
+    }
+
+    const embedUrl = getEmbedUrl(videoUrl);
+
+    if (!embedUrl) {
+        showStatus('aboutStatus', 'Invalid video URL format', true);
+        return;
+    }
+
+    const previewContainer = document.getElementById('aboutVideoPreviewContainer');
+    const previewSection = document.getElementById('aboutVideoPreview');
+
+    if (isDirectVideo(embedUrl)) {
+        previewContainer.innerHTML = `
+            <video controls controlsList="nodownload" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 8px;">
+                <source src="${embedUrl}" type="${embedUrl.endsWith('.m3u8') ? 'application/x-mpegURL' : 'video/mp4'}">
+                Your browser does not support the video tag.
+            </video>
+        `;
+    } else {
+        previewContainer.innerHTML = `
+            <iframe
+                src="${embedUrl}"
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 8px;"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        `;
+    }
+
+    previewSection.style.display = 'block';
+    showStatus('aboutStatus', 'Preview loaded', false);
+});
+
+// Helper function: Convert video URL to embed URL
+function getEmbedUrl(url) {
+    if (!url) return null;
+
+    // YouTube
+    const youtubeMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    if (youtubeMatch) {
+        return `https://www.youtube.com/embed/${youtubeMatch[1]}`;
+    }
+
+    // Vimeo
+    const vimeoMatch = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+    if (vimeoMatch) {
+        return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+    }
+
+    // Aparat
+    const aparatMatch = url.match(/aparat\.com\/v\/([a-zA-Z0-9]+)/);
+    if (aparatMatch) {
+        return `https://www.aparat.com/video/video/embed/videohash/${aparatMatch[1]}/vt/frame`;
+    }
+
+    // Arvan Cloud VOD or direct video
+    const arvanMatch = url.match(/https?:\/\/([^\/]+\.arvanvod\.ir\/[^\/]+\/[^\/]+)/);
+    if (arvanMatch || url.match(/\.(mp4|webm|ogg|m3u8)$/i)) {
+        return url;
+    }
+
+    // If already an embed URL
+    if (url.includes('embed')) {
+        return url;
+    }
+
+    return null;
+}
+
+// Helper function: Check if URL is a direct video file
+function isDirectVideo(url) {
+    return url && (url.includes('arvanvod.ir') || url.match(/\.(mp4|webm|ogg|m3u8)$/i));
+}
+
+// Load about video on page load
+loadAboutVideo();
+
+// ====================
 // UTILITY FUNCTIONS
 // ====================
 function showStatus(elementId, message, isError) {

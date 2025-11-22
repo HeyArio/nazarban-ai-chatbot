@@ -313,6 +313,7 @@
             <button class="tab" data-tab="products">Products</button>
             <button class="tab" data-tab="faqs">FAQs</button>
             <button class="tab" data-tab="articles">Articles</button>
+            <button class="tab" data-tab="about">About Page</button>
         </div>
 
         <!-- PROMPTS TAB -->
@@ -557,6 +558,41 @@
             <div class="controls" style="margin-top: 2rem;">
                 <button id="copyArticlesJsonBtn" class="primary">Copy JSON to Clipboard</button>
                 <span class="status" id="copyStatus"></span>
+            </div>
+        </div>
+
+        <!-- ABOUT PAGE TAB -->
+        <div class="tab-content" id="about-tab">
+            <h2 style="margin-bottom: 1.5rem;">About Page Video</h2>
+            <p style="color: var(--muted); margin-bottom: 2rem;">
+                Manage the video displayed on the About page. Supports YouTube, Vimeo, Aparat, and Arvan Cloud VOD.
+            </p>
+
+            <div class="form-group">
+                <label for="aboutVideoUrl">Video URL</label>
+                <input type="url" id="aboutVideoUrl" placeholder="https://www.youtube.com/watch?v=... or https://example.arvanvod.ir/...">
+                <small style="display: block; margin-top: 0.5rem; color: var(--muted);">
+                    Supported formats:
+                    <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                        <li>YouTube: https://www.youtube.com/watch?v=VIDEO_ID or https://youtu.be/VIDEO_ID</li>
+                        <li>Vimeo: https://vimeo.com/VIDEO_ID</li>
+                        <li>Aparat: https://www.aparat.com/v/VIDEO_ID</li>
+                        <li>Arvan Cloud VOD: https://example.arvanvod.ir/path/video.mp4 or .m3u8</li>
+                    </ul>
+                </small>
+            </div>
+
+            <div id="aboutVideoPreview" style="display: none; margin-top: 1.5rem;">
+                <h3 style="margin-bottom: 1rem; color: var(--ink);">Video Preview</h3>
+                <div id="aboutVideoPreviewContainer" style="position: relative; width: 100%; max-width: 600px; padding-top: 56.25%; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden;">
+                </div>
+            </div>
+
+            <div class="controls">
+                <input type="password" id="aboutPassword" placeholder="Admin Password" required style="flex: 1; max-width: 250px;">
+                <button id="saveAboutVideoBtn">Save Video URL</button>
+                <button class="secondary" id="previewAboutVideoBtn">Preview Video</button>
+                <span class="status" id="aboutStatus"></span>
             </div>
         </div>
     </div>

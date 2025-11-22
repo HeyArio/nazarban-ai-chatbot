@@ -132,17 +132,16 @@
 
     <h2 data-lang-key="about_mission_title">ماموریت ما</h2>
     <p data-lang-key="about_mission_text">ماموریت ما توانمندسازی کسب‌وکارهای ایرانی با دسترسی‌پذیر کردن راهکارهای پیچیده، امن و مقرون‌به‌صرفه هوش مصنوعی و یادگیری ماشین است تا بتوانند در سطح جهانی رقابت و نوآوری کنند.</p>
+
+    <!-- Download button -->
     <div class="download-button-wrapper">
       <a href="nazarban_doc.pdf" download="Nazarban_Analytics_PRD.pdf" class="download-button">
         <span class="button-text" data-lang-key="download_pdf">دانلود PDF</span>
       </a>
     </div>
 
-    <div class="pdf-viewer-container">
-      <object data="nazarban_doc.pdf#toolbar=0&navpanes=0" type="application/pdf">
-        <p data-lang-key="pdf_fallback">مرورگر شما از نمایش PDF پشتیبانی نمی‌کند. می‌توانید <a href="nazarban_doc.pdf">فایل PDF را دانلود کنید</a>.</p>
-      </object>
-    </div>
+    <!-- Video section (will be populated by JavaScript) -->
+    <div id="aboutVideoSection" style="display: none;"></div>
   </main>
 
   <footer class="site-footer">
@@ -209,6 +208,7 @@
   <script src="js/main.js"></script>
   <script src="js/translations.js"></script>
   <script src="js/language.js"></script>
+  <script src="js/about.js"></script>
   <script src="js/chatWidget.js"></script>
 </body>
 </html>
