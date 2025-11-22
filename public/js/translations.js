@@ -71,6 +71,7 @@ window.translations = {
     services_auto_li3: "Automating Repetitive Data Entry & Business Logic",
     
     services_contact: "For immediate inquiries, please chat with our AI assistant or email us at info@nazarbanai.com.",
+    watch_video: "Watch Video",
     // White Paper Page
     whitepaper_title: "White Paper",
     whitepaper_wip: "Our official white paper detailing our methodologies, market analysis, and technology stack is currently being finalized.",
@@ -280,6 +281,7 @@ window.translations = {
     services_auto_li3: "اتوماسیون ورود داده‌های تکراری و منطق تجاری",
     
     services_contact: "برای سوالات فوری، لطفاً با دستیار هوش مصنوعی ما چت کنید یا به ما ایمیل بزنید info@nazarbanai.com.",
+    watch_video: "تماشای ویدیو",
     // White Paper Page
     whitepaper_title: "وایت پیپر",
     whitepaper_wip: "گزارش رسمی ما که جزئیات روش‌ها، تحلیل بازار و پشته فناوری ما را شرح می‌دهد، در حال نهایی شدن است.",
