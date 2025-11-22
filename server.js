@@ -87,6 +87,12 @@ const aboutVideoPath = path.join(__dirname, 'aboutVideo.json');
 const servicesVideosPath = path.join(__dirname, 'servicesVideos.json');
 // --- END: SERVICES VIDEOS DATA PATH ---
 
+// --- PAGE CONTENT DATA PATHS ---
+const servicesContentPath = path.join(__dirname, 'servicesContent.json');
+const aboutContentPath = path.join(__dirname, 'aboutContent.json');
+const whitepaperContentPath = path.join(__dirname, 'whitepaperContent.json');
+// --- END: PAGE CONTENT DATA PATHS ---
+
 // --- NEW: Prompt Management ---
 let prompts = {};
 const promptsFilePath = path.join(__dirname, 'prompts.json');
@@ -291,6 +297,56 @@ async function saveServicesVideos(videosData) {
     console.log('✅ Services videos saved successfully');
 }
 // --- END: SERVICES VIDEOS DATA MANAGEMENT FUNCTIONS ---
+
+// --- PAGE CONTENT DATA MANAGEMENT FUNCTIONS ---
+// Services Page Content
+async function loadServicesContent() {
+    try {
+        const data = await fs.readFile(servicesContentPath, 'utf-8');
+        return JSON.parse(data);
+    } catch (error) {
+        console.log('⚠️  No services content file found, returning null');
+        return null;
+    }
+}
+
+async function saveServicesContent(content) {
+    await fs.writeFile(servicesContentPath, JSON.stringify(content, null, 2));
+    console.log('✅ Services content saved successfully');
+}
+
+// About Page Content
+async function loadAboutContent() {
+    try {
+        const data = await fs.readFile(aboutContentPath, 'utf-8');
+        return JSON.parse(data);
+    } catch (error) {
+        console.log('⚠️ No about content file found, returning null');
+        return null;
+    }
+}
+
+async function saveAboutContent(content) {
+    await fs.writeFile(aboutContentPath, JSON.stringify(content, null, 2));
+    console.log('✅ About content saved successfully');
+}
+
+// Whitepaper Page Content
+async function loadWhitepaperContent() {
+    try {
+        const data = await fs.readFile(whitepaperContentPath, 'utf-8');
+        return JSON.parse(data);
+    } catch (error) {
+        console.log('⚠️ No whitepaper content file found, returning null');
+        return null;
+    }
+}
+
+async function saveWhitepaperContent(content) {
+    await fs.writeFile(whitepaperContentPath, JSON.stringify(content, null, 2));
+    console.log('✅ Whitepaper content saved successfully');
+}
+// --- END: PAGE CONTENT DATA MANAGEMENT FUNCTIONS ---
 
 // --- AUTOMATIC WEEKLY ARCHIVING ---
 // Schedule archiving to run every Monday at 2:00 AM
@@ -1292,6 +1348,89 @@ app.post('/api/services/videos', async (req, res) => {
     }
 });
 // --- END: SERVICES VIDEOS API ROUTES ---
+
+// --- PAGE CONTENT API ROUTES ---
+// Services Content API
+app.get('/api/content/services', async (req, res) => {
+    try {
+        const content = await loadServicesContent();
+        res.json({ success: true, content });
+    } catch (error) {
+        console.error('❌ Error loading services content:', error);
+        res.status(500).json({ success: false, message: 'Failed to load services content' });
+    }
+});
+
+app.post('/api/content/services', async (req, res) => {
+    try {
+        const { content, password } = req.body;
+
+        if (password !== process.env.ADMIN_PASSWORD) {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
+
+        await saveServicesContent(content);
+        res.json({ success: true, message: 'Services content saved successfully' });
+    } catch (error) {
+        console.error('❌ Error saving services content:', error);
+        res.status(500).json({ success: false, message: 'Failed to save services content' });
+    }
+});
+
+// About Content API
+app.get('/api/content/about', async (req, res) => {
+    try {
+        const content = await loadAboutContent();
+        res.json({ success: true, content });
+    } catch (error) {
+        console.error('❌ Error loading about content:', error);
+        res.status(500).json({ success: false, message: 'Failed to load about content' });
+    }
+});
+
+app.post('/api/content/about', async (req, res) => {
+    try {
+        const { content, password } = req.body;
+
+        if (password !== process.env.ADMIN_PASSWORD) {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
+
+        await saveAboutContent(content);
+        res.json({ success: true, message: 'About content saved successfully' });
+    } catch (error) {
+        console.error('❌ Error saving about content:', error);
+        res.status(500).json({ success: false, message: 'Failed to save about content' });
+    }
+});
+
+// Whitepaper Content API
+app.get('/api/content/whitepaper', async (req, res) => {
+    try {
+        const content = await loadWhitepaperContent();
+        res.json({ success: true, content });
+    } catch (error) {
+        console.error('❌ Error loading whitepaper content:', error);
+        res.status(500).json({ success: false, message: 'Failed to load whitepaper content' });
+    }
+});
+
+app.post('/api/content/whitepaper', async (req, res) => {
+    try {
+        const { content, password } = req.body;
+
+        if (password !== process.env.ADMIN_PASSWORD) {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
+
+        await saveWhitepaperContent(content);
+        res.json({ success: true, message: 'Whitepaper content saved successfully' });
+    } catch (error) {
+        console.error('❌ Error saving whitepaper content:', error);
+        res.status(500).json({ success: false, message: 'Failed to save whitepaper content' });
+    }
+});
+// --- END: PAGE CONTENT API ROUTES ---
 
 // Initialize email transporter on startup
 setupEmailTransporter();

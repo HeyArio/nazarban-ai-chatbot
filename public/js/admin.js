@@ -940,6 +940,297 @@ document.getElementById('saveServicesVideosBtn').addEventListener('click', async
 loadServicesVideos();
 
 // ====================
+// PAGE CONTENT MANAGEMENT
+// ====================
+
+// SERVICES CONTENT
+async function loadServicesContent() {
+    try {
+        const response = await fetch('/api/content/services');
+        const data = await response.json();
+
+        if (data.success && data.content) {
+            const c = data.content;
+            document.getElementById('servicesTitle_en').value = c.en?.title || '';
+            document.getElementById('servicesTitle_fa').value = c.fa?.title || '';
+            document.getElementById('servicesIntro_en').value = c.en?.intro || '';
+            document.getElementById('servicesIntro_fa').value = c.fa?.intro || '';
+
+            // Service 1
+            document.getElementById('service1Title_en').value = c.en?.service1?.title || '';
+            document.getElementById('service1Title_fa').value = c.fa?.service1?.title || '';
+            document.getElementById('service1Desc_en').value = c.en?.service1?.desc || '';
+            document.getElementById('service1Desc_fa').value = c.fa?.service1?.desc || '';
+            document.getElementById('service1Li1_en').value = c.en?.service1?.li1 || '';
+            document.getElementById('service1Li1_fa').value = c.fa?.service1?.li1 || '';
+            document.getElementById('service1Li2_en').value = c.en?.service1?.li2 || '';
+            document.getElementById('service1Li2_fa').value = c.fa?.service1?.li2 || '';
+            document.getElementById('service1Li3_en').value = c.en?.service1?.li3 || '';
+            document.getElementById('service1Li3_fa').value = c.fa?.service1?.li3 || '';
+
+            // Service 2
+            document.getElementById('service2Title_en').value = c.en?.service2?.title || '';
+            document.getElementById('service2Title_fa').value = c.fa?.service2?.title || '';
+            document.getElementById('service2Desc_en').value = c.en?.service2?.desc || '';
+            document.getElementById('service2Desc_fa').value = c.fa?.service2?.desc || '';
+            document.getElementById('service2Li1_en').value = c.en?.service2?.li1 || '';
+            document.getElementById('service2Li1_fa').value = c.fa?.service2?.li1 || '';
+            document.getElementById('service2Li2_en').value = c.en?.service2?.li2 || '';
+            document.getElementById('service2Li2_fa').value = c.fa?.service2?.li2 || '';
+            document.getElementById('service2Li3_en').value = c.en?.service2?.li3 || '';
+            document.getElementById('service2Li3_fa').value = c.fa?.service2?.li3 || '';
+
+            // Service 3
+            document.getElementById('service3Title_en').value = c.en?.service3?.title || '';
+            document.getElementById('service3Title_fa').value = c.fa?.service3?.title || '';
+            document.getElementById('service3Desc_en').value = c.en?.service3?.desc || '';
+            document.getElementById('service3Desc_fa').value = c.fa?.service3?.desc || '';
+            document.getElementById('service3Li1_en').value = c.en?.service3?.li1 || '';
+            document.getElementById('service3Li1_fa').value = c.fa?.service3?.li1 || '';
+            document.getElementById('service3Li2_en').value = c.en?.service3?.li2 || '';
+            document.getElementById('service3Li2_fa').value = c.fa?.service3?.li2 || '';
+            document.getElementById('service3Li3_en').value = c.en?.service3?.li3 || '';
+            document.getElementById('service3Li3_fa').value = c.fa?.service3?.li3 || '';
+
+            document.getElementById('servicesContact_en').value = c.en?.contact || '';
+            document.getElementById('servicesContact_fa').value = c.fa?.contact || '';
+        }
+    } catch (error) {
+        console.error('Error loading services content:', error);
+    }
+}
+
+document.getElementById('saveServicesContentBtn').addEventListener('click', async () => {
+    const password = document.getElementById('servicesContentPassword').value;
+
+    if (!password) {
+        showStatus('servicesContentStatus', 'Password required', true);
+        return;
+    }
+
+    const content = {
+        en: {
+            title: document.getElementById('servicesTitle_en').value.trim(),
+            intro: document.getElementById('servicesIntro_en').value.trim(),
+            service1: {
+                title: document.getElementById('service1Title_en').value.trim(),
+                desc: document.getElementById('service1Desc_en').value.trim(),
+                li1: document.getElementById('service1Li1_en').value.trim(),
+                li2: document.getElementById('service1Li2_en').value.trim(),
+                li3: document.getElementById('service1Li3_en').value.trim()
+            },
+            service2: {
+                title: document.getElementById('service2Title_en').value.trim(),
+                desc: document.getElementById('service2Desc_en').value.trim(),
+                li1: document.getElementById('service2Li1_en').value.trim(),
+                li2: document.getElementById('service2Li2_en').value.trim(),
+                li3: document.getElementById('service2Li3_en').value.trim()
+            },
+            service3: {
+                title: document.getElementById('service3Title_en').value.trim(),
+                desc: document.getElementById('service3Desc_en').value.trim(),
+                li1: document.getElementById('service3Li1_en').value.trim(),
+                li2: document.getElementById('service3Li2_en').value.trim(),
+                li3: document.getElementById('service3Li3_en').value.trim()
+            },
+            contact: document.getElementById('servicesContact_en').value.trim()
+        },
+        fa: {
+            title: document.getElementById('servicesTitle_fa').value.trim(),
+            intro: document.getElementById('servicesIntro_fa').value.trim(),
+            service1: {
+                title: document.getElementById('service1Title_fa').value.trim(),
+                desc: document.getElementById('service1Desc_fa').value.trim(),
+                li1: document.getElementById('service1Li1_fa').value.trim(),
+                li2: document.getElementById('service1Li2_fa').value.trim(),
+                li3: document.getElementById('service1Li3_fa').value.trim()
+            },
+            service2: {
+                title: document.getElementById('service2Title_fa').value.trim(),
+                desc: document.getElementById('service2Desc_fa').value.trim(),
+                li1: document.getElementById('service2Li1_fa').value.trim(),
+                li2: document.getElementById('service2Li2_fa').value.trim(),
+                li3: document.getElementById('service2Li3_fa').value.trim()
+            },
+            service3: {
+                title: document.getElementById('service3Title_fa').value.trim(),
+                desc: document.getElementById('service3Desc_fa').value.trim(),
+                li1: document.getElementById('service3Li1_fa').value.trim(),
+                li2: document.getElementById('service3Li2_fa').value.trim(),
+                li3: document.getElementById('service3Li3_fa').value.trim()
+            },
+            contact: document.getElementById('servicesContact_fa').value.trim()
+        }
+    };
+
+    try {
+        const response = await fetch('/api/content/services', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content, password })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            showStatus('servicesContentStatus', 'Services content saved successfully', false);
+            document.getElementById('servicesContentPassword').value = '';
+        } else {
+            showStatus('servicesContentStatus', data.message || 'Failed to save', true);
+        }
+    } catch (error) {
+        showStatus('servicesContentStatus', error.message, true);
+    }
+});
+
+// ABOUT CONTENT
+async function loadAboutContent() {
+    try {
+        const response = await fetch('/api/content/about');
+        const data = await response.json();
+
+        if (data.success && data.content) {
+            const c = data.content;
+            document.getElementById('aboutTitle_en').value = c.en?.title || '';
+            document.getElementById('aboutTitle_fa').value = c.fa?.title || '';
+            document.getElementById('aboutIntro_en').value = c.en?.intro || '';
+            document.getElementById('aboutIntro_fa').value = c.fa?.intro || '';
+            document.getElementById('aboutMissionTitle_en').value = c.en?.missionTitle || '';
+            document.getElementById('aboutMissionTitle_fa').value = c.fa?.missionTitle || '';
+            document.getElementById('aboutMissionText_en').value = c.en?.missionText || '';
+            document.getElementById('aboutMissionText_fa').value = c.fa?.missionText || '';
+        }
+    } catch (error) {
+        console.error('Error loading about content:', error);
+    }
+}
+
+document.getElementById('saveAboutContentBtn').addEventListener('click', async () => {
+    const password = document.getElementById('aboutContentPassword').value;
+
+    if (!password) {
+        showStatus('aboutContentStatus', 'Password required', true);
+        return;
+    }
+
+    const content = {
+        en: {
+            title: document.getElementById('aboutTitle_en').value.trim(),
+            intro: document.getElementById('aboutIntro_en').value.trim(),
+            missionTitle: document.getElementById('aboutMissionTitle_en').value.trim(),
+            missionText: document.getElementById('aboutMissionText_en').value.trim()
+        },
+        fa: {
+            title: document.getElementById('aboutTitle_fa').value.trim(),
+            intro: document.getElementById('aboutIntro_fa').value.trim(),
+            missionTitle: document.getElementById('aboutMissionTitle_fa').value.trim(),
+            missionText: document.getElementById('aboutMissionText_fa').value.trim()
+        }
+    };
+
+    try {
+        const response = await fetch('/api/content/about', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content, password })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            showStatus('aboutContentStatus', 'About content saved successfully', false);
+            document.getElementById('aboutContentPassword').value = '';
+        } else {
+            showStatus('aboutContentStatus', data.message || 'Failed to save', true);
+        }
+    } catch (error) {
+        showStatus('aboutContentStatus', error.message, true);
+    }
+});
+
+// WHITEPAPER CONTENT
+async function loadWhitepaperContent() {
+    try {
+        const response = await fetch('/api/content/whitepaper');
+        const data = await response.json();
+
+        if (data.success && data.content) {
+            const c = data.content;
+            document.getElementById('wpMainTitle_en').value = c.en?.mainTitle || '';
+            document.getElementById('wpMainTitle_fa').value = c.fa?.mainTitle || '';
+            document.getElementById('wpVisionTitle_en').value = c.en?.visionTitle || '';
+            document.getElementById('wpVisionTitle_fa').value = c.fa?.visionTitle || '';
+            document.getElementById('wpVisionText_en').value = c.en?.visionText || '';
+            document.getElementById('wpVisionText_fa').value = c.fa?.visionText || '';
+            document.getElementById('wpWhynowTitle_en').value = c.en?.whynowTitle || '';
+            document.getElementById('wpWhynowTitle_fa').value = c.fa?.whynowTitle || '';
+            document.getElementById('wpWhynowText_en').value = c.en?.whynowText || '';
+            document.getElementById('wpWhynowText_fa').value = c.fa?.whynowText || '';
+            document.getElementById('wpCtaTitle_en').value = c.en?.ctaTitle || '';
+            document.getElementById('wpCtaTitle_fa').value = c.fa?.ctaTitle || '';
+            document.getElementById('wpCtaText_en').value = c.en?.ctaText || '';
+            document.getElementById('wpCtaText_fa').value = c.fa?.ctaText || '';
+        }
+    } catch (error) {
+        console.error('Error loading whitepaper content:', error);
+    }
+}
+
+document.getElementById('saveWhitepaperContentBtn').addEventListener('click', async () => {
+    const password = document.getElementById('whitepaperContentPassword').value;
+
+    if (!password) {
+        showStatus('whitepaperContentStatus', 'Password required', true);
+        return;
+    }
+
+    const content = {
+        en: {
+            mainTitle: document.getElementById('wpMainTitle_en').value.trim(),
+            visionTitle: document.getElementById('wpVisionTitle_en').value.trim(),
+            visionText: document.getElementById('wpVisionText_en').value.trim(),
+            whynowTitle: document.getElementById('wpWhynowTitle_en').value.trim(),
+            whynowText: document.getElementById('wpWhynowText_en').value.trim(),
+            ctaTitle: document.getElementById('wpCtaTitle_en').value.trim(),
+            ctaText: document.getElementById('wpCtaText_en').value.trim()
+        },
+        fa: {
+            mainTitle: document.getElementById('wpMainTitle_fa').value.trim(),
+            visionTitle: document.getElementById('wpVisionTitle_fa').value.trim(),
+            visionText: document.getElementById('wpVisionText_fa').value.trim(),
+            whynowTitle: document.getElementById('wpWhynowTitle_fa').value.trim(),
+            whynowText: document.getElementById('wpWhynowText_fa').value.trim(),
+            ctaTitle: document.getElementById('wpCtaTitle_fa').value.trim(),
+            ctaText: document.getElementById('wpCtaText_fa').value.trim()
+        }
+    };
+
+    try {
+        const response = await fetch('/api/content/whitepaper', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content, password })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            showStatus('whitepaperContentStatus', 'Whitepaper content saved successfully', false);
+            document.getElementById('whitepaperContentPassword').value = '';
+        } else {
+            showStatus('whitepaperContentStatus', data.message || 'Failed to save', true);
+        }
+    } catch (error) {
+        showStatus('whitepaperContentStatus', error.message, true);
+    }
+});
+
+// Load all page content on page load
+loadServicesContent();
+loadAboutContent();
+loadWhitepaperContent();
+
+// ====================
 // UTILITY FUNCTIONS
 // ====================
 function showStatus(elementId, message, isError) {
