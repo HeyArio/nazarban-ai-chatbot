@@ -75,37 +75,37 @@
 
 
 :root {
-  /* === DARK THEME COLORS === */
-  --primary: #7DD3FC;        /* Glacial Blue - New Logo Color (No Purple) */
-  --accent: #22D3EE;         /* Electric Cyan - High Energy */
-  --dark: #F1F5F9;           /* Light Text (Off-white) */
-  --bg: #0B1120;             /* Deep Background (Navy-Black) */
+  /* === RETRO THEME COLORS === */
+  --primary: #FF4F18;        /* International Orange - The "Deathloop" Hero Color */
+  --accent: #00C2BA;         /* Retro Teal - The "Funk" contrast */
+  --dark: #FAF9F6;           /* Off-White/Cream - Vintage paper tone */
+  --bg: #0F0F0F;             /* Oil Black - Deep, warm, ink-black */
 
   /* === COMPLEMENTARY COLORS === */
-  --bg-light: #1E293B;       /* Card Surface (Dark Slate) */
-  --bg-soft: #3B82F6;        /* Royal Blue - Replaces Indigo/Purple */
-  --border: #334155;         /* Border color (Slate Gray) */
-  --muted: #94A3B8;          /* Muted Text (Light Gray) */
-  --text-light: #94A3B8;     /* Placeholder text */
+  --bg-light: #1A1A1A;       /* Card Surface - Matte Charcoal */
+  --bg-soft: #FACC15;        /* Mustard Gold - Secondary warm accent */
+  --border: #333333;         /* Dark Grey Borders */
+  --muted: #A1A1AA;          /* Concrete Grey - Muted text */
+  --text-light: #71717A;     /* Placeholder text */
 
   /* === SEMANTIC COLORS === */
-  --success: #0EA5E9;        /* Ocean Blue (Professional Success state) */
-  --error: #EF4444;          /* Red */
+  --success: #00C2BA;        /* Teal for success */
+  --error: #FF4F18;          /* Orange/Red for error */
 
-  /* === SHADOWS FOR DARK MODE === */
-  --shadow-color: rgba(0, 0, 0, 0.5);
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
-  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.6);
+  /* === RETRO HARD SHADOWS === */
+  --shadow-color: rgba(0, 0, 0, 0.8);
+  --shadow-sm: 2px 2px 0px rgba(0, 0, 0, 1);
+  --shadow-md: 4px 4px 0px rgba(0, 0, 0, 1);
+  --shadow-lg: 8px 8px 0px rgba(0, 0, 0, 1);
+  --shadow-xl: 12px 12px 0px rgba(0, 0, 0, 1);
 
   /* === LEGACY COMPATIBILITY === */
-  --brand1: #7DD3FC;         /* Glacial Blue */
-  --brand2: #22D3EE;         /* Electric Cyan */
-  --brand3: #38BDF8;         /* Sky Blue */
-  --ink: #F1F5F9;            /* Light text */
-  --panel: #1E293B;          /* Card Surface */
-  --panel-glass: rgba(30, 41, 59, 0.95);
+  --brand1: #FF4F18;         /* International Orange */
+  --brand2: #00C2BA;         /* Retro Teal */
+  --brand3: #FACC15;         /* Mustard Gold */
+  --ink: #FAF9F6;            /* Cream text */
+  --panel: #1A1A1A;          /* Charcoal */
+  --panel-glass: rgba(26, 26, 26, 0.95);
 
   /* === DESIGN TOKENS === */
   --radius-md: 12px;
@@ -143,6 +143,31 @@ body {
   text-align: left;
 }
 
+/* === CRITICAL: BUTTON FONT RULES === */
+/* Farsi buttons MUST use Sahel font */
+html[lang="fa"] button,
+html[lang="fa"] .btn,
+html[lang="fa"] input[type="submit"],
+html[lang="fa"] input[type="button"],
+html[dir="rtl"] button,
+html[dir="rtl"] .btn,
+html[dir="rtl"] input[type="submit"],
+html[dir="rtl"] input[type="button"] {
+  font-family: 'Sahel', sans-serif !important;
+}
+
+/* English buttons MUST use Nunito Sans font */
+html[lang="en"] button,
+html[lang="en"] .btn,
+html[lang="en"] input[type="submit"],
+html[lang="en"] input[type="button"],
+html[dir="ltr"] button,
+html[dir="ltr"] .btn,
+html[dir="ltr"] input[type="submit"],
+html[dir="ltr"] input[type="button"] {
+  font-family: 'Nunito Sans', sans-serif !important;
+}
+
 /* *** NEW: Page Wrapper Fix *** */
 /* This wrapper isolates the page and kills the horizontal scroll */
 .page-wrapper {
@@ -156,7 +181,7 @@ body {
   top: 0;
   z-index: 900;
   backdrop-filter: blur(20px);
-  background: rgba(11, 17, 32, 0.95);
+  background: rgba(15, 15, 15, 0.95);
   border-bottom: 1px solid var(--border);
   padding: 1rem 1.5rem;
   display: flex;
@@ -178,8 +203,8 @@ body {
   border-radius: 16px;
   display: grid;
   place-items: center;
-  background: #0F172A;
-  border: 1.5px solid var(--border);
+  background: #FAF9F6;
+  border: 2px solid var(--border);
   box-shadow: var(--shadow-sm);
 }
 
@@ -196,7 +221,7 @@ body {
 .brand-name {
   font-size: 22px;
   font-weight: 800;
-  background: linear-gradient(135deg, var(--brand1), var(--brand2), var(--brand3));
+  background: linear-gradient(135deg, #FF4F18, #FACC15, #FAF9F6);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -390,10 +415,8 @@ body.chat-page {
   font-weight: 900;
   letter-spacing: -0.02em;
   margin-bottom: 16px;
-  background: linear-gradient(135deg, #F1F5F9, #38BDF8);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #FF4F18;
+  text-shadow: 3px 3px 0px rgba(0, 0, 0, 1);
 }
 
 .welcome-subtitle {
@@ -563,13 +586,13 @@ html[dir="rtl"] .suggestion-pill {
 }
 
 .bot .avatar {
-  background: linear-gradient(135deg, #0EA5E9, #22D3EE);
-  box-shadow: 0 4px 16px var(--shadow-color);
+  background: linear-gradient(135deg, #FF4F18, #FACC15);
+  box-shadow: var(--shadow-md);
 }
 
 .user .avatar {
-  background: linear-gradient(135deg, #3B82F6, #60A5FA);
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.35);
+  background: linear-gradient(135deg, #00C2BA, #2E8B57);
+  box-shadow: var(--shadow-md);
 }
 
 .message-content {
@@ -582,23 +605,25 @@ html[dir="rtl"] .suggestion-pill {
 }
 
 .bot .message-content {
-  background: rgba(30, 41, 59, 0.9);
-  border: 1px solid rgba(34, 211, 238, 0.2);
+  background: #1A1A1A;
+  border: 2px solid #333333;
+  color: #FAF9F6;
   box-shadow: var(--shadow-lg);
 }
 
 .user .message-content {
-  background: linear-gradient(135deg, #2563EB, #0EA5E9);
-  color: #fff;
-  box-shadow: 0 10px 32px rgba(59, 130, 246, 0.35);
+  background: #00C2BA;
+  color: #000000;
+  border: 2px solid #00C2BA;
+  box-shadow: var(--shadow-lg);
 }
 
 .typing-indicator {
   padding: 18px 20px;
   border-radius: var(--radius-lg);
   max-width: 86px;
-  background: rgba(30, 41, 59, 0.9);
-  border: 1px solid rgba(34, 211, 238, 0.2);
+  background: #1A1A1A;
+  border: 2px solid #333333;
 }
 
 .typing-dots {
@@ -611,7 +636,7 @@ html[dir="rtl"] .suggestion-pill {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #22D3EE;
+  background: #FF4F18;
   animation: typing 1.4s infinite;
 }
 
@@ -689,20 +714,21 @@ html[dir="rtl"] .suggestion-pill {
   bottom: 8px;
   width: 40px;
   height: 40px;
-  border: none;
+  border: 2px solid #333333;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--brand1), var(--brand2));
+  background: #FF4F18;
   color: #fff;
   cursor: pointer;
   display: grid;
   place-items: center;
-  box-shadow: 0 6px 20px var(--shadow-color);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  box-shadow: var(--shadow-md);
+  transition: all 0.15s ease;
 }
 
 #sendButton:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(34, 211, 238, 0.55);
+  background: #FACC15;
+  color: #000000;
+  box-shadow: var(--shadow-lg);
 }
 
 #sendButton:active:not(:disabled) .send-icon {
@@ -779,19 +805,17 @@ html[dir="rtl"] .suggestion-pill {
   font-weight: 900;
   letter-spacing: -0.02em;
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, #F1F5F9, #7DD3FC);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #FAF9F6;
+  text-shadow: 3px 3px 0px rgba(0, 0, 0, 1);
 }
 
 .content-wrapper h2 {
   font-size: 1.75rem;
   font-weight: 700;
-  color: var(--brand1);
+  color: #FF4F18;
   margin-top: 2.5rem;
   margin-bottom: 1rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 2px solid var(--border);
   padding-bottom: 0.5rem;
 }
 
@@ -809,15 +833,16 @@ html[dir="rtl"] .suggestion-pill {
 }
 
 .content-wrapper a {
-  color: #38BDF8;
+  color: #FACC15;
   text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s;
+  font-weight: 600;
+  transition: all 0.2s;
+  border-bottom: 2px solid transparent;
 }
 
 .content-wrapper a:hover {
-  color: #22D3EE;
-  text-decoration: underline;
+  color: #FACC15;
+  border-bottom: 2px solid #FF4F18;
 }
 
 /* --- 5. PDF Viewer & Download Button --- */
@@ -1228,17 +1253,15 @@ html[dir="rtl"] .menu-toggle {
 
 /* Blog Post Card - Glassmorphism */
 .blog-post-card {
-  background: rgba(15, 23, 42, 0.8);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(56, 189, 248, 0.2);
-  border-radius: 20px;
+  background: #1A1A1A;
+  border: 3px solid #333333;
+  border-radius: 12px;
   padding: 2rem;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
   cursor: pointer;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-lg);
 }
 
 .blog-post-card::before {
@@ -1247,11 +1270,11 @@ html[dir="rtl"] .menu-toggle {
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--brand1), var(--brand2), var(--brand3));
+  height: 6px;
+  background: linear-gradient(90deg, #FF4F18, #FACC15, #00C2BA);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.3s ease;
 }
 
 .blog-post-card::after {
@@ -1400,21 +1423,23 @@ html[dir="rtl"] .menu-toggle {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: linear-gradient(135deg, #0EA5E9, #22D3EE);
-  color: white;
-  border: none;
+  background: #FF4F18;
+  color: #FAF9F6;
+  border: 2px solid #333333;
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
   font-family: inherit;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.9rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-md);
 }
 
 .read-more-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px var(--shadow-color);
+  background: #FACC15;
+  color: #000000;
+  box-shadow: var(--shadow-lg);
 }
 
 .read-more-btn .link-icon {
@@ -2382,9 +2407,9 @@ html[dir="rtl"] .floating-chat-widget {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: #25D366;
-  border: none;
-  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+  background: #00C2BA;
+  border: 2px solid #333333;
+  box-shadow: var(--shadow-md);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -2395,8 +2420,8 @@ html[dir="rtl"] .floating-chat-widget {
 }
 
 .whatsapp-widget-button:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 30px rgba(37, 211, 102, 0.5);
+  background: #FACC15;
+  box-shadow: var(--shadow-lg);
 }
 
 .whatsapp-widget-button:active {
