@@ -79,6 +79,10 @@ const productsDataPath = path.join(__dirname, 'productsData.json');
 const faqsDataPath = path.join(__dirname, 'faqsData.json');
 // --- END: FAQS DATA PATH ---
 
+// --- ABOUT VIDEO DATA PATH ---
+const aboutVideoPath = path.join(__dirname, 'aboutVideo.json');
+// --- END: ABOUT VIDEO DATA PATH ---
+
 // --- NEW: Prompt Management ---
 let prompts = {};
 const promptsFilePath = path.join(__dirname, 'prompts.json');
@@ -237,6 +241,27 @@ async function saveFaqs(faqs) {
     console.log('✅ FAQs saved successfully');
 }
 // --- END: FAQS DATA MANAGEMENT FUNCTIONS ---
+
+// --- ABOUT VIDEO DATA MANAGEMENT FUNCTIONS ---
+// Load about video from JSON
+async function loadAboutVideo() {
+    try {
+        const data = await fs.readFile(aboutVideoPath, 'utf-8');
+        return JSON.parse(data);
+    } catch (error) {
+        console.log('⚠️ No about video file found, creating new one');
+        const defaultData = { videoUrl: '' };
+        await fs.writeFile(aboutVideoPath, JSON.stringify(defaultData, null, 2));
+        return defaultData;
+    }
+}
+
+// Save about video to JSON
+async function saveAboutVideo(videoData) {
+    await fs.writeFile(aboutVideoPath, JSON.stringify(videoData, null, 2));
+    console.log('✅ About video saved successfully');
+}
+// --- END: ABOUT VIDEO DATA MANAGEMENT FUNCTIONS ---
 
 // --- AUTOMATIC WEEKLY ARCHIVING ---
 // Schedule archiving to run every Monday at 2:00 AM
@@ -1116,6 +1141,62 @@ app.delete('/api/faqs/:id', async (req, res) => {
     }
 });
 // --- END: FAQS API ROUTES ---
+
+// --- ABOUT VIDEO API ROUTES ---
+// API: GET about video URL
+app.get('/api/about/video', async (req, res) => {
+    try {
+        const videoData = await loadAboutVideo();
+        res.json({
+            success: true,
+            videoUrl: videoData.videoUrl || ''
+        });
+    } catch (error) {
+        console.error('❌ Error loading about video:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to load about video'
+        });
+    }
+});
+
+// API: POST/Update about video URL (Admin only)
+app.post('/api/about/video', async (req, res) => {
+    try {
+        const { videoUrl, password } = req.body;
+
+        // Simple password protection
+        if (password !== process.env.ADMIN_PASSWORD) {
+            return res.status(401).json({
+                success: false,
+                error: 'Unauthorized: Invalid password'
+            });
+        }
+
+        // Save video URL (can be empty string to clear)
+        const videoData = {
+            videoUrl: videoUrl || '',
+            updatedAt: new Date().toISOString()
+        };
+
+        await saveAboutVideo(videoData);
+
+        res.json({
+            success: true,
+            message: 'About video URL saved successfully',
+            videoUrl: videoData.videoUrl
+        });
+
+    } catch (error) {
+        console.error('❌ Error saving about video:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to save about video',
+            details: error.message
+        });
+    }
+});
+// --- END: ABOUT VIDEO API ROUTES ---
 
 // Initialize email transporter on startup
 setupEmailTransporter();
