@@ -269,7 +269,7 @@ html[dir="ltr"] label {
 }
 
 .logo {
-  width: 204px;
+  width: 136px;
   height: auto;
   display: block;
   transition: transform 0.3s ease, opacity 0.3s ease;
