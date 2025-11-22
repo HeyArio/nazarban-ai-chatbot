@@ -270,18 +270,14 @@ html[dir="ltr"] label {
 }
 
 .logo-badge {
-  width: 58px;
-  height: 58px;
-  border-radius: 16px;
-  display: grid;
-  place-items: center;
-  background: #0F1915;  /* Dark Metallic Green-Black */
-  border: 2px solid var(--border);
-  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .logo {
-  width: 42px;
+  width: 52px;
+  height: auto;
 }
 
 .brand-text {
@@ -3138,6 +3134,17 @@ html[dir="rtl"] .chat-widget-tooltip {
   padding: 1.5rem 1.5rem 1.25rem;
   margin-top: auto;
   position: relative;
+}
+
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #10B981, #34D399, #10B981, transparent);
+  opacity: 0.6;
 }
 
 .footer-content {
