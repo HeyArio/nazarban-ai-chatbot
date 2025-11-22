@@ -255,7 +255,7 @@ html[dir="ltr"] label {
   backdrop-filter: blur(20px);
   background: rgba(15, 15, 15, 0.95);
   border-bottom: 1px solid var(--border);
-  padding: 1rem 1.5rem;
+  padding: 0.5rem 1.5rem;  /* Reduced top/bottom padding from 1rem to 0.5rem */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -270,7 +270,7 @@ html[dir="ltr"] label {
 }
 
 .logo {
-  width: 136px;
+  width: 58px;  /* Reduced from 136px for more compact navbar */
   height: auto;
   display: block;
   transition: transform 0.3s ease, opacity 0.3s ease;
