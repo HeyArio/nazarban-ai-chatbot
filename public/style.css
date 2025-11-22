@@ -265,6 +265,7 @@ html[dir="ltr"] label {
 .logo-section {
   display: flex;
   align-items: center;
+  gap: 16px;
   text-decoration: none;
 }
 
@@ -278,6 +279,28 @@ html[dir="ltr"] label {
 .logo-section:hover .logo {
   transform: scale(1.05);
   opacity: 0.9;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.brand-name {
+  font-size: 22px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #10B981, #34D399, #6EE7B7);  /* Emerald to Mint */
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-tagline {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  font-weight: 600;
 }
 
 .header-right-group {
