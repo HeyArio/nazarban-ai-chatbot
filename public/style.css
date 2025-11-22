@@ -76,15 +76,15 @@
 
 :root {
   /* === DARK THEME COLORS === */
-  --primary: #6A71A5;        /* Logo Blue - headers, branding */
+  --primary: #C4CEF5;        /* Logo Light Variant - headers, branding */
   --accent: #22D3EE;         /* Electric Cyan - buttons, primary CTAs */
-  --dark: #F8FAFC;           /* Light Text - main content (off-white) */
-  --bg: #0F172A;             /* Deep BG - background (deep navy-black) */
+  --dark: #F1F5F9;           /* Light Text - main content (brighter for readability) */
+  --bg: #0B1120;             /* Deep BG - background (darker navy for max contrast) */
 
   /* === COMPLEMENTARY COLORS === */
   --bg-light: #1E293B;       /* Card Surface - cards, panels */
-  --bg-soft: #312E81;        /* Glow Accent - subtle backgrounds for icons/active states */
-  --border: #334155;         /* Dark Border - dividers */
+  --bg-soft: #4F46E5;        /* Glow Accent - subtle borders/active states */
+  --border: #334155;         /* Border - dividers */
   --muted: #94A3B8;          /* Muted Text - secondary content, footers */
   --text-light: #94A3B8;     /* Muted text - placeholders */
 
@@ -100,10 +100,10 @@
   --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.6);
 
   /* === LEGACY COMPATIBILITY === */
-  --brand1: #6A71A5;         /* Logo Blue */
+  --brand1: #C4CEF5;         /* Logo Light Variant */
   --brand2: #22D3EE;         /* Electric Cyan */
-  --brand3: #312E81;         /* Glow Accent */
-  --ink: #F8FAFC;            /* Light text */
+  --brand3: #4F46E5;         /* Glow Accent */
+  --ink: #F1F5F9;            /* Light text */
   --panel: #1E293B;          /* Card Surface */
   --panel-glass: rgba(30, 41, 59, 0.95);
 
@@ -156,7 +156,7 @@ body {
   top: 0;
   z-index: 900;
   backdrop-filter: blur(20px);
-  background: rgba(15, 23, 42, 0.95);
+  background: rgba(11, 17, 32, 0.95);
   border-bottom: 1px solid var(--border);
   padding: 1rem 1.5rem;
   display: flex;
