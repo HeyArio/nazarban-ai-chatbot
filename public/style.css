@@ -75,46 +75,49 @@
 
 
 :root {
-  /* === MAIN THEME COLORS - EMERALD + CYAN === */
-  --primary: #10B981;        /* Emerald - Main Buttons, Logos, Success */
-  --primary-hover: #059669;  /* Darker Emerald - Hover states */
-  --accent: #06B6D4;         /* Electric Cyan - Bridges the gap, gradients & secondary */
-  --accent-hover: #0891B2;   /* Darker Cyan - Hover states */
+  /* === WARM EMERALD + AMBER PALETTE === */
+  --primary: #10B981;        /* Emerald - Warm green, success, growth */
+  --primary-hover: #059669;  /* Darker Emerald */
+  --accent: #F59E0B;         /* Warm Amber Gold - Inviting, energy */
+  --accent-hover: #D97706;   /* Deeper Amber */
+  --accent-soft: #FB923C;    /* Soft Warm Orange - For subtle accents */
 
-  /* === THE CANVAS === */
-  --bg: #0F172A;             /* Slate 900 - Deep Gunmetal Navy (Makes emerald pop) */
-  --bg-light: #1E293B;       /* Slate 800 - Cards/Panels */
-  --bg-lighter: #334155;     /* Slate 700 - Borders and Inputs */
+  /* === WARM CANVAS (Stone palette - brown undertones) === */
+  --bg: #1C1917;             /* Stone 900 - Warm charcoal (NOT cold blue) */
+  --bg-light: #292524;       /* Stone 800 - Warm card surface */
+  --bg-lighter: #44403C;     /* Stone 700 - Warm borders */
 
-  /* === TEXT PALETTE - CLEAN & SHARP === */
-  --text-main: #F8FAFC;      /* Slate 50 - Crisp White */
-  --text-muted: #94A3B8;     /* Slate 400 - Cool Grey (No green tint) */
-  --text-placeholder: #64748B; /* Slate 500 - Placeholder text */
+  /* === TEXT PALETTE === */
+  --text-main: #FAFAF9;      /* Stone 50 - Warm white */
+  --text-muted: #A8A29E;     /* Stone 400 - Warm grey */
+  --text-placeholder: #78716C; /* Stone 500 - Warm placeholder */
 
   /* === SEMANTIC COLORS === */
   --success: #10B981;        /* Emerald */
   --error: #EF4444;          /* Red */
-  --info: #06B6D4;           /* Cyan */
+  --warning: #F59E0B;        /* Amber */
+  --info: #10B981;           /* Emerald */
 
-  /* === SHADOWS - CYAN/GREEN BLEND GLOW === */
-  --shadow-glow: 0 0 20px rgba(16, 185, 129, 0.15);
-  --shadow-card: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
-  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.6);
+  /* === WARM SHADOWS - AMBER GLOW === */
+  --shadow-glow: 0 0 20px rgba(245, 158, 11, 0.15);  /* Warm amber glow */
+  --shadow-emerald: 0 0 15px rgba(16, 185, 129, 0.2); /* Emerald glow */
+  --shadow-card: 0 10px 15px -3px rgba(0, 0, 0, 0.6);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.7);
 
   /* === LEGACY COMPATIBILITY === */
   --brand1: #10B981;         /* Emerald */
-  --brand2: #06B6D4;         /* Electric Cyan */
-  --brand3: #0891B2;         /* Darker Cyan */
-  --ink: #F8FAFC;            /* Slate White */
-  --dark: #F8FAFC;           /* Alias for ink */
-  --muted: #94A3B8;          /* Cool Grey */
-  --panel: #1E293B;          /* Slate 800 */
-  --panel-glass: rgba(30, 41, 59, 0.95);
-  --border: #334155;         /* Slate 700 */
-  --border-subtle: rgba(51, 65, 85, 0.5);
+  --brand2: #F59E0B;         /* Warm Amber */
+  --brand3: #FB923C;         /* Soft Orange */
+  --ink: #FAFAF9;            /* Warm white */
+  --dark: #FAFAF9;           /* Alias */
+  --muted: #A8A29E;          /* Warm grey */
+  --panel: #292524;          /* Stone 800 */
+  --panel-glass: rgba(41, 37, 36, 0.95);  /* Warm panel glass */
+  --border: #44403C;         /* Stone 700 */
+  --border-subtle: rgba(68, 64, 60, 0.5);
 
   /* === DESIGN TOKENS === */
   --radius-md: 12px;
@@ -260,8 +263,8 @@ html[dir="ltr"] label {
   top: 0;
   z-index: 900;
   backdrop-filter: blur(20px);
-  background: rgba(15, 23, 42, 0.95);  /* Gunmetal Glass - Slate 900 */
-  border-bottom: 1px solid #1E293B;  /* Subtle Slate */
+  background: rgba(28, 25, 23, 0.95);  /* Warm Stone Glass */
+  border-bottom: 1px solid #292524;  /* Warm border */
   padding: 0.5rem 1.5rem;
   display: flex;
   justify-content: space-between;
@@ -297,7 +300,7 @@ html[dir="ltr"] label {
 .brand-name {
   font-size: 22px;
   font-weight: 800;
-  background: linear-gradient(135deg, #10B981, #06B6D4);  /* Emerald to Cyan - The Neural Flow */
+  background: linear-gradient(135deg, #10B981, #F59E0B);  /* Emerald to Warm Amber - Growth + Energy */
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -339,7 +342,7 @@ html[dir="ltr"] label {
 }
 
 .nav-desktop a.active-page {
-  background: linear-gradient(135deg, #10B981, #06B6D4);  /* Emerald to Cyan */
+  background: linear-gradient(135deg, #10B981, #F59E0B);  /* Emerald to Amber */
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -368,8 +371,8 @@ html[dir="ltr"] label {
 }
 
 .language-switcher a:hover {
-  color: #06B6D4;  /* Cyan */
-  background-color: rgba(6, 182, 212, 0.1);  /* Cyan tint */
+  color: #F59E0B;  /* Warm Amber */
+  background-color: rgba(245, 158, 11, 0.1);  /* Amber glow */
 }
 
 .language-switcher a.active {
@@ -670,7 +673,7 @@ html[dir="rtl"] .suggestion-pill {
 }
 
 .user .avatar {
-  background: linear-gradient(135deg, #06B6D4, #0891B2);  /* Cyan Gradient - The Data */
+  background: linear-gradient(135deg, #F59E0B, #FB923C);  /* Warm Amber to Orange - The Client */
   box-shadow: var(--shadow-md);
 }
 
@@ -691,7 +694,7 @@ html[dir="rtl"] .suggestion-pill {
 }
 
 .user .message-content {
-  background: linear-gradient(135deg, #06B6D4, #0891B2);  /* Cyan Gradient */
+  background: linear-gradient(135deg, #F59E0B, #FB923C);  /* Warm Amber Gradient */
   color: #FFFFFF;  /* Pure White */
   border: none;
   box-shadow: var(--shadow-lg);
@@ -796,19 +799,19 @@ html[dir="rtl"] .suggestion-pill {
   height: 40px;
   border: none;
   border-radius: 50%;
-  background: linear-gradient(135deg, #10B981, #06B6D4);  /* Emerald to Cyan - Beautiful blend */
+  background: linear-gradient(135deg, #10B981, #F59E0B);  /* Emerald to Amber - Warm blend */
   color: #fff;
   cursor: pointer;
   display: grid;
   place-items: center;
-  box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);  /* Cyan Glow */
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);  /* Warm Amber Glow */
   transition: all 0.15s ease;
 }
 
 #sendButton:hover:not(:disabled) {
-  background: linear-gradient(135deg, #059669, #0891B2);  /* Darker gradient */
+  background: linear-gradient(135deg, #059669, #D97706);  /* Darker warm gradient */
   color: #FFFFFF;
-  box-shadow: 0 0 20px rgba(6, 182, 212, 0.6);  /* Stronger Cyan Glow */
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);  /* Stronger Amber Glow */
 }
 
 #sendButton:active:not(:disabled) .send-icon {
@@ -904,7 +907,7 @@ html[dir="rtl"] .suggestion-pill {
 .content-wrapper h3 {
   font-size: 1.4rem;
   font-weight: 600;
-  color: #06B6D4;  /* Cyan - Subheadings */
+  color: #F59E0B;  /* Warm Amber - Subheadings */
   margin-top: 2rem;
   margin-bottom: 0.75rem;
 }
@@ -930,7 +933,7 @@ html[dir="rtl"] .suggestion-pill {
 }
 
 .content-wrapper a:hover {
-  color: #06B6D4;  /* Cyan on hover */
+  color: #F59E0B;  /* Warm Amber on hover */
   text-decoration: underline;
 }
 
@@ -1219,10 +1222,10 @@ html[dir="rtl"] .menu-toggle {
   position: relative;
   overflow: hidden;
   border-radius: 24px;
-  background: rgba(6, 182, 212, 0.08);  /* Subtle Cyan Haze */
+  background: rgba(245, 158, 11, 0.06);  /* Subtle Warm Amber Haze */
   background-size: 200% 200%;
   animation: gradientShift 8s ease infinite;
-  border: 1px solid rgba(6, 182, 212, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.12);
 }
 
 .blog-header::before {
@@ -1233,8 +1236,8 @@ html[dir="rtl"] .menu-toggle {
   right: 0;
   bottom: 0;
   background: radial-gradient(circle at 50% 50%,
-    rgba(6, 182, 212, 0.12) 0%,
-    transparent 70%);  /* Cyan Glow */
+    rgba(245, 158, 11, 0.1) 0%,
+    transparent 70%);  /* Warm Amber Glow */
   animation: pulse 4s ease-in-out infinite;
   pointer-events: none;
 }
@@ -1394,7 +1397,7 @@ html[dir="rtl"] .menu-toggle {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: linear-gradient(135deg, #10B981, #06B6D4);  /* Emerald to Cyan gradient */
+  background: linear-gradient(135deg, #10B981, #F59E0B);  /* Emerald to Warm Amber */
   color: #FFFFFF;  /* White text */
   font-size: 0.75rem;
   font-weight: 700;
@@ -2189,8 +2192,8 @@ html[dir="rtl"] .products-header p {
 }
 
 .product-status.status-beta {
-  background: rgba(6, 182, 212, 0.2);  /* Cyan tint */
-  color: #06B6D4;  /* Cyan - Beta/Info */
+  background: rgba(245, 158, 11, 0.2);  /* Warm Amber tint */
+  color: #F59E0B;  /* Warm Amber - Beta/Info */
 }
 
 .product-status.status-coming {
@@ -2634,8 +2637,8 @@ html[dir="rtl"] .chat-widget-tooltip {
 }
 
 .email-popup {
-  background: linear-gradient(135deg, #1E293B, #0F172A);  /* Slate gradient */
-  border: 2px solid #06B6D4;  /* Cyan border */
+  background: linear-gradient(135deg, #292524, #1C1917);  /* Warm Stone gradient */
+  border: 2px solid #F59E0B;  /* Warm Amber border */
   border-radius: 20px;
   padding: 2.5rem;
   max-width: 420px;
@@ -2764,7 +2767,7 @@ html[dir="rtl"] .chat-widget-tooltip {
   gap: 0.5rem;
   width: 100%;
   padding: 1rem;
-  background: linear-gradient(135deg, #10B981, #06B6D4);  /* Emerald to Cyan */
+  background: linear-gradient(135deg, #10B981, #F59E0B);  /* Emerald to Warm Amber */
   border: none;
   border-radius: 12px;
   color: #FFFFFF;
@@ -2773,12 +2776,12 @@ html[dir="rtl"] .chat-widget-tooltip {
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(6, 182, 212, 0.4);
+  box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
 }
 
 .email-popup-submit:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(6, 182, 212, 0.6);
+  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.5);
 }
 
 .email-popup-submit:active {
@@ -3138,7 +3141,7 @@ html[dir="rtl"] .chat-widget-tooltip {
 .site-footer {
   background: #000000;  /* Pure Black - Grounds the design */
   backdrop-filter: blur(20px);
-  border-top: 1px solid #10B981;  /* Emerald - Premium finish */
+  border-top: 1px solid #F59E0B;  /* Warm Amber - Premium finish */
   padding: 1.5rem 1.5rem 1.25rem;
   margin-top: auto;
   position: relative;
