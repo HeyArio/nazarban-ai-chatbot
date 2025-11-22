@@ -75,39 +75,41 @@
 
 
 :root {
-  /* === THE EMERALD ENGINE - MAIN THEME COLORS === */
-  --primary: #10B981;        /* Emerald - The "Success" State / Brand Color */
-  --accent: #34D399;         /* Electric Mint - High Energy Hover/Glow */
-  --dark: #ECFDF5;           /* Mint White - Main Text (Easy on eyes, not harsh white) */
-  --bg: #020605;             /* Deepest Jungle - Rich, warm black with 1% Green tint */
+  /* === MAIN THEME COLORS - BALANCED EMERALD + BLUE + AMBER === */
+  --primary: #10B981;        /* Emerald - Primary Action / Success */
+  --secondary: #3B82F6;      /* Royal Blue - Secondary Action (User bubbles, Links) */
+  --accent: #F59E0B;         /* Amber Gold - Highlights / Important Badges */
+  --dark: #F8FAFC;           /* Slate White - Main Text (Cool white, no green tint) */
+  --bg: #0B1120;             /* Deep Navy Black - Background (Not pure black) */
 
   /* === COMPLEMENTARY COLORS === */
-  --bg-light: #0F1915;       /* Card Surface - Dark Metallic Green-Black */
-  --bg-soft: #064E3B;        /* Deep Forest - For active states/subtle backgrounds */
-  --border: #1F2F28;         /* Dark Emerald Grey - Subtle borders */
-  --muted: #6B7280;          /* Neutral Grey - Secondary text (No green tint) */
-  --text-light: #374151;     /* Darker placeholder text */
+  --bg-light: #1E293B;       /* Slate Navy - Card Surface (Blue-grey tone, not green) */
+  --bg-soft: #334155;        /* Lighter Slate - Hover states */
+  --border: #334155;         /* Slate Grey - Dividers */
+  --muted: #94A3B8;          /* Cool Grey - Secondary text */
+  --text-light: #64748B;     /* Darker placeholder text */
 
   /* === SEMANTIC COLORS === */
   --success: #10B981;        /* Emerald */
-  --error: #EF4444;          /* Red - Kept standard for safety */
-  --warning: #F59E0B;        /* Amber - For "Processing" states */
+  --error: #EF4444;          /* Red */
+  --warning: #F59E0B;        /* Amber */
+  --info: #3B82F6;           /* Blue */
 
-  /* === SHADOWS - SOFT DIFFUSED GREEN GLOW === */
-  --shadow-color: rgba(0, 0, 0, 0.8);
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.6);
-  --shadow-lg: 0 10px 15px rgba(0, 20, 10, 0.5);  /* Subtle green shadow */
-  --shadow-xl: 0 20px 25px rgba(0, 20, 10, 0.6);
+  /* === SHADOWS - COOL SHADOWS (BLUE TINT) === */
+  --shadow-color: rgba(15, 23, 42, 0.8);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.6);
 
   /* === LEGACY COMPATIBILITY === */
   --brand1: #10B981;         /* Emerald */
-  --brand2: #34D399;         /* Electric Mint */
-  --brand3: #6EE7B7;         /* Light Mint */
-  --ink: #ECFDF5;            /* Mint White */
-  --panel: #0F1915;          /* Dark Metallic Green-Black */
-  --panel-glass: rgba(15, 25, 21, 0.95);
-  --border-subtle: rgba(16, 185, 129, 0.15);
+  --brand2: #3B82F6;         /* Royal Blue */
+  --brand3: #F59E0B;         /* Amber Gold */
+  --ink: #F8FAFC;            /* Slate White */
+  --panel: #1E293B;          /* Slate Navy */
+  --panel-glass: rgba(30, 41, 59, 0.95);
+  --border-subtle: rgba(51, 65, 85, 0.5);
 
   /* === DESIGN TOKENS === */
   --radius-md: 12px;
@@ -253,9 +255,9 @@ html[dir="ltr"] label {
   top: 0;
   z-index: 900;
   backdrop-filter: blur(20px);
-  background: rgba(15, 15, 15, 0.95);
+  background: rgba(11, 17, 32, 0.95);  /* Deep Navy */
   border-bottom: 1px solid var(--border);
-  padding: 0.5rem 1.5rem;  /* Reduced top/bottom padding from 1rem to 0.5rem */
+  padding: 0.5rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -290,7 +292,7 @@ html[dir="ltr"] label {
 .brand-name {
   font-size: 22px;
   font-weight: 800;
-  background: linear-gradient(135deg, #10B981, #34D399, #6EE7B7);  /* Emerald to Mint */
+  background: linear-gradient(135deg, #10B981, #3B82F6);  /* Emerald to Royal Blue - Growth + Trust */
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -327,8 +329,8 @@ html[dir="ltr"] label {
 }
 
 .nav-desktop a:hover {
-  color: #ECFDF5;  /* Mint White */
-  background-color: rgba(16, 185, 129, 0.1);  /* Emerald Mist */
+  color: #F59E0B;  /* Amber Gold - Adds warmth */
+  background-color: rgba(245, 158, 11, 0.1);  /* Amber Mist */
 }
 
 .nav-desktop a.active-page {
@@ -484,7 +486,7 @@ body.chat-page {
   font-weight: 900;
   letter-spacing: -0.02em;
   margin-bottom: 16px;
-  background: linear-gradient(135deg, #ECFDF5, #10B981);  /* Mint White to Emerald */
+  background: linear-gradient(135deg, #F8FAFC, #3B82F6);  /* White to Royal Blue */
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -658,12 +660,12 @@ html[dir="rtl"] .suggestion-pill {
 }
 
 .bot .avatar {
-  background: linear-gradient(135deg, #064E3B, #10B981);  /* Deep Forest to Emerald */
+  background: linear-gradient(135deg, #10B981, #34D399);  /* Emerald Gradient */
   box-shadow: var(--shadow-md);
 }
 
 .user .avatar {
-  background: linear-gradient(135deg, #34D399, #6EE7B7);  /* Electric Mint to Light Mint */
+  background: linear-gradient(135deg, #3B82F6, #60A5FA);  /* Blue Gradient */
   box-shadow: var(--shadow-md);
 }
 
@@ -677,16 +679,16 @@ html[dir="rtl"] .suggestion-pill {
 }
 
 .bot .message-content {
-  background: #0F1915;  /* Dark Metallic Green-Black */
-  border: 2px solid #1F2F28;  /* Dark Emerald Grey */
-  color: #ECFDF5;  /* Mint White */
+  background: #1E293B;  /* Slate Navy - Distinct from background */
+  border: 2px solid rgba(16, 185, 129, 0.3);  /* Subtle Green rim */
+  color: #F8FAFC;  /* Slate White */
   box-shadow: var(--shadow-lg);
 }
 
 .user .message-content {
-  background: linear-gradient(135deg, #059669, #10B981);  /* Rich Green Gradient */
-  color: #FFFFFF;  /* Pure White for readability */
-  border: 2px solid #10B981;
+  background: #3B82F6;  /* Royal Blue - Much friendlier than green-on-green */
+  color: #FFFFFF;  /* Pure White */
+  border: 2px solid #3B82F6;
   box-shadow: var(--shadow-lg);
 }
 
@@ -694,8 +696,8 @@ html[dir="rtl"] .suggestion-pill {
   padding: 18px 20px;
   border-radius: var(--radius-lg);
   max-width: 86px;
-  background: #0F1915;  /* Dark Metallic Green-Black */
-  border: 2px solid #1F2F28;  /* Dark Emerald Grey */
+  background: #1E293B;  /* Slate Navy */
+  border: 2px solid var(--border);
 }
 
 .typing-dots {
@@ -708,7 +710,7 @@ html[dir="rtl"] .suggestion-pill {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #34D399;  /* Electric Mint */
+  background: #F59E0B;  /* Amber Gold - A nice warm "thinking" indicator */
   animation: typing 1.4s infinite;
 }
 
@@ -746,7 +748,7 @@ html[dir="rtl"] .suggestion-pill {
   align-items: flex-end;
   padding: 6px 56px 6px 8px;
   border-radius: 20px;
-  background: #0F1915;  /* Dark Metallic Green-Black */
+  background: #1E293B;  /* Slate Navy */
   border: 2px solid var(--border);
   box-shadow: var(--shadow-lg);
   transition: box-shadow 0.2s ease;
@@ -763,7 +765,7 @@ html[dir="rtl"] .suggestion-pill {
   resize: none;
   outline: none;
   border: none;
-  background: #020605;  /* Deepest Jungle - Inset Black */
+  background: #0F172A;  /* Darker Navy */
   color: var(--ink);
   border-radius: 14px;
   padding: 12px 16px;
@@ -773,7 +775,7 @@ html[dir="rtl"] .suggestion-pill {
 }
 
 #messageInput:focus {
-  background: #020605;
+  background: #0F172A;
   border: 1px solid #10B981;  /* Emerald */
 }
 
@@ -789,7 +791,7 @@ html[dir="rtl"] .suggestion-pill {
   height: 40px;
   border: 2px solid var(--border);
   border-radius: 50%;
-  background: linear-gradient(135deg, #10B981, #34D399);  /* Emerald to Electric Mint */
+  background: linear-gradient(135deg, #10B981, #059669);  /* Emerald Gradient */
   color: #fff;
   cursor: pointer;
   display: grid;
@@ -799,7 +801,7 @@ html[dir="rtl"] .suggestion-pill {
 }
 
 #sendButton:hover:not(:disabled) {
-  background: linear-gradient(135deg, #34D399, #6EE7B7);  /* Electric Mint to Light Mint */
+  background: linear-gradient(135deg, #059669, #047857);  /* Darker Emerald */
   color: #FFFFFF;
   box-shadow: 0 6px 12px rgba(16, 185, 129, 0.5);  /* Stronger Green Glow */
 }
@@ -887,7 +889,7 @@ html[dir="rtl"] .suggestion-pill {
 .content-wrapper h2 {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #10B981;  /* Emerald */
+  color: #3B82F6;  /* Royal Blue - Balanced secondary color */
   margin-top: 2.5rem;
   margin-bottom: 1rem;
   border-bottom: 2px solid var(--border);
@@ -897,7 +899,7 @@ html[dir="rtl"] .suggestion-pill {
 .content-wrapper h3 {
   font-size: 1.4rem;
   font-weight: 600;
-  color: #ECFDF5;  /* Mint White */
+  color: #10B981;  /* Emerald - Primary accent */
   margin-top: 2rem;
   margin-bottom: 0.75rem;
 }
@@ -905,7 +907,7 @@ html[dir="rtl"] .suggestion-pill {
 .content-wrapper p,
 .content-wrapper li {
   font-size: 1.1rem;
-  color: #9CA3AF;  /* Cool Grey - very readable */
+  color: #CBD5E1;  /* Light Slate Grey - Better contrast */
   line-height: 1.7;
   margin-bottom: 1.25rem;
 }
@@ -916,7 +918,7 @@ html[dir="rtl"] .suggestion-pill {
 }
 
 .content-wrapper a {
-  color: #34D399;  /* Electric Mint */
+  color: #F59E0B;  /* Amber Gold - Warm accent */
   text-decoration: none;
   font-weight: 600;
   transition: all 0.2s;
@@ -924,7 +926,7 @@ html[dir="rtl"] .suggestion-pill {
 }
 
 .content-wrapper a:hover {
-  color: #10B981;  /* Emerald */
+  color: #10B981;  /* Emerald - Primary accent */
   border-bottom: 2px solid #10B981;
 }
 
@@ -1213,10 +1215,10 @@ html[dir="rtl"] .menu-toggle {
   position: relative;
   overflow: hidden;
   border-radius: 24px;
-  background: rgba(16, 185, 129, 0.1);  /* Emerald Haze */
+  background: rgba(59, 130, 246, 0.1);  /* Blue Haze - Balanced secondary color */
   background-size: 200% 200%;
   animation: gradientShift 8s ease infinite;
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.2);
 }
 
 .blog-header::before {
@@ -1227,8 +1229,8 @@ html[dir="rtl"] .menu-toggle {
   right: 0;
   bottom: 0;
   background: radial-gradient(circle at 50% 50%,
-    rgba(16, 185, 129, 0.15) 0%,
-    transparent 70%);  /* Emerald Glow */
+    rgba(59, 130, 246, 0.15) 0%,
+    transparent 70%);  /* Blue Glow */
   animation: pulse 4s ease-in-out infinite;
   pointer-events: none;
 }
@@ -1388,8 +1390,8 @@ html[dir="rtl"] .menu-toggle {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: rgba(16, 185, 129, 0.15);  /* Emerald Tint */
-  color: #34D399;  /* Electric Mint */
+  background: rgba(245, 158, 11, 0.15);  /* Amber Tint - Warm accent */
+  color: #F59E0B;  /* Amber Gold */
   font-size: 0.75rem;
   font-weight: 700;
   padding: 0.35rem 0.85rem;
@@ -1399,7 +1401,7 @@ html[dir="rtl"] .menu-toggle {
   box-shadow: var(--shadow-sm);
   z-index: 2;
   letter-spacing: 0.02em;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
 [dir="rtl"] .nazarban-badge {
@@ -1501,9 +1503,9 @@ html[dir="rtl"] .menu-toggle {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: linear-gradient(135deg, #059669, #10B981);  /* Rich Green Gradient */
-  color: #FFFFFF;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: transparent;  /* Transparent - Minimal design */
+  color: #3B82F6;  /* Royal Blue */
+  border: 2px solid #3B82F6;
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
   font-family: inherit;
@@ -1511,19 +1513,19 @@ html[dir="rtl"] .menu-toggle {
   font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);
+  box-shadow: none;
 }
 
 .read-more-btn:hover {
-  background: linear-gradient(135deg, #10B981, #34D399);  /* Emerald to Electric Mint */
+  background: #3B82F6;  /* Royal Blue fill on hover */
   color: #FFFFFF;
-  box-shadow: 0 6px 12px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
 }
 
 .read-more-btn .link-icon {
   width: 16px;
   height: 16px;
-  stroke: white;
+  stroke: currentColor;  /* Inherits button color */
 }
 
 .post-link {
@@ -2055,7 +2057,7 @@ html[dir="rtl"] .menu-toggle {
 
 .faq-item.active .faq-icon {
   transform: rotate(180deg);
-  stroke: #34D399;  /* Electric Mint */
+  stroke: #F59E0B;  /* Amber Gold - Warm accent */
 }
 
 .faq-answer {
@@ -2177,18 +2179,18 @@ html[dir="rtl"] .products-header p {
 }
 
 .product-status.status-live {
-  background: rgba(74, 222, 128, 0.2);
-  color: #4ade80;
+  background: rgba(16, 185, 129, 0.2);  /* Emerald tint */
+  color: #10B981;  /* Emerald - Success */
 }
 
 .product-status.status-beta {
-  background: rgba(34, 211, 238, 0.2);
-  color: var(--brand1);
+  background: rgba(59, 130, 246, 0.2);  /* Blue tint */
+  color: #3B82F6;  /* Royal Blue - New badge */
 }
 
 .product-status.status-coming {
-  background: rgba(148, 163, 184, 0.2);
-  color: var(--muted);
+  background: rgba(245, 158, 11, 0.2);  /* Amber tint */
+  color: #F59E0B;  /* Amber Gold - Warning */
 }
 
 .product-name {
@@ -2627,8 +2629,8 @@ html[dir="rtl"] .chat-widget-tooltip {
 }
 
 .email-popup {
-  background: linear-gradient(135deg, #0F1915, #020605);  /* Dark Green-Black to Deepest Jungle */
-  border: 2px solid #10B981;  /* Emerald border */
+  background: linear-gradient(135deg, #1E293B, #0F172A);  /* Navy Gradient - Balanced with theme */
+  border: 2px solid #F59E0B;  /* Amber Gold border */
   border-radius: 20px;
   padding: 2.5rem;
   max-width: 420px;
@@ -2757,8 +2759,8 @@ html[dir="rtl"] .chat-widget-tooltip {
   gap: 0.5rem;
   width: 100%;
   padding: 1rem;
-  background: linear-gradient(135deg, #10B981, #34D399);  /* Emerald to Electric Mint */
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: linear-gradient(135deg, #F59E0B, #D97706);  /* Amber Gold to Orange */
+  border: 1px solid rgba(245, 158, 11, 0.3);
   border-radius: 12px;
   color: #FFFFFF;
   font-family: inherit;
@@ -2766,12 +2768,12 @@ html[dir="rtl"] .chat-widget-tooltip {
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 4px 8px rgba(245, 158, 11, 0.4);
 }
 
 .email-popup-submit:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.5);
+  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.5);
 }
 
 .email-popup-submit:active {
@@ -3131,7 +3133,7 @@ html[dir="rtl"] .chat-widget-tooltip {
 .site-footer {
   background: #000000;  /* Pure Black - Grounds the design */
   backdrop-filter: blur(20px);
-  border-top: 1px solid #1F2F28;  /* Dark Emerald Grey */
+  border-top: 1px solid #F59E0B;  /* Amber Gold - Premium finish */
   padding: 1.5rem 1.5rem 1.25rem;
   margin-top: auto;
   position: relative;
