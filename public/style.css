@@ -76,33 +76,35 @@
 
 :root {
   /* === RETRO THEME COLORS === */
-  --primary: #FF4F18;        /* International Orange - The "Deathloop" Hero Color */
-  --accent: #00C2BA;         /* Retro Teal - The "Funk" contrast */
-  --dark: #FAF9F6;           /* Off-White/Cream - Vintage paper tone */
-  --bg: #0F0F0F;             /* Oil Black - Deep, warm, ink-black */
+  --primary: #FF4F18;        /* Magma Orange - The "Hero" color */
+  --accent: #FACC15;         /* Mustard Gold - The "Style" color */
+  --tertiary: #00C2BA;       /* Retro Teal - The "Funk" contrast */
+  --dark: #FAF9F6;           /* Vintage Cream - Main Text */
+  --bg: #0F0F0F;             /* Oil Black - Deep, matte background */
 
   /* === COMPLEMENTARY COLORS === */
-  --bg-light: #1A1A1A;       /* Card Surface - Matte Charcoal */
-  --bg-soft: #FACC15;        /* Mustard Gold - Secondary warm accent */
-  --border: #333333;         /* Dark Grey Borders */
-  --muted: #A1A1AA;          /* Concrete Grey - Muted text */
+  --bg-light: #1A1A1A;       /* Charcoal Matte - Card Surface */
+  --bg-soft: #2A2A2A;        /* Gunmetal - Input fields, slight elevation */
+  --border: #404040;         /* Dark Grey - Subtle dividers */
+  --muted: #A1A1AA;          /* Concrete Grey - Secondary text */
   --text-light: #71717A;     /* Placeholder text */
+  --text-body: #D4D4D8;      /* Light Grey - Body text (improved readability) */
 
   /* === SEMANTIC COLORS === */
-  --success: #00C2BA;        /* Teal for success */
-  --error: #FF4F18;          /* Orange/Red for error */
+  --success: #00C2BA;        /* Retro Teal - Very 60s/Scifi */
+  --error: #FF4F18;          /* Magma Orange - Unified with primary */
 
   /* === RETRO HARD SHADOWS === */
-  --shadow-color: rgba(0, 0, 0, 0.8);
+  --shadow-color: rgba(0, 0, 0, 0.9);
   --shadow-sm: 2px 2px 0px rgba(0, 0, 0, 1);
   --shadow-md: 4px 4px 0px rgba(0, 0, 0, 1);
   --shadow-lg: 8px 8px 0px rgba(0, 0, 0, 1);
   --shadow-xl: 12px 12px 0px rgba(0, 0, 0, 1);
 
   /* === LEGACY COMPATIBILITY === */
-  --brand1: #FF4F18;         /* International Orange */
-  --brand2: #00C2BA;         /* Retro Teal */
-  --brand3: #FACC15;         /* Mustard Gold */
+  --brand1: #FF4F18;         /* Magma Orange */
+  --brand2: #FACC15;         /* Mustard Gold */
+  --brand3: #00C2BA;         /* Retro Teal */
   --ink: #FAF9F6;            /* Cream text */
   --panel: #1A1A1A;          /* Charcoal */
   --panel-glass: rgba(26, 26, 26, 0.95);
@@ -143,28 +145,98 @@ body {
   text-align: left;
 }
 
-/* === CRITICAL: BUTTON FONT RULES === */
-/* Farsi buttons MUST use Sahel font */
-html[lang="fa"] button,
-html[lang="fa"] .btn,
-html[lang="fa"] input[type="submit"],
-html[lang="fa"] input[type="button"],
-html[dir="rtl"] button,
-html[dir="rtl"] .btn,
-html[dir="rtl"] input[type="submit"],
-html[dir="rtl"] input[type="button"] {
+/* ===================================================================
+   CRITICAL: COMPREHENSIVE FONT RULES - SAHEL FOR FARSI
+   ===================================================================
+   These rules ensure ALL Farsi text uses Sahel font throughout the site.
+   Using !important to override any conflicting styles.
+   =================================================================== */
+
+/* Farsi: ALL elements inherit Sahel */
+html[lang="fa"] *,
+html[dir="rtl"] * {
   font-family: 'Sahel', sans-serif !important;
 }
 
-/* English buttons MUST use Nunito Sans font */
+/* Farsi: Specific elements for extra coverage */
+html[lang="fa"] button,
+html[lang="fa"] .btn,
+html[lang="fa"] input,
+html[lang="fa"] textarea,
+html[lang="fa"] select,
+html[lang="fa"] a,
+html[lang="fa"] p,
+html[lang="fa"] span,
+html[lang="fa"] div,
+html[lang="fa"] h1,
+html[lang="fa"] h2,
+html[lang="fa"] h3,
+html[lang="fa"] h4,
+html[lang="fa"] h5,
+html[lang="fa"] h6,
+html[lang="fa"] li,
+html[lang="fa"] label,
+html[dir="rtl"] button,
+html[dir="rtl"] .btn,
+html[dir="rtl"] input,
+html[dir="rtl"] textarea,
+html[dir="rtl"] select,
+html[dir="rtl"] a,
+html[dir="rtl"] p,
+html[dir="rtl"] span,
+html[dir="rtl"] div,
+html[dir="rtl"] h1,
+html[dir="rtl"] h2,
+html[dir="rtl"] h3,
+html[dir="rtl"] h4,
+html[dir="rtl"] h5,
+html[dir="rtl"] h6,
+html[dir="rtl"] li,
+html[dir="rtl"] label {
+  font-family: 'Sahel', sans-serif !important;
+}
+
+/* English: ALL elements inherit Nunito Sans */
+html[lang="en"] *,
+html[dir="ltr"] * {
+  font-family: 'Nunito Sans', sans-serif !important;
+}
+
+/* English: Specific elements for extra coverage */
 html[lang="en"] button,
 html[lang="en"] .btn,
-html[lang="en"] input[type="submit"],
-html[lang="en"] input[type="button"],
+html[lang="en"] input,
+html[lang="en"] textarea,
+html[lang="en"] select,
+html[lang="en"] a,
+html[lang="en"] p,
+html[lang="en"] span,
+html[lang="en"] div,
+html[lang="en"] h1,
+html[lang="en"] h2,
+html[lang="en"] h3,
+html[lang="en"] h4,
+html[lang="en"] h5,
+html[lang="en"] h6,
+html[lang="en"] li,
+html[lang="en"] label,
 html[dir="ltr"] button,
 html[dir="ltr"] .btn,
-html[dir="ltr"] input[type="submit"],
-html[dir="ltr"] input[type="button"] {
+html[dir="ltr"] input,
+html[dir="ltr"] textarea,
+html[dir="ltr"] select,
+html[dir="ltr"] a,
+html[dir="ltr"] p,
+html[dir="ltr"] span,
+html[dir="ltr"] div,
+html[dir="ltr"] h1,
+html[dir="ltr"] h2,
+html[dir="ltr"] h3,
+html[dir="ltr"] h4,
+html[dir="ltr"] h5,
+html[dir="ltr"] h6,
+html[dir="ltr"] li,
+html[dir="ltr"] label {
   font-family: 'Nunito Sans', sans-serif !important;
 }
 
@@ -203,7 +275,7 @@ html[dir="ltr"] input[type="button"] {
   border-radius: 16px;
   display: grid;
   place-items: center;
-  background: #FAF9F6;
+  background: #1A1A1A;
   border: 2px solid var(--border);
   box-shadow: var(--shadow-sm);
 }
@@ -258,8 +330,8 @@ html[dir="ltr"] input[type="button"] {
 }
 
 .nav-desktop a:hover {
-  color: var(--dark);
-  background-color: var(--bg-soft);
+  color: #FACC15;
+  background-color: rgba(255, 79, 24, 0.1);
 }
 
 .nav-desktop a.active-page {
@@ -289,8 +361,8 @@ html[dir="ltr"] input[type="button"] {
 }
 
 .language-switcher a:hover {
-  color: var(--dark);
-  background-color: rgba(148, 163, 184, 0.15);
+  color: #FACC15;
+  background-color: rgba(255, 79, 24, 0.1);
 }
 
 .language-switcher a.active {
@@ -415,8 +487,11 @@ body.chat-page {
   font-weight: 900;
   letter-spacing: -0.02em;
   margin-bottom: 16px;
-  color: #FF4F18;
-  text-shadow: 3px 3px 0px rgba(0, 0, 0, 1);
+  background: linear-gradient(135deg, #FAF9F6, #FACC15);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
 }
 
 .welcome-subtitle {
@@ -586,12 +661,12 @@ html[dir="rtl"] .suggestion-pill {
 }
 
 .bot .avatar {
-  background: linear-gradient(135deg, #FF4F18, #FACC15);
+  background: linear-gradient(135deg, #2A2A2A, #404040);
   box-shadow: var(--shadow-md);
 }
 
 .user .avatar {
-  background: linear-gradient(135deg, #00C2BA, #2E8B57);
+  background: linear-gradient(135deg, #FF4F18, #FACC15);
   box-shadow: var(--shadow-md);
 }
 
@@ -606,14 +681,14 @@ html[dir="rtl"] .suggestion-pill {
 
 .bot .message-content {
   background: #1A1A1A;
-  border: 2px solid #333333;
+  border: 2px solid #404040;
   color: #FAF9F6;
   box-shadow: var(--shadow-lg);
 }
 
 .user .message-content {
   background: #00C2BA;
-  color: #000000;
+  color: #0F0F0F;
   border: 2px solid #00C2BA;
   box-shadow: var(--shadow-lg);
 }
@@ -623,7 +698,7 @@ html[dir="rtl"] .suggestion-pill {
   border-radius: var(--radius-lg);
   max-width: 86px;
   background: #1A1A1A;
-  border: 2px solid #333333;
+  border: 2px solid #404040;
 }
 
 .typing-dots {
@@ -674,14 +749,14 @@ html[dir="rtl"] .suggestion-pill {
   align-items: flex-end;
   padding: 6px 56px 6px 8px;
   border-radius: 20px;
-  background: rgba(30, 41, 59, 0.8);
-  border: 1px solid var(--border);
+  background: #1A1A1A;
+  border: 2px solid var(--border);
   box-shadow: var(--shadow-lg);
   transition: box-shadow 0.2s ease;
 }
 
 .input-container:focus-within {
-  box-shadow: 0 0 0 3px var(--shadow-color);
+  border-color: #FACC15;
 }
 
 #messageInput {
@@ -691,7 +766,7 @@ html[dir="rtl"] .suggestion-pill {
   resize: none;
   outline: none;
   border: none;
-  background: rgba(51, 65, 85, 0.82);
+  background: #0F0F0F;
   color: var(--ink);
   border-radius: 14px;
   padding: 12px 16px;
@@ -701,11 +776,12 @@ html[dir="rtl"] .suggestion-pill {
 }
 
 #messageInput:focus {
-  background: rgba(51, 65, 85, 1);
+  background: #0F0F0F;
+  border: 1px solid #FACC15;
 }
 
 #messageInput::placeholder {
-  color: #94a3b8;
+  color: var(--text-light);
 }
 
 #sendButton {
@@ -714,9 +790,9 @@ html[dir="rtl"] .suggestion-pill {
   bottom: 8px;
   width: 40px;
   height: 40px;
-  border: 2px solid #333333;
+  border: 2px solid var(--border);
   border-radius: 50%;
-  background: #FF4F18;
+  background: linear-gradient(135deg, #FF4F18, #F59E0B);
   color: #fff;
   cursor: pointer;
   display: grid;
@@ -726,7 +802,7 @@ html[dir="rtl"] .suggestion-pill {
 }
 
 #sendButton:hover:not(:disabled) {
-  background: #FACC15;
+  background: linear-gradient(135deg, #FACC15, #FCD34D);
   color: #000000;
   box-shadow: var(--shadow-lg);
 }
@@ -805,24 +881,32 @@ html[dir="rtl"] .suggestion-pill {
   font-weight: 900;
   letter-spacing: -0.02em;
   margin-bottom: 1rem;
-  color: #FAF9F6;
+  color: #FF4F18;
   text-shadow: 3px 3px 0px rgba(0, 0, 0, 1);
 }
 
 .content-wrapper h2 {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #FF4F18;
+  color: #FACC15;
   margin-top: 2.5rem;
   margin-bottom: 1rem;
   border-bottom: 2px solid var(--border);
   padding-bottom: 0.5rem;
 }
 
+.content-wrapper h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #FAF9F6;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
 .content-wrapper p,
 .content-wrapper li {
   font-size: 1.1rem;
-  color: var(--muted);
+  color: var(--text-body);  /* Light Grey - improved readability */
   line-height: 1.7;
   margin-bottom: 1.25rem;
 }
@@ -841,7 +925,7 @@ html[dir="rtl"] .suggestion-pill {
 }
 
 .content-wrapper a:hover {
-  color: #FACC15;
+  color: #FF4F18;  /* Orange */
   border-bottom: 2px solid #FF4F18;
 }
 
@@ -1131,14 +1215,12 @@ html[dir="rtl"] .menu-toggle {
   overflow: hidden;
   border-radius: 24px;
   background: linear-gradient(135deg,
-    rgba(14, 165, 233, 0.1) 0%,
-    rgba(34, 211, 238, 0.1) 25%,
-    rgba(125, 211, 252, 0.1) 50%,
-    rgba(34, 211, 238, 0.1) 75%,
-    rgba(14, 165, 233, 0.1) 100%);
+    rgba(255, 79, 24, 0.15) 0%,
+    rgba(250, 204, 21, 0.1) 50%,
+    rgba(255, 79, 24, 0.15) 100%);  /* Orange Haze */
   background-size: 200% 200%;
   animation: gradientShift 8s ease infinite;
-  border: 1px solid rgba(34, 211, 238, 0.2);
+  border: 1px solid rgba(250, 204, 21, 0.2);
 }
 
 .blog-header::before {
@@ -1149,8 +1231,8 @@ html[dir="rtl"] .menu-toggle {
   right: 0;
   bottom: 0;
   background: radial-gradient(circle at 50% 50%,
-    rgba(14, 165, 233, 0.1) 0%,
-    transparent 70%);
+    rgba(255, 79, 24, 0.1) 0%,
+    transparent 70%);  /* Orange Haze */
   animation: pulse 4s ease-in-out infinite;
   pointer-events: none;
 }
@@ -1251,17 +1333,17 @@ html[dir="rtl"] .menu-toggle {
   }
 }
 
-/* Blog Post Card - Glassmorphism */
+/* Blog Post Card - Retro Style */
 .blog-post-card {
-  background: #1A1A1A;
-  border: 3px solid #333333;
+  background: #1A1A1A;  /* Charcoal Matte */
+  border: 3px solid #404040;  /* Dark Grey */
   border-radius: 12px;
   padding: 2rem;
   transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
   cursor: pointer;
-  box-shadow: var(--shadow-lg);
+  box-shadow: 4px 4px 0px #000000;  /* Hard Shadow */
 }
 
 .blog-post-card::before {
@@ -1292,9 +1374,9 @@ html[dir="rtl"] .menu-toggle {
 
 .blog-post-card:hover {
   transform: translateY(-8px) scale(1.02);
-  border-color: rgba(34, 211, 238, 0.5);
-  box-shadow: 0 20px 60px rgba(34, 211, 238, 0.25);
-  background: rgba(15, 23, 42, 0.8);
+  border-color: #FACC15;  /* Gold */
+  box-shadow: 6px 6px 0px #000000;  /* Larger Hard Shadow */
+  background: #1A1A1A;
 }
 
 .blog-post-card:hover::before {
@@ -1310,18 +1392,18 @@ html[dir="rtl"] .menu-toggle {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: linear-gradient(135deg, var(--brand1), var(--brand2));
-  color: white;
+  background: #FACC15;  /* Solid Mustard Gold */
+  color: #000000;  /* Black - High Contrast */
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
   padding: 0.35rem 0.85rem;
   border-radius: 20px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 4px 12px rgba(34, 211, 238, 0.3);
+  box-shadow: var(--shadow-md);
   z-index: 2;
   letter-spacing: 0.02em;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid #000000;
 }
 
 [dir="rtl"] .nazarban-badge {
@@ -1365,11 +1447,11 @@ html[dir="rtl"] .menu-toggle {
   align-items: center;
   gap: 0.4rem;
   padding: 0.25rem 0.75rem;
-  background: rgba(34, 211, 238, 0.15);
+  background: rgba(250, 204, 21, 0.15);  /* Gold Tint */
   backdrop-filter: blur(10px);
   border-radius: 20px;
-  border: 1px solid rgba(34, 211, 238, 0.3);
-  color: var(--brand1);
+  border: 1px solid rgba(250, 204, 21, 0.3);
+  color: #FACC15;  /* Mustard Gold */
   font-weight: 500;
 }
 
@@ -1934,15 +2016,15 @@ html[dir="rtl"] .menu-toggle {
 
 .faq-item {
   background: var(--bg);
-  border: 1px solid var(--border-subtle);
+  border: 2px solid #404040;  /* Dark Grey */
   border-radius: var(--radius-md);
   overflow: hidden;
   transition: all 0.3s ease;
 }
 
 .faq-item.active {
-  border-color: var(--brand1);
-  box-shadow: 0 0 0 1px var(--brand1);
+  border-color: #FACC15;  /* Gold */
+  box-shadow: var(--shadow-md);
 }
 
 .faq-question {
@@ -1977,7 +2059,7 @@ html[dir="rtl"] .menu-toggle {
 
 .faq-item.active .faq-icon {
   transform: rotate(180deg);
-  stroke: var(--brand1);
+  stroke: #FF4F18;  /* Orange */
 }
 
 .faq-answer {
@@ -2067,21 +2149,22 @@ html[dir="rtl"] .products-header p {
 }
 
 .product-card {
-  background: var(--panel);
+  background: #1A1A1A;  /* Charcoal Matte */
   backdrop-filter: blur(20px);
-  border: 1px solid var(--border-subtle);
+  border: 2px solid #404040;  /* Dark Grey */
   border-radius: var(--radius-lg);
   padding: 2rem;
   transition: all 0.3s ease;
   cursor: pointer;
   display: flex;
   flex-direction: column;
+  box-shadow: var(--shadow-md);
 }
 
 .product-card:hover {
   transform: translateY(-5px);
-  border-color: var(--brand1);
-  box-shadow: 0 10px 30px rgba(34, 211, 238, 0.2);
+  border-color: #FACC15;  /* Gold */
+  box-shadow: 6px 6px 0px #000000;  /* Hard Shadow */
 }
 
 .product-header {
@@ -2530,7 +2613,7 @@ html[dir="rtl"] .chat-widget-tooltip {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(2, 6, 23, 0.85);
+  background: rgba(15, 15, 15, 0.9);  /* Oil Black overlay */
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   z-index: 10000;
@@ -2547,17 +2630,15 @@ html[dir="rtl"] .chat-widget-tooltip {
 }
 
 .email-popup {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.95));
-  border: 1px solid rgba(125, 211, 252, 0.3);
+  background: linear-gradient(135deg, #1A1A1A, #0F0F0F);  /* Charcoal to Oil Black */
+  border: 2px solid #FACC15;  /* Gold border */
   border-radius: 20px;
   padding: 2.5rem;
   max-width: 420px;
   width: 100%;
   text-align: center;
   position: relative;
-  box-shadow:
-    0 25px 50px -12px rgba(0, 0, 0, 0.5),
-    0 0 60px rgba(34, 211, 238, 0.15);
+  box-shadow: var(--shadow-xl);
   transform: scale(0.9) translateY(20px);
   transition: transform 0.3s ease;
 }
@@ -2601,20 +2682,22 @@ html[dir="rtl"] .chat-widget-tooltip {
   width: 64px;
   height: 64px;
   margin: 0 auto 1.5rem;
-  background: linear-gradient(135deg, var(--brand1), var(--brand2));
+  background: linear-gradient(135deg, #FF4F18, #FACC15);  /* Orange to Gold */
   border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   animation: pulse-glow 2s ease-in-out infinite;
+  border: 2px solid #000000;
+  box-shadow: var(--shadow-md);
 }
 
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
+    box-shadow: var(--shadow-md);
   }
   50% {
-    box-shadow: 0 0 40px rgba(34, 211, 238, 0.5);
+    box-shadow: var(--shadow-lg);
   }
 }
 
@@ -2677,20 +2760,21 @@ html[dir="rtl"] .chat-widget-tooltip {
   gap: 0.5rem;
   width: 100%;
   padding: 1rem;
-  background: linear-gradient(135deg, #38BDF8, #22D3EE);
-  border: none;
+  background: linear-gradient(135deg, #FF4F18, #FACC15);  /* Orange to Gold */
+  border: 2px solid #000000;
   border-radius: 12px;
-  color: white;
+  color: #000000;  /* Black text */
   font-family: inherit;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: var(--shadow-md);
 }
 
 .email-popup-submit:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(34, 211, 238, 0.35);
+  box-shadow: var(--shadow-lg);
 }
 
 .email-popup-submit:active {
@@ -3048,23 +3132,12 @@ html[dir="rtl"] .chat-widget-tooltip {
 
 /* --- Site Footer --- */
 .site-footer {
-  background: #020617;
+  background: #0A0A0A;  /* Pitch Black */
   backdrop-filter: blur(20px);
-  border-top: 2px solid transparent;
-  border-image: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.1), var(--brand2), transparent) 1;
+  border-top: 2px solid #FACC15;  /* Thin Gold Line */
   padding: 1.5rem 1.5rem 1.25rem;
   margin-top: auto;
   position: relative;
-}
-
-.site-footer::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.3), rgba(125, 211, 252, 0.3), transparent);
 }
 
 .footer-content {
@@ -3088,10 +3161,7 @@ html[dir="rtl"] .chat-widget-tooltip {
   margin-bottom: 0.35rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  background: linear-gradient(135deg, var(--brand1), var(--brand2));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #FACC15;  /* Mustard Gold */
 }
 
 .footer-social-links {
@@ -3106,17 +3176,17 @@ html[dir="rtl"] .chat-widget-tooltip {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(34, 211, 238, 0.1);
-  border: 1px solid rgba(34, 211, 238, 0.2);
+  background: rgba(250, 204, 21, 0.1);  /* Gold tint */
+  border: 1px solid rgba(250, 204, 21, 0.3);
   color: var(--ink);
   text-decoration: none;
   transition: all 0.2s ease;
 }
 
 .footer-social-link:hover {
-  background: linear-gradient(135deg, var(--brand1), var(--brand2));
-  border-color: transparent;
-  color: white;
+  background: linear-gradient(135deg, #FF4F18, #FACC15);  /* Orange to Gold */
+  border-color: #000000;
+  color: #000000;  /* Black text */
   transform: translateY(-2px);
 }
 
@@ -3143,7 +3213,7 @@ html[dir="rtl"] .chat-widget-tooltip {
 }
 
 .footer-contact-link:hover {
-  color: var(--brand1);
+  color: #00C2BA;  /* Retro Teal */
   opacity: 1;
 }
 
