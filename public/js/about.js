@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Display video player
   const displayVideo = (embedUrl) => {
     const lang = getCurrentLanguage();
-    const videoTitle = lang === 'fa' ? 'ویدیوی معرفی نظربان' : 'About Nazarban Video';
+    const videoTitle = lang === 'fa' ? 'ویدیوی معرفی نظربان' : 'Nazarban Introduction Video';
 
     let videoPlayerHTML;
 
