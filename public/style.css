@@ -1599,20 +1599,31 @@ html[dir="rtl"] .menu-toggle {
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   .blog-wrapper {
-    padding: 2rem 1rem;
+    padding: 1.5rem 1rem;
   }
 
- .blog-header {
-  text-align: center !important;
-}
+  /* Reduce ticker spacing on mobile */
+  .ticker-wrapper {
+    margin-bottom: 1.5rem;
+  }
 
-.blog-header h1 {
-  text-align: center !important;
-}
+  .blog-header {
+    text-align: center !important;
+    padding: 2rem 1rem; /* Reduce padding from 4rem 2rem */
+    margin-bottom: 2rem; /* Reduce margin from 4rem */
+  }
 
-.blog-header p {
-  text-align: center !important;
-}
+  .blog-header h1 {
+    text-align: center !important;
+    font-size: 2rem; /* Reduce from 3rem */
+    margin-bottom: 0.75rem;
+  }
+
+  .blog-header p {
+    text-align: center !important;
+    font-size: 1rem; /* Reduce from 1.2rem */
+  }
+
   .blog-post-card {
     padding: 1.5rem;
   }
@@ -2277,7 +2288,7 @@ html[dir="rtl"] .product-features li::before {
   padding: 0.75rem 1.5rem;
   background: var(--brand1);
   color: var(--ink);
-  text-decoration: none;
+  text-decoration: none !important;
   border-radius: var(--radius-md);
   font-weight: 600;
   transition: all 0.2s ease;
