@@ -1166,29 +1166,25 @@ html[dir="rtl"] [data-lang-key="contact_phone"] {
 
 /* --- Mobile Language Switcher Fix --- */
 @media (max-width: 768px) {
-  /* Hide language switcher from header on mobile */
+  /* Keep language switcher visible in header on mobile */
   .header .language-switcher {
+    display: flex;
+  }
+
+  /* Make mobile language switcher more compact */
+  .header .language-switcher a {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  /* Hide language switcher from mobile menu */
+  .nav-mobile-overlay .language-switcher {
     display: none;
   }
 
-  /* Add language switcher to mobile menu */
+  /* Add spacing between items in mobile menu */
   .nav-mobile-overlay {
-    gap: 0.5rem; /* Add spacing between items */
-  }
-
-  /* Mobile menu language switcher styling */
-  .nav-mobile-overlay .language-switcher {
-    display: flex;
-    justify-content: center;
-    margin-top: 2rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--border);
-  }
-
-  /* Make the buttons slightly larger in mobile menu */
-  .nav-mobile-overlay .language-switcher a {
-    font-size: 1rem;
-    padding: 0.5rem 1rem;
+    gap: 0.5rem;
   }
 }
 
@@ -1916,17 +1912,17 @@ html[dir="rtl"] .menu-toggle {
   width: max-content;
   cursor: pointer;
   transition: transform 0.2s ease, background-color 0.2s ease;
-  
+
   /* We still want the link's default color to be neutral */
-  color: inherit; 
-  text-decoration: none; /* remove underline by default */
+  color: inherit;
+  text-decoration: none !important; /* Force remove underline */
 }
 
 .ticker-item:hover {
   transform: scale(1.05);
   background: rgba(30, 41, 59, 0.9);
   color: inherit; /* also neutral on hover */
-  text-decoration: underline; /* add underline on hover */
+  text-decoration: none !important; /* Keep no underline on hover */
 }
 
 .ticker-symbol {
