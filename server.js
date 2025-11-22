@@ -83,6 +83,10 @@ const faqsDataPath = path.join(__dirname, 'faqsData.json');
 const aboutVideoPath = path.join(__dirname, 'aboutVideo.json');
 // --- END: ABOUT VIDEO DATA PATH ---
 
+// --- SERVICES VIDEOS DATA PATH ---
+const servicesVideosPath = path.join(__dirname, 'servicesVideos.json');
+// --- END: SERVICES VIDEOS DATA PATH ---
+
 // --- NEW: Prompt Management ---
 let prompts = {};
 const promptsFilePath = path.join(__dirname, 'prompts.json');
@@ -262,6 +266,31 @@ async function saveAboutVideo(videoData) {
     console.log('✅ About video saved successfully');
 }
 // --- END: ABOUT VIDEO DATA MANAGEMENT FUNCTIONS ---
+
+// --- SERVICES VIDEOS DATA MANAGEMENT FUNCTIONS ---
+// Load services videos from JSON
+async function loadServicesVideos() {
+    try {
+        const data = await fs.readFile(servicesVideosPath, 'utf-8');
+        return JSON.parse(data);
+    } catch (error) {
+        console.log('⚠️ No services videos file found, creating new one');
+        const defaultData = {
+            strategy: '',
+            development: '',
+            automation: ''
+        };
+        await fs.writeFile(servicesVideosPath, JSON.stringify(defaultData, null, 2));
+        return defaultData;
+    }
+}
+
+// Save services videos to JSON
+async function saveServicesVideos(videosData) {
+    await fs.writeFile(servicesVideosPath, JSON.stringify(videosData, null, 2));
+    console.log('✅ Services videos saved successfully');
+}
+// --- END: SERVICES VIDEOS DATA MANAGEMENT FUNCTIONS ---
 
 // --- AUTOMATIC WEEKLY ARCHIVING ---
 // Schedule archiving to run every Monday at 2:00 AM
@@ -1197,6 +1226,72 @@ app.post('/api/about/video', async (req, res) => {
     }
 });
 // --- END: ABOUT VIDEO API ROUTES ---
+
+// --- SERVICES VIDEOS API ROUTES ---
+// API: GET services videos
+app.get('/api/services/videos', async (req, res) => {
+    try {
+        const videosData = await loadServicesVideos();
+        res.json({
+            success: true,
+            videos: videosData
+        });
+    } catch (error) {
+        console.error('❌ Error loading services videos:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to load services videos'
+        });
+    }
+});
+
+// API: POST/Update services videos (Admin only)
+app.post('/api/services/videos', async (req, res) => {
+    try {
+        const { videos, password } = req.body;
+
+        // Simple password protection
+        if (password !== process.env.ADMIN_PASSWORD) {
+            return res.status(401).json({
+                success: false,
+                error: 'Unauthorized: Invalid password'
+            });
+        }
+
+        // Validate that videos is an object
+        if (!videos || typeof videos !== 'object') {
+            return res.status(400).json({
+                success: false,
+                error: 'Invalid videos data format'
+            });
+        }
+
+        // Save videos data
+        const videosData = {
+            strategy: videos.strategy || '',
+            development: videos.development || '',
+            automation: videos.automation || '',
+            updatedAt: new Date().toISOString()
+        };
+
+        await saveServicesVideos(videosData);
+
+        res.json({
+            success: true,
+            message: 'Services videos saved successfully',
+            videos: videosData
+        });
+
+    } catch (error) {
+        console.error('❌ Error saving services videos:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to save services videos',
+            details: error.message
+        });
+    }
+});
+// --- END: SERVICES VIDEOS API ROUTES ---
 
 // Initialize email transporter on startup
 setupEmailTransporter();

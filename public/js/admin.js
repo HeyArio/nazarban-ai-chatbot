@@ -878,6 +878,68 @@ function isDirectVideo(url) {
 loadAboutVideo();
 
 // ====================
+// SERVICES VIDEOS MANAGEMENT
+// ====================
+
+// Load current services videos
+async function loadServicesVideos() {
+    try {
+        const response = await fetch('/api/services/videos');
+        const data = await response.json();
+
+        if (data.success && data.videos) {
+            document.getElementById('strategyVideoUrl').value = data.videos.strategy || '';
+            document.getElementById('developmentVideoUrl').value = data.videos.development || '';
+            document.getElementById('automationVideoUrl').value = data.videos.automation || '';
+        }
+    } catch (error) {
+        console.error('Error loading services videos:', error);
+    }
+}
+
+// Save services videos
+document.getElementById('saveServicesVideosBtn').addEventListener('click', async () => {
+    const strategyUrl = document.getElementById('strategyVideoUrl').value.trim();
+    const developmentUrl = document.getElementById('developmentVideoUrl').value.trim();
+    const automationUrl = document.getElementById('automationVideoUrl').value.trim();
+    const password = document.getElementById('servicesPassword').value;
+
+    if (!password) {
+        showStatus('servicesStatus', 'Password required', true);
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/services/videos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                videos: {
+                    strategy: strategyUrl,
+                    development: developmentUrl,
+                    automation: automationUrl
+                },
+                password
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            showStatus('servicesStatus', 'Services videos saved successfully', false);
+            document.getElementById('servicesPassword').value = '';
+        } else {
+            showStatus('servicesStatus', data.error || 'Failed to save', true);
+        }
+    } catch (error) {
+        showStatus('servicesStatus', error.message, true);
+    }
+});
+
+// Load services videos on page load
+loadServicesVideos();
+
+// ====================
 // UTILITY FUNCTIONS
 // ====================
 function showStatus(elementId, message, isError) {

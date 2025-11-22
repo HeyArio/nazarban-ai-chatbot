@@ -314,6 +314,7 @@
             <button class="tab" data-tab="faqs">FAQs</button>
             <button class="tab" data-tab="articles">Articles</button>
             <button class="tab" data-tab="about">About Page</button>
+            <button class="tab" data-tab="services">Services Videos</button>
         </div>
 
         <!-- PROMPTS TAB -->
@@ -593,6 +594,54 @@
                 <button id="saveAboutVideoBtn">Save Video URL</button>
                 <button class="secondary" id="previewAboutVideoBtn">Preview Video</button>
                 <span class="status" id="aboutStatus"></span>
+            </div>
+        </div>
+
+        <!-- SERVICES VIDEOS TAB -->
+        <div class="tab-content" id="services-tab">
+            <h2 style="margin-bottom: 1.5rem;">Services Page Videos</h2>
+            <p style="color: var(--muted); margin-bottom: 2rem;">
+                Manage clickable videos for the Services page headings. Supports YouTube, Vimeo, Aparat, and Arvan Cloud VOD.
+            </p>
+
+            <div class="form-group">
+                <label for="strategyVideoUrl">AI Strategy & Data Readiness Video URL</label>
+                <input type="url" id="strategyVideoUrl" placeholder="https://www.youtube.com/watch?v=... or https://example.arvanvod.ir/...">
+                <small style="display: block; margin-top: 0.5rem; color: var(--muted);">
+                    Video for "1. AI Strategy & Data Readiness" section
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label for="developmentVideoUrl">Custom AI & ML Development Video URL</label>
+                <input type="url" id="developmentVideoUrl" placeholder="https://www.youtube.com/watch?v=... or https://example.arvanvod.ir/...">
+                <small style="display: block; margin-top: 0.5rem; color: var(--muted);">
+                    Video for "2. Custom AI & ML Development" section
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label for="automationVideoUrl">Workflow & Process Automation Video URL</label>
+                <input type="url" id="automationVideoUrl" placeholder="https://www.youtube.com/watch?v=... or https://example.arvanvod.ir/...">
+                <small style="display: block; margin-top: 0.5rem; color: var(--muted);">
+                    Video for "3. Workflow & Process Automation" section
+                </small>
+            </div>
+
+            <div class="controls">
+                <input type="password" id="servicesPassword" placeholder="Admin Password" required style="flex: 1; max-width: 250px;">
+                <button id="saveServicesVideosBtn">Save Video URLs</button>
+                <span class="status" id="servicesStatus"></span>
+            </div>
+
+            <div style="margin-top: 2rem; padding: 1rem; background: var(--panel); border: 1px solid var(--border); border-radius: 8px;">
+                <h3 style="margin-top: 0; color: var(--ink);">Supported Video Formats:</h3>
+                <ul style="margin-bottom: 0; padding-left: 1.5rem; color: var(--muted);">
+                    <li>YouTube: https://www.youtube.com/watch?v=VIDEO_ID or https://youtu.be/VIDEO_ID</li>
+                    <li>Vimeo: https://vimeo.com/VIDEO_ID</li>
+                    <li>Aparat: https://www.aparat.com/v/VIDEO_ID</li>
+                    <li>Arvan Cloud VOD: https://example.arvanvod.ir/path/video.mp4 or .m3u8</li>
+                </ul>
             </div>
         </div>
     </div>

@@ -158,7 +158,13 @@
     </p>
     
     <div class="service-category">
-      <h2 data-lang-key="services_strategy_title">1. AI Strategy & Data Readiness</h2>
+      <h2 class="service-heading-clickable" data-service-id="strategy" data-lang-key="services_strategy_title">
+        1. AI Strategy & Data Readiness
+        <svg class="play-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+          <polygon points="10,8 16,12 10,16" fill="currentColor"/>
+        </svg>
+      </h2>
       <p data-lang-key="services_strategy_desc">
         Success starts with a clear plan. We map your KPIs, assess data quality, and define a clear path to value, culminating in a 14-Day PoC on your own stack.
       </p>
@@ -170,7 +176,13 @@
     </div>
 
     <div class="service-category">
-      <h2 data-lang-key="services_dev_title">2. Custom AI & ML Development</h2>
+      <h2 class="service-heading-clickable" data-service-id="development" data-lang-key="services_dev_title">
+        2. Custom AI & ML Development
+        <svg class="play-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+          <polygon points="10,8 16,12 10,16" fill="currentColor"/>
+        </svg>
+      </h2>
       <p data-lang-key="services_dev_desc">
         Our expert team builds and deploys high-performance models tailored to your needs. We specialize in 'Secure by Design' solutions, prioritizing On-Premise and Hybrid deployments for data sovereignty.
       </p>
@@ -182,7 +194,13 @@
     </div>
 
     <div class="service-category">
-      <h2 data-lang-key="services_auto_title">3. Workflow & Process Automation</h2>
+      <h2 class="service-heading-clickable" data-service-id="automation" data-lang-key="services_auto_title">
+        3. Workflow & Process Automation
+        <svg class="play-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+          <polygon points="10,8 16,12 10,16" fill="currentColor"/>
+        </svg>
+      </h2>
       <p data-lang-key="services_auto_desc">
         An AI model is only powerful if it's connected. Using low-code platforms like n8n, we build robust automation workflows that connect your AI models to your existing apps (ERPs, CRMs, messaging tools) to trigger actions and eliminate manual tasks.
       </p>
@@ -275,10 +293,24 @@
       </div>
   </footer>
 
+  <!-- Video Modal -->
+  <div id="serviceVideoModal" class="service-video-modal" style="display: none;">
+    <div class="service-video-overlay"></div>
+    <div class="service-video-content">
+      <button class="service-video-close" aria-label="Close video">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div id="serviceVideoPlayer"></div>
+    </div>
+  </div>
+
   <script src="js/main.js"></script>
   <script src="js/translations.js"></script>
   <script src="js/language.js"></script>
   <script src="js/faq.js"></script>
+  <script src="js/services.js"></script>
   <script src="js/chatWidget.js"></script>
 </body>
 </html>
