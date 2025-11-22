@@ -181,19 +181,34 @@ body {
   background: var(--bg-soft);
   border: 1.5px solid var(--border);
   box-shadow: var(--shadow-sm);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 10;
 }
 
-.logo-section:hover .logo-badge {
-  transform: scale(1.05);
-  background: var(--bg-soft);
+.logo-section:hover .logo-badge,
+.logo-section:active .logo-badge,
+.logo-section:focus .logo-badge {
+  transform: scale(2.5);
+  background: rgba(255, 255, 255, 0.95);
   border-color: var(--accent);
-  box-shadow: 0 0 20px rgba(34, 211, 238, 0.4), var(--shadow-md);
+  box-shadow:
+    0 0 40px rgba(34, 211, 238, 0.6),
+    0 0 80px rgba(196, 206, 245, 0.4),
+    var(--shadow-xl);
+  z-index: 1000;
 }
 
 .logo {
   width: 42px;
-  transition: transform 0.3s ease;
+  transition: all 0.4s ease;
+  filter: brightness(1);
+}
+
+.logo-section:hover .logo,
+.logo-section:active .logo,
+.logo-section:focus .logo {
+  filter: brightness(1.2) contrast(1.1);
 }
 
 .brand-text {
