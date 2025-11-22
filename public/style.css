@@ -75,39 +75,39 @@
 
 
 :root {
-  /* === RETRO THEME COLORS === */
-  --primary: #FF4F18;        /* Magma Orange - The "Hero" color */
-  --accent: #FACC15;         /* Mustard Gold - The "Style" color */
-  --tertiary: #00C2BA;       /* Retro Teal - The "Funk" contrast */
-  --dark: #FAF9F6;           /* Vintage Cream - Main Text */
-  --bg: #0F0F0F;             /* Oil Black - Deep, matte background */
+  /* === THE EMERALD ENGINE - MAIN THEME COLORS === */
+  --primary: #10B981;        /* Emerald - The "Success" State / Brand Color */
+  --accent: #34D399;         /* Electric Mint - High Energy Hover/Glow */
+  --dark: #ECFDF5;           /* Mint White - Main Text (Easy on eyes, not harsh white) */
+  --bg: #020605;             /* Deepest Jungle - Rich, warm black with 1% Green tint */
 
   /* === COMPLEMENTARY COLORS === */
-  --bg-light: #1A1A1A;       /* Charcoal Matte - Card Surface */
-  --bg-soft: #2A2A2A;        /* Gunmetal - Input fields, slight elevation */
-  --border: #404040;         /* Dark Grey - Subtle dividers */
-  --muted: #A1A1AA;          /* Concrete Grey - Secondary text */
-  --text-light: #71717A;     /* Placeholder text */
-  --text-body: #D4D4D8;      /* Light Grey - Body text (improved readability) */
+  --bg-light: #0F1915;       /* Card Surface - Dark Metallic Green-Black */
+  --bg-soft: #064E3B;        /* Deep Forest - For active states/subtle backgrounds */
+  --border: #1F2F28;         /* Dark Emerald Grey - Subtle borders */
+  --muted: #6B7280;          /* Neutral Grey - Secondary text (No green tint) */
+  --text-light: #374151;     /* Darker placeholder text */
 
   /* === SEMANTIC COLORS === */
-  --success: #00C2BA;        /* Retro Teal - Very 60s/Scifi */
-  --error: #FF4F18;          /* Magma Orange - Unified with primary */
+  --success: #10B981;        /* Emerald */
+  --error: #EF4444;          /* Red - Kept standard for safety */
+  --warning: #F59E0B;        /* Amber - For "Processing" states */
 
-  /* === RETRO HARD SHADOWS === */
-  --shadow-color: rgba(0, 0, 0, 0.9);
-  --shadow-sm: 2px 2px 0px rgba(0, 0, 0, 1);
-  --shadow-md: 4px 4px 0px rgba(0, 0, 0, 1);
-  --shadow-lg: 8px 8px 0px rgba(0, 0, 0, 1);
-  --shadow-xl: 12px 12px 0px rgba(0, 0, 0, 1);
+  /* === SHADOWS - SOFT DIFFUSED GREEN GLOW === */
+  --shadow-color: rgba(0, 0, 0, 0.8);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 10px 15px rgba(0, 20, 10, 0.5);  /* Subtle green shadow */
+  --shadow-xl: 0 20px 25px rgba(0, 20, 10, 0.6);
 
   /* === LEGACY COMPATIBILITY === */
-  --brand1: #FF4F18;         /* Magma Orange */
-  --brand2: #FACC15;         /* Mustard Gold */
-  --brand3: #00C2BA;         /* Retro Teal */
-  --ink: #FAF9F6;            /* Cream text */
-  --panel: #1A1A1A;          /* Charcoal */
-  --panel-glass: rgba(26, 26, 26, 0.95);
+  --brand1: #10B981;         /* Emerald */
+  --brand2: #34D399;         /* Electric Mint */
+  --brand3: #6EE7B7;         /* Light Mint */
+  --ink: #ECFDF5;            /* Mint White */
+  --panel: #0F1915;          /* Dark Metallic Green-Black */
+  --panel-glass: rgba(15, 25, 21, 0.95);
+  --border-subtle: rgba(16, 185, 129, 0.15);
 
   /* === DESIGN TOKENS === */
   --radius-md: 12px;
@@ -275,7 +275,7 @@ html[dir="ltr"] label {
   border-radius: 16px;
   display: grid;
   place-items: center;
-  background: #1A1A1A;
+  background: #0F1915;  /* Dark Metallic Green-Black */
   border: 2px solid var(--border);
   box-shadow: var(--shadow-sm);
 }
@@ -293,7 +293,7 @@ html[dir="ltr"] label {
 .brand-name {
   font-size: 22px;
   font-weight: 800;
-  background: linear-gradient(135deg, #FF4F18, #FACC15, #FAF9F6);
+  background: linear-gradient(135deg, #10B981, #34D399, #6EE7B7);  /* Emerald to Mint */
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -320,7 +320,7 @@ html[dir="ltr"] label {
 }
 
 .nav-desktop a {
-  color: var(--muted);
+  color: #9CA3AF;  /* Light Grey */
   text-decoration: none;
   font-weight: 600;
   font-size: 1rem;
@@ -330,12 +330,12 @@ html[dir="ltr"] label {
 }
 
 .nav-desktop a:hover {
-  color: #FACC15;
-  background-color: rgba(255, 79, 24, 0.1);
+  color: #ECFDF5;  /* Mint White */
+  background-color: rgba(16, 185, 129, 0.1);  /* Emerald Mist */
 }
 
 .nav-desktop a.active-page {
-  color: var(--brand1);
+  color: #10B981;  /* Emerald */
   font-weight: 700;
 }
 
@@ -487,7 +487,7 @@ body.chat-page {
   font-weight: 900;
   letter-spacing: -0.02em;
   margin-bottom: 16px;
-  background: linear-gradient(135deg, #FAF9F6, #FACC15);
+  background: linear-gradient(135deg, #ECFDF5, #10B981);  /* Mint White to Emerald */
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -661,12 +661,12 @@ html[dir="rtl"] .suggestion-pill {
 }
 
 .bot .avatar {
-  background: linear-gradient(135deg, #2A2A2A, #404040);
+  background: linear-gradient(135deg, #064E3B, #10B981);  /* Deep Forest to Emerald */
   box-shadow: var(--shadow-md);
 }
 
 .user .avatar {
-  background: linear-gradient(135deg, #FF4F18, #FACC15);
+  background: linear-gradient(135deg, #34D399, #6EE7B7);  /* Electric Mint to Light Mint */
   box-shadow: var(--shadow-md);
 }
 
@@ -680,16 +680,16 @@ html[dir="rtl"] .suggestion-pill {
 }
 
 .bot .message-content {
-  background: #1A1A1A;
-  border: 2px solid #404040;
-  color: #FAF9F6;
+  background: #0F1915;  /* Dark Metallic Green-Black */
+  border: 2px solid #1F2F28;  /* Dark Emerald Grey */
+  color: #ECFDF5;  /* Mint White */
   box-shadow: var(--shadow-lg);
 }
 
 .user .message-content {
-  background: #00C2BA;
-  color: #0F0F0F;
-  border: 2px solid #00C2BA;
+  background: linear-gradient(135deg, #059669, #10B981);  /* Rich Green Gradient */
+  color: #FFFFFF;  /* Pure White for readability */
+  border: 2px solid #10B981;
   box-shadow: var(--shadow-lg);
 }
 
@@ -697,8 +697,8 @@ html[dir="rtl"] .suggestion-pill {
   padding: 18px 20px;
   border-radius: var(--radius-lg);
   max-width: 86px;
-  background: #1A1A1A;
-  border: 2px solid #404040;
+  background: #0F1915;  /* Dark Metallic Green-Black */
+  border: 2px solid #1F2F28;  /* Dark Emerald Grey */
 }
 
 .typing-dots {
@@ -711,7 +711,7 @@ html[dir="rtl"] .suggestion-pill {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #FF4F18;
+  background: #34D399;  /* Electric Mint */
   animation: typing 1.4s infinite;
 }
 
@@ -749,14 +749,14 @@ html[dir="rtl"] .suggestion-pill {
   align-items: flex-end;
   padding: 6px 56px 6px 8px;
   border-radius: 20px;
-  background: #1A1A1A;
+  background: #0F1915;  /* Dark Metallic Green-Black */
   border: 2px solid var(--border);
   box-shadow: var(--shadow-lg);
   transition: box-shadow 0.2s ease;
 }
 
 .input-container:focus-within {
-  border-color: #FACC15;
+  border-color: #10B981;  /* Emerald */
 }
 
 #messageInput {
@@ -766,7 +766,7 @@ html[dir="rtl"] .suggestion-pill {
   resize: none;
   outline: none;
   border: none;
-  background: #0F0F0F;
+  background: #020605;  /* Deepest Jungle - Inset Black */
   color: var(--ink);
   border-radius: 14px;
   padding: 12px 16px;
@@ -776,12 +776,12 @@ html[dir="rtl"] .suggestion-pill {
 }
 
 #messageInput:focus {
-  background: #0F0F0F;
-  border: 1px solid #FACC15;
+  background: #020605;
+  border: 1px solid #10B981;  /* Emerald */
 }
 
 #messageInput::placeholder {
-  color: var(--text-light);
+  color: #4B5563;  /* Darker placeholder text */
 }
 
 #sendButton {
@@ -792,19 +792,19 @@ html[dir="rtl"] .suggestion-pill {
   height: 40px;
   border: 2px solid var(--border);
   border-radius: 50%;
-  background: linear-gradient(135deg, #FF4F18, #F59E0B);
+  background: linear-gradient(135deg, #10B981, #34D399);  /* Emerald to Electric Mint */
   color: #fff;
   cursor: pointer;
   display: grid;
   place-items: center;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 6px rgba(16, 185, 129, 0.4);  /* Green Glow */
   transition: all 0.15s ease;
 }
 
 #sendButton:hover:not(:disabled) {
-  background: linear-gradient(135deg, #FACC15, #FCD34D);
-  color: #000000;
-  box-shadow: var(--shadow-lg);
+  background: linear-gradient(135deg, #34D399, #6EE7B7);  /* Electric Mint to Light Mint */
+  color: #FFFFFF;
+  box-shadow: 0 6px 12px rgba(16, 185, 129, 0.5);  /* Stronger Green Glow */
 }
 
 #sendButton:active:not(:disabled) .send-icon {
@@ -881,14 +881,16 @@ html[dir="rtl"] .suggestion-pill {
   font-weight: 900;
   letter-spacing: -0.02em;
   margin-bottom: 1rem;
-  color: #FF4F18;
-  text-shadow: 3px 3px 0px rgba(0, 0, 0, 1);
+  background: linear-gradient(135deg, #ECFDF5, #34D399);  /* Mint White to Electric Mint */
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .content-wrapper h2 {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #FACC15;
+  color: #10B981;  /* Emerald */
   margin-top: 2.5rem;
   margin-bottom: 1rem;
   border-bottom: 2px solid var(--border);
@@ -898,7 +900,7 @@ html[dir="rtl"] .suggestion-pill {
 .content-wrapper h3 {
   font-size: 1.4rem;
   font-weight: 600;
-  color: #FAF9F6;
+  color: #ECFDF5;  /* Mint White */
   margin-top: 2rem;
   margin-bottom: 0.75rem;
 }
@@ -906,7 +908,7 @@ html[dir="rtl"] .suggestion-pill {
 .content-wrapper p,
 .content-wrapper li {
   font-size: 1.1rem;
-  color: var(--text-body);  /* Light Grey - improved readability */
+  color: #9CA3AF;  /* Cool Grey - very readable */
   line-height: 1.7;
   margin-bottom: 1.25rem;
 }
@@ -917,7 +919,7 @@ html[dir="rtl"] .suggestion-pill {
 }
 
 .content-wrapper a {
-  color: #FACC15;
+  color: #34D399;  /* Electric Mint */
   text-decoration: none;
   font-weight: 600;
   transition: all 0.2s;
@@ -925,8 +927,8 @@ html[dir="rtl"] .suggestion-pill {
 }
 
 .content-wrapper a:hover {
-  color: #FF4F18;  /* Orange */
-  border-bottom: 2px solid #FF4F18;
+  color: #10B981;  /* Emerald */
+  border-bottom: 2px solid #10B981;
 }
 
 /* --- 5. PDF Viewer & Download Button --- */
@@ -1214,13 +1216,10 @@ html[dir="rtl"] .menu-toggle {
   position: relative;
   overflow: hidden;
   border-radius: 24px;
-  background: linear-gradient(135deg,
-    rgba(255, 79, 24, 0.15) 0%,
-    rgba(250, 204, 21, 0.1) 50%,
-    rgba(255, 79, 24, 0.15) 100%);  /* Orange Haze */
+  background: rgba(16, 185, 129, 0.1);  /* Emerald Haze */
   background-size: 200% 200%;
   animation: gradientShift 8s ease infinite;
-  border: 1px solid rgba(250, 204, 21, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .blog-header::before {
@@ -1231,8 +1230,8 @@ html[dir="rtl"] .menu-toggle {
   right: 0;
   bottom: 0;
   background: radial-gradient(circle at 50% 50%,
-    rgba(255, 79, 24, 0.1) 0%,
-    transparent 70%);  /* Orange Haze */
+    rgba(16, 185, 129, 0.15) 0%,
+    transparent 70%);  /* Emerald Glow */
   animation: pulse 4s ease-in-out infinite;
   pointer-events: none;
 }
@@ -1335,15 +1334,15 @@ html[dir="rtl"] .menu-toggle {
 
 /* Blog Post Card - Retro Style */
 .blog-post-card {
-  background: #1A1A1A;  /* Charcoal Matte */
-  border: 3px solid #404040;  /* Dark Grey */
+  background: rgba(15, 25, 21, 0.8);  /* Glassy Dark Green */
+  border: 1px solid rgba(16, 185, 129, 0.15);  /* Subtle Green Rim */
   border-radius: 12px;
   padding: 2rem;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
   cursor: pointer;
-  box-shadow: 4px 4px 0px #000000;  /* Hard Shadow */
+  box-shadow: var(--shadow-lg);
 }
 
 .blog-post-card::before {
@@ -1374,9 +1373,9 @@ html[dir="rtl"] .menu-toggle {
 
 .blog-post-card:hover {
   transform: translateY(-8px) scale(1.02);
-  border-color: #FACC15;  /* Gold */
-  box-shadow: 6px 6px 0px #000000;  /* Larger Hard Shadow */
-  background: #1A1A1A;
+  border-color: rgba(16, 185, 129, 0.5);  /* Emerald Glow */
+  box-shadow: 0 12px 24px rgba(16, 185, 129, 0.2);
+  background: rgba(15, 25, 21, 0.9);
 }
 
 .blog-post-card:hover::before {
@@ -1392,18 +1391,18 @@ html[dir="rtl"] .menu-toggle {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: #FACC15;  /* Solid Mustard Gold */
-  color: #000000;  /* Black - High Contrast */
+  background: rgba(16, 185, 129, 0.15);  /* Emerald Tint */
+  color: #34D399;  /* Electric Mint */
   font-size: 0.75rem;
   font-weight: 700;
   padding: 0.35rem 0.85rem;
   border-radius: 20px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
   z-index: 2;
   letter-spacing: 0.02em;
-  border: 2px solid #000000;
+  border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 [dir="rtl"] .nazarban-badge {
@@ -1447,11 +1446,11 @@ html[dir="rtl"] .menu-toggle {
   align-items: center;
   gap: 0.4rem;
   padding: 0.25rem 0.75rem;
-  background: rgba(250, 204, 21, 0.15);  /* Gold Tint */
+  background: rgba(16, 185, 129, 0.1);  /* Emerald Tint */
   backdrop-filter: blur(10px);
   border-radius: 20px;
-  border: 1px solid rgba(250, 204, 21, 0.3);
-  color: #FACC15;  /* Mustard Gold */
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34D399;  /* Electric Mint */
   font-weight: 500;
 }
 
@@ -1505,9 +1504,9 @@ html[dir="rtl"] .menu-toggle {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: #FF4F18;
-  color: #FAF9F6;
-  border: 2px solid #333333;
+  background: linear-gradient(135deg, #059669, #10B981);  /* Rich Green Gradient */
+  color: #FFFFFF;
+  border: 1px solid rgba(16, 185, 129, 0.3);
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
   font-family: inherit;
@@ -1515,13 +1514,13 @@ html[dir="rtl"] .menu-toggle {
   font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);
 }
 
 .read-more-btn:hover {
-  background: #FACC15;
-  color: #000000;
-  box-shadow: var(--shadow-lg);
+  background: linear-gradient(135deg, #10B981, #34D399);  /* Emerald to Electric Mint */
+  color: #FFFFFF;
+  box-shadow: 0 6px 12px rgba(16, 185, 129, 0.4);
 }
 
 .read-more-btn .link-icon {
@@ -2016,14 +2015,14 @@ html[dir="rtl"] .menu-toggle {
 
 .faq-item {
   background: var(--bg);
-  border: 2px solid #404040;  /* Dark Grey */
+  border: 1px solid rgba(16, 185, 129, 0.15);  /* Subtle Green Rim */
   border-radius: var(--radius-md);
   overflow: hidden;
   transition: all 0.3s ease;
 }
 
 .faq-item.active {
-  border-color: #FACC15;  /* Gold */
+  border-color: #10B981;  /* Emerald */
   box-shadow: var(--shadow-md);
 }
 
@@ -2059,7 +2058,7 @@ html[dir="rtl"] .menu-toggle {
 
 .faq-item.active .faq-icon {
   transform: rotate(180deg);
-  stroke: #FF4F18;  /* Orange */
+  stroke: #34D399;  /* Electric Mint */
 }
 
 .faq-answer {
@@ -2149,9 +2148,9 @@ html[dir="rtl"] .products-header p {
 }
 
 .product-card {
-  background: #1A1A1A;  /* Charcoal Matte */
+  background: rgba(15, 25, 21, 0.8);  /* Glassy Dark Green */
   backdrop-filter: blur(20px);
-  border: 2px solid #404040;  /* Dark Grey */
+  border: 1px solid rgba(16, 185, 129, 0.15);  /* Subtle Green Rim */
   border-radius: var(--radius-lg);
   padding: 2rem;
   transition: all 0.3s ease;
@@ -2163,8 +2162,8 @@ html[dir="rtl"] .products-header p {
 
 .product-card:hover {
   transform: translateY(-5px);
-  border-color: #FACC15;  /* Gold */
-  box-shadow: 6px 6px 0px #000000;  /* Hard Shadow */
+  border-color: rgba(16, 185, 129, 0.5);  /* Brighter Green Rim */
+  box-shadow: var(--shadow-xl);
 }
 
 .product-header {
@@ -2490,9 +2489,9 @@ html[dir="rtl"] .floating-chat-widget {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: #00C2BA;
-  border: 2px solid #333333;
-  box-shadow: var(--shadow-md);
+  background: #25D366;  /* Standard WhatsApp Green */
+  border: none;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -2503,8 +2502,9 @@ html[dir="rtl"] .floating-chat-widget {
 }
 
 .whatsapp-widget-button:hover {
-  background: #FACC15;
-  box-shadow: var(--shadow-lg);
+  background: #20BA5A;  /* Slightly darker WhatsApp green */
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+  transform: translateY(-2px);
 }
 
 .whatsapp-widget-button:active {
@@ -2613,7 +2613,7 @@ html[dir="rtl"] .chat-widget-tooltip {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(15, 15, 15, 0.9);  /* Oil Black overlay */
+  background: rgba(2, 6, 5, 0.9);  /* Deepest Jungle overlay */
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   z-index: 10000;
@@ -2630,8 +2630,8 @@ html[dir="rtl"] .chat-widget-tooltip {
 }
 
 .email-popup {
-  background: linear-gradient(135deg, #1A1A1A, #0F0F0F);  /* Charcoal to Oil Black */
-  border: 2px solid #FACC15;  /* Gold border */
+  background: linear-gradient(135deg, #0F1915, #020605);  /* Dark Green-Black to Deepest Jungle */
+  border: 2px solid #10B981;  /* Emerald border */
   border-radius: 20px;
   padding: 2.5rem;
   max-width: 420px;
@@ -2682,22 +2682,22 @@ html[dir="rtl"] .chat-widget-tooltip {
   width: 64px;
   height: 64px;
   margin: 0 auto 1.5rem;
-  background: linear-gradient(135deg, #FF4F18, #FACC15);  /* Orange to Gold */
+  background: linear-gradient(135deg, #10B981, #34D399);  /* Emerald to Electric Mint */
   border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   animation: pulse-glow 2s ease-in-out infinite;
-  border: 2px solid #000000;
-  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(16, 185, 129, 0.5);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
   }
   50% {
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
   }
 }
 
@@ -2760,21 +2760,21 @@ html[dir="rtl"] .chat-widget-tooltip {
   gap: 0.5rem;
   width: 100%;
   padding: 1rem;
-  background: linear-gradient(135deg, #FF4F18, #FACC15);  /* Orange to Gold */
-  border: 2px solid #000000;
+  background: linear-gradient(135deg, #10B981, #34D399);  /* Emerald to Electric Mint */
+  border: 1px solid rgba(16, 185, 129, 0.3);
   border-radius: 12px;
-  color: #000000;  /* Black text */
+  color: #FFFFFF;
   font-family: inherit;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.4);
 }
 
 .email-popup-submit:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.5);
 }
 
 .email-popup-submit:active {
@@ -3132,9 +3132,9 @@ html[dir="rtl"] .chat-widget-tooltip {
 
 /* --- Site Footer --- */
 .site-footer {
-  background: #0A0A0A;  /* Pitch Black */
+  background: #000000;  /* Pure Black - Grounds the design */
   backdrop-filter: blur(20px);
-  border-top: 2px solid #FACC15;  /* Thin Gold Line */
+  border-top: 1px solid #1F2F28;  /* Dark Emerald Grey */
   padding: 1.5rem 1.5rem 1.25rem;
   margin-top: auto;
   position: relative;
@@ -3161,7 +3161,7 @@ html[dir="rtl"] .chat-widget-tooltip {
   margin-bottom: 0.35rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #FACC15;  /* Mustard Gold */
+  color: #10B981;  /* Emerald */
 }
 
 .footer-social-links {
@@ -3176,17 +3176,17 @@ html[dir="rtl"] .chat-widget-tooltip {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(250, 204, 21, 0.1);  /* Gold tint */
-  border: 1px solid rgba(250, 204, 21, 0.3);
+  background: rgba(16, 185, 129, 0.1);  /* Emerald tint */
+  border: 1px solid rgba(16, 185, 129, 0.2);
   color: var(--ink);
   text-decoration: none;
   transition: all 0.2s ease;
 }
 
 .footer-social-link:hover {
-  background: linear-gradient(135deg, #FF4F18, #FACC15);  /* Orange to Gold */
-  border-color: #000000;
-  color: #000000;  /* Black text */
+  background: linear-gradient(135deg, #10B981, #34D399);  /* Emerald to Electric Mint */
+  border-color: rgba(16, 185, 129, 0.5);
+  color: #FFFFFF;
   transform: translateY(-2px);
 }
 
@@ -3213,7 +3213,7 @@ html[dir="rtl"] .chat-widget-tooltip {
 }
 
 .footer-contact-link:hover {
-  color: #00C2BA;  /* Retro Teal */
+  color: #34D399;  /* Electric Mint */
   opacity: 1;
 }
 
