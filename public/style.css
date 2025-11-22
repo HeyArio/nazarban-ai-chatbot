@@ -1169,12 +1169,16 @@ html[dir="rtl"] [data-lang-key="contact_phone"] {
   /* Keep language switcher visible in header on mobile */
   .header .language-switcher {
     display: flex;
+    gap: 0.25rem; /* Reduce gap between buttons */
+    padding: 0.15rem; /* Reduce container padding */
+    margin-right: 0.5rem; /* Shift slightly to the right */
   }
 
   /* Make mobile language switcher more compact */
   .header .language-switcher a {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
+    font-size: 0.65rem; /* Even smaller font */
+    padding: 0.2rem 0.35rem; /* Tighter padding */
+    border-radius: 6px; /* Smaller border radius */
   }
 
   /* Hide language switcher from mobile menu */
