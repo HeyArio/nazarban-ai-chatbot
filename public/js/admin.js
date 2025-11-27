@@ -91,9 +91,10 @@ document.querySelectorAll('.tab').forEach(tab => {
         const tabName = tab.dataset.tab;
         document.getElementById(`${tabName}-tab`).classList.add('active');
 
-        // Load data when switching to products or FAQs tab
+        // Load data when switching to products, FAQs, or articles tab
         if (tabName === 'products') loadProducts();
         if (tabName === 'faqs') loadFaqs();
+        if (tabName === 'articles') loadArticles();
     });
 });
 
@@ -621,7 +622,23 @@ function clearFaqForm() {
 // ====================
 let articles = [];
 
-function loadArticles() {
+// Load articles from server
+async function loadArticles() {
+    try {
+        const response = await fetch('/api/articles/custom');
+        const data = await response.json();
+
+        if (data.success) {
+            articles = data.articles;
+            renderArticlesList();
+        }
+    } catch (error) {
+        console.error('Error loading custom articles:', error);
+        showStatus('articleStatus', 'Error loading articles', true);
+    }
+}
+
+function renderArticlesList() {
     const articlesList = document.getElementById('articlesList');
     articlesList.innerHTML = '';
 
@@ -632,24 +649,26 @@ function loadArticles() {
 
     articles.forEach((article, index) => {
         const div = document.createElement('div');
-        div.className = 'item';
+        div.className = 'item-card';
         div.innerHTML = `
-            <div class="item-content">
-                <h3>${article.title.en}</h3>
-                <p style="color: var(--muted); font-size: 0.9rem; margin-top: 0.25rem;">${article.title.fa}</p>
-                <p style="margin-top: 0.5rem; font-size: 0.9rem;">${article.summary.en}</p>
-                <p style="color: var(--muted); font-size: 0.85rem; margin-top: 0.5rem;">Date: ${article.date} | URL: ${article.url}</p>
+            <div class="item-header">
+                <div>
+                    <div class="item-title">${article.title.en} | ${article.title.fa}</div>
+                    <div class="item-meta">Date: ${article.date}</div>
+                </div>
+                <div class="item-actions">
+                    <button class="secondary" onclick="editArticle(${index})">Edit</button>
+                    <button class="danger" onclick="deleteArticle(${index})">Delete</button>
+                </div>
             </div>
-            <div class="item-actions">
-                <button class="secondary" onclick="editArticle(${index})">Edit</button>
-                <button class="danger" onclick="deleteArticle(${index})">Delete</button>
-            </div>
+            <p style="color: var(--muted); font-size: 0.9rem;">${article.summary.en.substring(0, 150)}...</p>
+            ${article.url ? `<p style="color: var(--brand1); font-size: 0.85rem; margin-top: 0.5rem;"><a href="${article.url}" target="_blank">View Article</a></p>` : ''}
         `;
         articlesList.appendChild(div);
     });
 }
 
-function addArticle() {
+async function addArticle() {
     const titleEn = document.getElementById('articleTitleEn').value.trim();
     const titleFa = document.getElementById('articleTitleFa').value.trim();
     const summaryEn = document.getElementById('articleSummaryEn').value.trim();
@@ -658,9 +677,15 @@ function addArticle() {
     const date = document.getElementById('articleDate').value;
     const image = document.getElementById('articleImage').value.trim();
     const articleId = document.getElementById('articleId').value;
+    const password = document.getElementById('articlePassword').value;
 
     if (!titleEn || !titleFa || !summaryEn || !summaryFa || !url || !date) {
         showStatus('articleStatus', 'Please fill in all required fields', true);
+        return;
+    }
+
+    if (!password) {
+        showStatus('articleStatus', 'Password is required', true);
         return;
     }
 
@@ -673,21 +698,41 @@ function addArticle() {
         image: image || 'https://via.placeholder.com/400x200'
     };
 
+    let updatedArticles;
     if (articleId) {
         // Edit existing
         const index = articles.findIndex(a => a.id === articleId);
         if (index !== -1) {
             articles[index] = article;
-            showStatus('articleStatus', 'Article updated!', false);
+            updatedArticles = [...articles];
+        } else {
+            showStatus('articleStatus', 'Article not found', true);
+            return;
         }
     } else {
         // Add new
-        articles.unshift(article); // Add to beginning
-        showStatus('articleStatus', 'Article added!', false);
+        updatedArticles = [article, ...articles];
     }
 
-    clearArticleForm();
-    loadArticles();
+    // Save to server
+    try {
+        const response = await fetch('/api/articles/custom', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ articles: updatedArticles, password })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            showStatus('articleStatus', articleId ? 'Article updated successfully!' : 'Article added successfully!', false);
+            clearArticleForm();
+            await loadArticles();
+        } else {
+            showStatus('articleStatus', result.message || 'Failed to save article', true);
+        }
+    } catch (error) {
+        showStatus('articleStatus', error.message || 'Failed to save article', true);
+    }
 }
 
 function editArticle(index) {
@@ -703,11 +748,31 @@ function editArticle(index) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function deleteArticle(index) {
-    if (confirm('Are you sure you want to delete this article?')) {
-        articles.splice(index, 1);
-        loadArticles();
-        showStatus('articleStatus', 'Article deleted', false);
+async function deleteArticle(index) {
+    if (!confirm('Are you sure you want to delete this article?')) return;
+
+    const password = prompt('Enter admin password:');
+    if (!password) return;
+
+    const article = articles[index];
+    const updatedArticles = articles.filter(a => a.id !== article.id);
+
+    try {
+        const response = await fetch('/api/articles/custom', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ articles: updatedArticles, password })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            showStatus('articleStatus', 'Article deleted successfully!', false);
+            await loadArticles();
+        } else {
+            showStatus('articleStatus', result.message || 'Failed to delete article', true);
+        }
+    } catch (error) {
+        showStatus('articleStatus', error.message || 'Failed to delete article', true);
     }
 }
 
@@ -720,26 +785,11 @@ function clearArticleForm() {
     document.getElementById('articleUrl').value = '';
     document.getElementById('articleDate').value = '';
     document.getElementById('articleImage').value = '';
-}
-
-function copyArticlesJson() {
-    if (articles.length === 0) {
-        showStatus('copyStatus', 'No articles to copy', true);
-        return;
-    }
-
-    const json = JSON.stringify(articles, null, 2);
-    navigator.clipboard.writeText(json).then(() => {
-        showStatus('copyStatus', 'JSON copied! Paste into data/custom-articles.json', false);
-    }).catch(() => {
-        showStatus('copyStatus', 'Failed to copy. Check console for JSON.', true);
-        console.log('Articles JSON:', json);
-    });
+    document.getElementById('articlePassword').value = '';
 }
 
 // Event listeners for articles
 document.getElementById('addArticleBtn').addEventListener('click', addArticle);
-document.getElementById('copyArticlesJsonBtn').addEventListener('click', copyArticlesJson);
 
 // Set today's date as default
 document.getElementById('articleDate').valueAsDate = new Date();

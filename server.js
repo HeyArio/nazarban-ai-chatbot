@@ -93,6 +93,10 @@ const aboutContentPath = path.join(__dirname, 'aboutContent.json');
 const whitepaperContentPath = path.join(__dirname, 'whitepaperContent.json');
 // --- END: PAGE CONTENT DATA PATHS ---
 
+// --- CUSTOM ARTICLES DATA PATH ---
+const customArticlesPath = path.join(__dirname, 'public', 'data', 'custom-articles.json');
+// --- END: CUSTOM ARTICLES DATA PATH ---
+
 // --- NEW: Prompt Management ---
 let prompts = {};
 const promptsFilePath = path.join(__dirname, 'prompts.json');
@@ -347,6 +351,26 @@ async function saveWhitepaperContent(content) {
     console.log('✅ Whitepaper content saved successfully');
 }
 // --- END: PAGE CONTENT DATA MANAGEMENT FUNCTIONS ---
+
+// --- CUSTOM ARTICLES DATA MANAGEMENT FUNCTIONS ---
+// Load custom articles from JSON
+async function loadCustomArticles() {
+    try {
+        const data = await fs.readFile(customArticlesPath, 'utf-8');
+        return JSON.parse(data);
+    } catch (error) {
+        console.log('⚠️ No custom articles file found, creating new one');
+        await fs.writeFile(customArticlesPath, '[]');
+        return [];
+    }
+}
+
+// Save custom articles to JSON
+async function saveCustomArticles(articles) {
+    await fs.writeFile(customArticlesPath, JSON.stringify(articles, null, 2));
+    console.log('✅ Custom articles saved successfully');
+}
+// --- END: CUSTOM ARTICLES DATA MANAGEMENT FUNCTIONS ---
 
 // --- AUTOMATIC WEEKLY ARCHIVING ---
 // Schedule archiving to run every Monday at 2:00 AM
@@ -615,20 +639,27 @@ async function sendCustomerConfirmation(userEmail, language = 'fa') {
 app.post('/api/blog/post', async (req, res) => {
     try {
         const { title, summaryEnglish, summaryFarsi, date, url, votes, password } = req.body;
-        
+
         // Simple password protection for the blog API
         if (password !== process.env.ADMIN_PASSWORD) {
-            return res.status(401).json({ 
-                success: false, 
-                message: 'Unauthorized: Invalid password' 
+            return res.status(401).json({
+                success: false,
+                message: 'Unauthorized: Invalid password'
             });
         }
-        
+
         // Validate required fields
         if (!title || !summaryEnglish || !summaryFarsi || !date) {
-            return res.status(400).json({ 
-                success: false, 
-                message: 'Missing required fields: title, summaryEnglish, summaryFarsi, date' 
+            console.error('❌ Blog post validation failed:', {
+                hasTitle: !!title,
+                hasSummaryEnglish: !!summaryEnglish,
+                hasSummaryFarsi: !!summaryFarsi,
+                hasDate: !!date,
+                receivedData: { title, summaryEnglish: summaryEnglish?.substring(0, 50), summaryFarsi: summaryFarsi?.substring(0, 50), date }
+            });
+            return res.status(400).json({
+                success: false,
+                message: 'Missing required fields: title, summaryEnglish, summaryFarsi, date'
             });
         }
         
@@ -645,10 +676,18 @@ app.post('/api/blog/post', async (req, res) => {
             votes: votes || 0,
             createdAt: new Date().toISOString()
         };
-        
+
+        console.log('✅ Creating new blog post:', {
+            title,
+            englishPreview: summaryEnglish.substring(0, 100),
+            farsiPreview: summaryFarsi.substring(0, 100),
+            date,
+            url: url || 'N/A'
+        });
+
         // Add to beginning of posts array (newest first)
         posts.unshift(newPost);
-        
+
         // Check if we need to remove duplicates based on title
         const uniquePosts = [];
         const seenTitles = new Set();
@@ -658,15 +697,17 @@ app.post('/api/blog/post', async (req, res) => {
                 uniquePosts.push(post);
             }
         }
-        
+
         // Save posts
         await saveBlogPosts(uniquePosts);
-        
+
         // Archive old posts if needed
         await archiveOldPosts();
-        
-        res.json({ 
-            success: true, 
+
+        console.log(`✅ Blog post saved successfully. Total posts: ${uniquePosts.length}`);
+
+        res.json({
+            success: true,
             message: 'Blog post saved successfully',
             post: newPost
         });
@@ -1431,6 +1472,100 @@ app.post('/api/content/whitepaper', async (req, res) => {
     }
 });
 // --- END: PAGE CONTENT API ROUTES ---
+
+// --- CUSTOM ARTICLES API ROUTES ---
+// API: GET all custom articles
+app.get('/api/articles/custom', async (req, res) => {
+    try {
+        const articles = await loadCustomArticles();
+        res.json({ success: true, articles });
+    } catch (error) {
+        console.error('❌ Error loading custom articles:', error);
+        res.status(500).json({ success: false, message: 'Failed to load custom articles' });
+    }
+});
+
+// API: POST/Update custom articles (Admin only)
+app.post('/api/articles/custom', async (req, res) => {
+    try {
+        const { articles, password } = req.body;
+
+        // Simple password protection
+        if (password !== process.env.ADMIN_PASSWORD) {
+            return res.status(401).json({
+                success: false,
+                message: 'Unauthorized: Invalid password'
+            });
+        }
+
+        // Validate that articles is an array
+        if (!Array.isArray(articles)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Articles must be an array'
+            });
+        }
+
+        // Save articles
+        await saveCustomArticles(articles);
+
+        res.json({
+            success: true,
+            message: 'Custom articles saved successfully',
+            count: articles.length
+        });
+
+    } catch (error) {
+        console.error('❌ Error saving custom articles:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to save custom articles',
+            error: error.message
+        });
+    }
+});
+
+// API: DELETE a specific custom article (Admin only)
+app.delete('/api/articles/custom/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { password } = req.body;
+
+        // Simple password protection
+        if (password !== process.env.ADMIN_PASSWORD) {
+            return res.status(401).json({
+                success: false,
+                message: 'Unauthorized: Invalid password'
+            });
+        }
+
+        const articles = await loadCustomArticles();
+        const filteredArticles = articles.filter(a => a.id !== id);
+
+        if (filteredArticles.length === articles.length) {
+            return res.status(404).json({
+                success: false,
+                message: 'Article not found'
+            });
+        }
+
+        await saveCustomArticles(filteredArticles);
+
+        res.json({
+            success: true,
+            message: 'Article deleted successfully'
+        });
+
+    } catch (error) {
+        console.error('❌ Error deleting custom article:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to delete article',
+            error: error.message
+        });
+    }
+});
+// --- END: CUSTOM ARTICLES API ROUTES ---
 
 // Initialize email transporter on startup
 setupEmailTransporter();

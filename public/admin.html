@@ -550,19 +550,19 @@
                 <input type="url" id="articleImage" placeholder="https://example.com/image.jpg">
             </div>
 
+            <div class="form-group">
+                <label for="articlePassword">Admin Password</label>
+                <input type="password" id="articlePassword" placeholder="Required to save article">
+            </div>
+
             <div class="controls">
-                <button id="addArticleBtn" class="primary">Add to List</button>
+                <button id="addArticleBtn" class="primary">Save Article</button>
                 <button class="secondary" onclick="clearArticleForm()">Clear Form</button>
                 <span class="status" id="articleStatus"></span>
             </div>
 
-            <h2 style="margin-top: 3rem; margin-bottom: 1rem;">Articles List</h2>
+            <h2 style="margin-top: 3rem; margin-bottom: 1rem;">Published Articles</h2>
             <div class="item-list" id="articlesList"></div>
-
-            <div class="controls" style="margin-top: 2rem;">
-                <button id="copyArticlesJsonBtn" class="primary">Copy JSON to Clipboard</button>
-                <span class="status" id="copyStatus"></span>
-            </div>
         </div>
 
         <!-- ABOUT PAGE TAB -->
