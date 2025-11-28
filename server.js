@@ -124,6 +124,31 @@ function trackIPUsage(ip) {
 }
 // --- END USAGE TRACKING & COST PROTECTION ---
 
+// --- JWT AUTHENTICATION MIDDLEWARE ---
+// Middleware to verify JWT token from cookie
+function requireAdmin(req, res, next) {
+    const token = req.cookies.adminToken;
+
+    if (!token) {
+        return res.status(401).json({
+            success: false,
+            message: 'Authentication required. Please log in.'
+        });
+    }
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        req.admin = decoded; // Add admin data to request
+        next();
+    } catch (err) {
+        return res.status(401).json({
+            success: false,
+            message: 'Invalid or expired token. Please log in again.'
+        });
+    }
+}
+// --- END JWT AUTHENTICATION MIDDLEWARE ---
+
 // --- IMAGE UPLOAD CONFIGURATION ---
 const uploadDir = path.join(__dirname, 'public', 'uploads', 'products');
 
@@ -1055,8 +1080,8 @@ app.use((error, req, res, next) => {
 // --- END: IMAGE UPLOAD API ---
 
 // --- PRODUCTS API ROUTES ---
-// API: Create/Update a product (Admin only)
-app.post('/api/products', async (req, res) => {
+// API: Create/Update a product (JWT protected)
+app.post('/api/products', requireAdmin, async (req, res) => {
     try {
         const {
             id,
@@ -1074,17 +1099,8 @@ app.post('/api/products', async (req, res) => {
             imageUrl,
             videoUrl,
             status,
-            category,
-            password
+            category
         } = req.body;
-
-        // Simple password protection for the products API
-        if (password !== process.env.ADMIN_PASSWORD) {
-            return res.status(401).json({
-                success: false,
-                message: 'Unauthorized: Invalid password'
-            });
-        }
 
         // Validate required fields
         if (!nameEn || !nameFa || !descriptionEn || !descriptionFa) {
@@ -1592,18 +1608,10 @@ app.get('/api/articles/custom', async (req, res) => {
     }
 });
 
-// API: POST/Update custom articles (Admin only)
-app.post('/api/articles/custom', async (req, res) => {
+// API: POST/Update custom articles (JWT protected)
+app.post('/api/articles/custom', requireAdmin, async (req, res) => {
     try {
-        const { articles, password } = req.body;
-
-        // Simple password protection
-        if (password !== process.env.ADMIN_PASSWORD) {
-            return res.status(401).json({
-                success: false,
-                message: 'Unauthorized: Invalid password'
-            });
-        }
+        const { articles } = req.body;
 
         // Validate that articles is an array
         if (!Array.isArray(articles)) {
@@ -1965,38 +1973,60 @@ app.post('/api/collect-email', async (req, res) => {
 });
 
 // Admin login verification endpoint
-app.post('/api/admin/verify-login', (req, res) => {
+app.post('/api/admin/verify-login', loginLimiter, (req, res) => {
     const { password } = req.body;
-    
+
     // Get admin password from environment variable
     const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
-    
+
     if (!ADMIN_PASSWORD) {
         console.error('❌ ADMIN_PASSWORD not set in environment variables');
-        return res.status(500).json({ 
-            success: false, 
-            error: 'Server configuration error: Admin password not configured' 
+        return res.status(500).json({
+            success: false,
+            error: 'Server configuration error: Admin password not configured'
         });
     }
-    
+
     if (!password) {
-        return res.status(400).json({ 
-            success: false, 
-            error: 'Password required' 
+        return res.status(400).json({
+            success: false,
+            error: 'Password required'
         });
     }
-    
+
     // Verify password
     if (password === ADMIN_PASSWORD) {
-        console.log('✅ Admin login successful');
+        // Create JWT token
+        const token = jwt.sign(
+            { admin: true, loginTime: new Date().toISOString() },
+            JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
+        // Set httpOnly cookie (can't be accessed by JavaScript - secure!)
+        res.cookie('adminToken', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', // Only HTTPS in production
+            sameSite: 'strict',
+            maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        });
+
+        console.log('✅ Admin login successful - JWT token issued');
         res.status(200).json({ success: true, message: 'Login successful' });
     } else {
         console.log('❌ Admin login failed - invalid password');
-        res.status(401).json({ 
-            success: false, 
-            error: 'Invalid password' 
+        res.status(401).json({
+            success: false,
+            error: 'Invalid password'
         });
     }
+});
+
+// Admin logout endpoint
+app.post('/api/admin/logout', (req, res) => {
+    res.clearCookie('adminToken');
+    console.log('✅ Admin logout successful');
+    res.json({ success: true, message: 'Logged out successfully' });
 });
 
 // Main chat endpoint
