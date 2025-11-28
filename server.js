@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
+const helmet = require('helmet'); // Security headers
 const nodemailer = require('nodemailer');
 const axios = require('axios');
 const fs = require('fs').promises; // Added for file operations
@@ -15,12 +16,58 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// JWT Secret (add to .env if not exists)
+// JWT Secret (must be set in .env for production)
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-this-in-production';
 
-// Middleware
-app.use(cors());
-app.use(express.json({ limit: '10mb' }));
+// --- SECURITY MIDDLEWARE ---
+// Helmet: Security headers (XSS, clickjacking, etc.)
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "https://www.googletagmanager.com", "https://www.google-analytics.com"],
+            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+            fontSrc: ["'self'", "https://fonts.gstatic.com"],
+            imgSrc: ["'self'", "data:", "https:", "http:"],
+            connectSrc: ["'self'", "https://www.google-analytics.com"],
+            frameSrc: ["'none'"],
+            objectSrc: ["'none'"]
+        }
+    },
+    hsts: {
+        maxAge: 31536000, // 1 year
+        includeSubDomains: true,
+        preload: true
+    }
+}));
+
+// CORS: Only allow your domain
+const allowedOrigins = [
+    'https://nazarbanai.com',
+    'https://www.nazarbanai.com',
+    'http://localhost:3000', // For local development
+    'http://127.0.0.1:3000'
+];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        // Allow requests with no origin (mobile apps, Postman, etc.)
+        if (!origin) return callback(null, true);
+
+        if (allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            console.log('❌ CORS blocked origin:', origin);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true, // Allow cookies
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-session-id']
+}));
+
+// Body parser with size limits
+app.use(express.json({ limit: '1mb' })); // Reduced from 10mb
 app.use(cookieParser()); // Parse cookies for JWT
 app.use(express.static(path.join(__dirname, 'public')));
 
