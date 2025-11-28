@@ -7,15 +7,122 @@ const fs = require('fs').promises; // Added for file operations
 const fsSync = require('fs'); // For sync operations
 const cron = require('node-cron'); // NEW: For scheduling tasks
 const multer = require('multer'); // For file uploads
+const rateLimit = require('express-rate-limit'); // For rate limiting
+const jwt = require('jsonwebtoken'); // For JWT authentication
+const cookieParser = require('cookie-parser'); // For parsing cookies
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// JWT Secret (add to .env if not exists)
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-this-in-production';
+
 // Middleware
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
+app.use(cookieParser()); // Parse cookies for JWT
 app.use(express.static(path.join(__dirname, 'public')));
+
+// --- RATE LIMITING CONFIGURATION ---
+// General API rate limiter - 100 requests per 15 minutes
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100,
+    message: { success: false, message: 'Too many requests, please try again later.' },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
+// Strict chat rate limiter - 10 messages per minute
+const chatLimiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 10,
+    message: { success: false, message: 'Please slow down. You can send 10 messages per minute.' },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
+// Login rate limiter - 5 attempts per 15 minutes
+const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 5,
+    message: { success: false, message: 'Too many login attempts. Please try again in 15 minutes.' },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
+// Apply general rate limiter to all API routes
+app.use('/api/', apiLimiter);
+// --- END RATE LIMITING CONFIGURATION ---
+
+// --- USAGE TRACKING & COST PROTECTION ---
+let usageStats = {
+    date: new Date().toDateString(),
+    chatMessages: 0,
+    apiCalls: 0,
+    blockedIPs: new Set(),
+    topIPs: new Map() // IP -> count
+};
+
+// Session tracking for hourly limits
+const sessionLimits = new Map(); // sessionId -> { messages: count, resetTime: timestamp }
+
+const MAX_DAILY_CHAT_MESSAGES = 1000;
+const MAX_HOURLY_MESSAGES_PER_SESSION = 50;
+const MAX_MESSAGE_LENGTH = 500;
+
+// Reset usage stats daily
+function resetDailyStats() {
+    const today = new Date().toDateString();
+    if (today !== usageStats.date) {
+        console.log(`📊 Daily stats reset. Yesterday: ${usageStats.chatMessages} messages, ${usageStats.apiCalls} API calls`);
+        usageStats = {
+            date: today,
+            chatMessages: 0,
+            apiCalls: 0,
+            blockedIPs: new Set(),
+            topIPs: new Map()
+        };
+    }
+}
+
+// Check if daily limit reached
+function checkDailyLimit() {
+    resetDailyStats();
+    return usageStats.chatMessages < MAX_DAILY_CHAT_MESSAGES;
+}
+
+// Track session message count
+function checkSessionLimit(sessionId) {
+    const now = Date.now();
+    const sessionData = sessionLimits.get(sessionId) || {
+        messages: 0,
+        resetTime: now + 3600000 // 1 hour from now
+    };
+
+    // Reset if time expired
+    if (now > sessionData.resetTime) {
+        sessionData.messages = 0;
+        sessionData.resetTime = now + 3600000;
+    }
+
+    // Check limit
+    if (sessionData.messages >= MAX_HOURLY_MESSAGES_PER_SESSION) {
+        return false;
+    }
+
+    sessionData.messages++;
+    sessionLimits.set(sessionId, sessionData);
+    return true;
+}
+
+// Track IP usage
+function trackIPUsage(ip) {
+    const count = (usageStats.topIPs.get(ip) || 0) + 1;
+    usageStats.topIPs.set(ip, count);
+}
+// --- END USAGE TRACKING & COST PROTECTION ---
 
 // --- IMAGE UPLOAD CONFIGURATION ---
 const uploadDir = path.join(__dirname, 'public', 'uploads', 'products');
@@ -1893,10 +2000,56 @@ app.post('/api/admin/verify-login', (req, res) => {
 });
 
 // Main chat endpoint
-app.post('/api/chat', async (req, res) => {
+app.post('/api/chat', chatLimiter, async (req, res) => {
     try {
-        const { message, conversationHistory = [], conversationStage = 'initial', userEmail, language = 'fa' } = req.body;
-        
+        const { message, conversationHistory = [], conversationStage = 'initial', userEmail, language = 'fa', honeypot } = req.body;
+
+        // Bot detection - honeypot field
+        if (honeypot) {
+            console.log('🤖 Bot detected via honeypot');
+            return res.status(400).json({ success: false, message: 'Invalid request' });
+        }
+
+        // Check daily limit
+        if (!checkDailyLimit()) {
+            console.error('🚨 DAILY CHAT LIMIT REACHED');
+            return res.status(503).json({
+                success: false,
+                message: language === 'fa'
+                    ? 'سرویس چت موقتاً در دسترس نیست. لطفاً فردا دوباره تلاش کنید.'
+                    : 'Chat service temporarily unavailable. Please try again tomorrow.'
+            });
+        }
+
+        // Get session ID (use custom header or IP as fallback)
+        const sessionId = req.headers['x-session-id'] || req.ip;
+
+        // Check session hourly limit
+        if (!checkSessionLimit(sessionId)) {
+            console.log(`⚠️ Session limit reached for ${sessionId}`);
+            return res.status(429).json({
+                success: false,
+                message: language === 'fa'
+                    ? 'شما به حد مجاز پیام‌های ساعتی رسیده‌اید. لطفاً یک ساعت دیگر تلاش کنید.'
+                    : 'You\'ve reached the hourly message limit. Please try again in an hour.'
+            });
+        }
+
+        // Validate message length
+        if (message && message.length > MAX_MESSAGE_LENGTH) {
+            return res.status(400).json({
+                success: false,
+                message: language === 'fa'
+                    ? `پیام شما خیلی طولانی است. لطفاً آن را به کمتر از ${MAX_MESSAGE_LENGTH} کاراکتر کوتاه کنید.`
+                    : `Message too long. Please keep it under ${MAX_MESSAGE_LENGTH} characters.`
+            });
+        }
+
+        // Track usage
+        usageStats.chatMessages++;
+        trackIPUsage(req.ip);
+        console.log(`✅ Chat message received (${usageStats.chatMessages}/${MAX_DAILY_CHAT_MESSAGES} today) from ${sessionId}`);
+
         if (!process.env.GOOGLE_API_KEY) {
             return res.status(500).json({ success: false, message: "Server configuration error: Missing Google API key." });
         }
