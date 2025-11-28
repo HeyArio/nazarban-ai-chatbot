@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nazarban Security Tester</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle { color: #94a3b8; margin-bottom: 2rem; }
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .test-card {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid #334155;
+        }
+        .test-card h3 {
+            color: #f1f5f9;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .test-card p { color: #94a3b8; font-size: 0.9rem; margin-bottom: 1rem; }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s;
+            width: 100%;
+        }
+        button:hover { transform: translateY(-2px); }
+        button:disabled {
+            background: #475569;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            display: none;
+        }
+        .result.success {
+            background: #064e3b;
+            border: 1px solid #059669;
+            color: #6ee7b7;
+            display: block;
+        }
+        .result.error {
+            background: #7f1d1d;
+            border: 1px solid #dc2626;
+            color: #fca5a5;
+            display: block;
+        }
+        .result.warning {
+            background: #78350f;
+            border: 1px solid #f59e0b;
+            color: #fbbf24;
+            display: block;
+        }
+        .logs {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        .logs h2 {
+            color: #f1f5f9;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+        .log-entry {
+            padding: 0.5rem;
+            border-left: 3px solid #475569;
+            margin-bottom: 0.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+        }
+        .log-entry.pass { border-color: #059669; color: #6ee7b7; }
+        .log-entry.fail { border-color: #dc2626; color: #fca5a5; }
+        .log-entry.info { border-color: #3b82f6; color: #93c5fd; }
+        .icon { font-size: 1.25rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔒 Nazarban Security Tester</h1>
+        <p class="subtitle">Test all security features of your chatbot</p>
+
+        <div class="test-grid">
+            <!-- Test 1: Rate Limiting -->
+            <div class="test-card">
+                <h3><span class="icon">⏱️</span> Rate Limiting</h3>
+                <p>Send 11 rapid requests to trigger rate limiter (10 msg/min limit)</p>
+                <button onclick="testRateLimiting()">Run Test</button>
+                <div id="rate-result" class="result"></div>
+            </div>
+
+            <!-- Test 2: Message Length -->
+            <div class="test-card">
+                <h3><span class="icon">📏</span> Message Length Limit</h3>
+                <p>Send 501 character message to test length limit (500 char max)</p>
+                <button onclick="testMessageLength()">Run Test</button>
+                <div id="length-result" class="result"></div>
+            </div>
+
+            <!-- Test 3: Honeypot -->
+            <div class="test-card">
+                <h3><span class="icon">🍯</span> Bot Detection</h3>
+                <p>Trigger honeypot field to verify bot detection</p>
+                <button onclick="testHoneypot()">Run Test</button>
+                <div id="honeypot-result" class="result"></div>
+            </div>
+
+            <!-- Test 4: Admin Auth -->
+            <div class="test-card">
+                <h3><span class="icon">🔑</span> Admin Protection</h3>
+                <p>Try accessing admin endpoint without authentication</p>
+                <button onclick="testAdminAuth()">Run Test</button>
+                <div id="admin-result" class="result"></div>
+            </div>
+
+            <!-- Test 5: CORS -->
+            <div class="test-card">
+                <h3><span class="icon">🌐</span> CORS Policy</h3>
+                <p>Check if cross-origin requests are blocked</p>
+                <button onclick="testCORS()">Run Test</button>
+                <div id="cors-result" class="result"></div>
+            </div>
+
+            <!-- Test 6: Security Headers -->
+            <div class="test-card">
+                <h3><span class="icon">🛡️</span> Security Headers</h3>
+                <p>Verify Helmet security headers are present</p>
+                <button onclick="testHeaders()">Run Test</button>
+                <div id="headers-result" class="result"></div>
+            </div>
+        </div>
+
+        <!-- Run All Tests -->
+        <button onclick="runAllTests()" style="max-width: 300px; margin: 0 auto; display: block;">
+            🚀 Run All Tests
+        </button>
+
+        <!-- Logs -->
+        <div class="logs">
+            <h2>📋 Test Logs</h2>
+            <div id="logs"></div>
+        </div>
+    </div>
+
+    <script>
+        const SITE_URL = window.location.origin; // Use current origin
+        let testLogs = [];
+
+        function log(message, type = 'info') {
+            testLogs.push({ message, type, time: new Date().toLocaleTimeString() });
+            updateLogs();
+        }
+
+        function updateLogs() {
+            const logsDiv = document.getElementById('logs');
+            logsDiv.innerHTML = testLogs.map(log =>
+                `<div class="log-entry ${log.type}">[${log.time}] ${log.message}</div>`
+            ).join('');
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+
+        async function testRateLimiting() {
+            const btn = event.target;
+            const resultDiv = document.getElementById('rate-result');
+            btn.disabled = true;
+            log('Testing rate limiting...', 'info');
+
+            let rateLimitHit = false;
+            for (let i = 1; i <= 11; i++) {
+                try {
+                    const response = await fetch(`${SITE_URL}/api/chat`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: `Test ${i}`, language: 'en' })
+                    });
+                    const data = await response.json();
+
+                    if (response.status === 429 || data.message?.includes('slow down') || data.message?.includes('Too many')) {
+                        resultDiv.className = 'result success';
+                        resultDiv.textContent = `✅ PASS: Rate limit triggered at request #${i}`;
+                        log(`✅ Rate limiting working (blocked at request ${i})`, 'pass');
+                        rateLimitHit = true;
+                        break;
+                    }
+                } catch (err) {
+                    console.error(err);
+                }
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+
+            if (!rateLimitHit) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = '❌ FAIL: Rate limit not triggered after 11 requests';
+                log('❌ Rate limiting NOT working', 'fail');
+            }
+
+            btn.disabled = false;
+        }
+
+        async function testMessageLength() {
+            const btn = event.target;
+            const resultDiv = document.getElementById('length-result');
+            btn.disabled = true;
+            log('Testing message length limit...', 'info');
+
+            const longMessage = 'a'.repeat(501);
+            try {
+                const response = await fetch(`${SITE_URL}/api/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: longMessage, language: 'en' })
+                });
+                const data = await response.json();
+
+                if (response.status === 400 || data.message?.includes('too long')) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ PASS: Long message blocked\n${data.message}`;
+                    log('✅ Message length limit working', 'pass');
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = '❌ FAIL: Long message was accepted';
+                    log('❌ Message length limit NOT working', 'fail');
+                }
+            } catch (err) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ ERROR: ${err.message}`;
+                log(`❌ Error testing message length: ${err.message}`, 'fail');
+            }
+
+            btn.disabled = false;
+        }
+
+        async function testHoneypot() {
+            const btn = event.target;
+            const resultDiv = document.getElementById('honeypot-result');
+            btn.disabled = true;
+            log('Testing honeypot bot detection...', 'info');
+
+            try {
+                const response = await fetch(`${SITE_URL}/api/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: 'test',
+                        language: 'en',
+                        honeypot: 'bot-filled-this'
+                    })
+                });
+                const data = await response.json();
+
+                if (response.status === 400 || data.message?.includes('Invalid request')) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = '✅ PASS: Honeypot caught the bot';
+                    log('✅ Honeypot bot detection working', 'pass');
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = '❌ FAIL: Honeypot did not block request';
+                    log('❌ Honeypot NOT working', 'fail');
+                }
+            } catch (err) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ ERROR: ${err.message}`;
+                log(`❌ Error testing honeypot: ${err.message}`, 'fail');
+            }
+
+            btn.disabled = false;
+        }
+
+        async function testAdminAuth() {
+            const btn = event.target;
+            const resultDiv = document.getElementById('admin-result');
+            btn.disabled = true;
+            log('Testing admin authentication...', 'info');
+
+            try {
+                const response = await fetch(`${SITE_URL}/api/articles/custom`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ articles: [] })
+                });
+                const data = await response.json();
+
+                if (response.status === 401 || data.message?.includes('Authentication required')) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ PASS: Admin endpoint protected\n${data.message}`;
+                    log('✅ Admin authentication working', 'pass');
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = '❌ FAIL: Admin endpoint accessible without auth!';
+                    log('❌ WARNING: Admin endpoints may be exposed!', 'fail');
+                }
+            } catch (err) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ ERROR: ${err.message}`;
+                log(`❌ Error testing admin auth: ${err.message}`, 'fail');
+            }
+
+            btn.disabled = false;
+        }
+
+        async function testCORS() {
+            const btn = event.target;
+            const resultDiv = document.getElementById('cors-result');
+            btn.disabled = true;
+            log('Testing CORS policy...', 'info');
+
+            // Note: Browser CORS policy prevents us from fully testing this
+            resultDiv.className = 'result warning';
+            resultDiv.textContent = '⚠️ CORS test limited by browser security.\nCheck browser console for CORS errors when accessing from different origin.';
+            log('⚠️ CORS test requires external origin (check server logs)', 'info');
+
+            btn.disabled = false;
+        }
+
+        async function testHeaders() {
+            const btn = event.target;
+            const resultDiv = document.getElementById('headers-result');
+            btn.disabled = true;
+            log('Testing security headers...', 'info');
+
+            try {
+                const response = await fetch(`${SITE_URL}/`);
+                const headers = response.headers;
+
+                const securityHeaders = {
+                    'x-content-type-options': headers.get('x-content-type-options'),
+                    'x-frame-options': headers.get('x-frame-options'),
+                    'strict-transport-security': headers.get('strict-transport-security'),
+                    'content-security-policy': headers.get('content-security-policy')
+                };
+
+                const presentHeaders = Object.entries(securityHeaders).filter(([k, v]) => v);
+
+                if (presentHeaders.length >= 3) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ PASS: ${presentHeaders.length}/4 security headers present\n` +
+                        presentHeaders.map(([k, v]) => `${k}: ${v.substring(0, 50)}...`).join('\n');
+                    log(`✅ Security headers present (${presentHeaders.length}/4)`, 'pass');
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ FAIL: Only ${presentHeaders.length}/4 security headers present`;
+                    log(`❌ Missing security headers (${presentHeaders.length}/4)`, 'fail');
+                }
+            } catch (err) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ ERROR: ${err.message}`;
+                log(`❌ Error testing headers: ${err.message}`, 'fail');
+            }
+
+            btn.disabled = false;
+        }
+
+        async function runAllTests() {
+            log('========================================', 'info');
+            log('Starting full security test suite...', 'info');
+            log('========================================', 'info');
+
+            await testAdminAuth();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await testHoneypot();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await testMessageLength();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await testHeaders();
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            log('========================================', 'info');
+            log('⚠️ Skipping rate limit test (wait 60s to run manually)', 'info');
+            log('All tests completed!', 'info');
+            log('========================================', 'info');
+        }
+
+        // Initialize
+        log('Security tester ready. Click any test to begin.', 'info');
+    </script>
+</body>
+</html>
