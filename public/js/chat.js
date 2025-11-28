@@ -415,7 +415,7 @@ async function sendMessage() {
       })
     });
 
-    if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    // Parse JSON response whether success or error
     const data = await response.json();
 
     hideTyping();
@@ -433,6 +433,7 @@ async function sendMessage() {
       messageCount++;
       checkEmailPopupTrigger();
     } else {
+      // Display the specific error message from the server
       addMessage(data.message || getChatTranslation('chat_error_generic'), false);
     }
   } catch (err) {
