@@ -17,7 +17,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // JWT Secret (must be set in .env for production)
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-this-in-production';
+const JWT_SECRET = process.env.JWT_SECRET
 
 // --- SECURITY MIDDLEWARE ---
 // Helmet: Security headers (XSS, clickjacking, etc.)
