@@ -116,9 +116,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
-        ${linkUrl ? `
+        ${linkUrl && !isCustom ? `
           <a href="${linkUrl}" target="_blank" rel="noopener noreferrer" class="post-link" onclick="event.stopPropagation()">
-            ${isCustom ? (lang === 'fa' ? 'مقاله کامل' : 'Full Article') : 'Product Hunt'}
+            Product Hunt
             <svg class="link-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -182,16 +182,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       ${post.votes ? `<span class="post-votes">⭐ ${post.votes} ${lang === 'fa' ? 'رأی' : 'upvotes'}</span>` : ''}
     `;
     modal.querySelector('.modal-body').innerHTML = summary;
-    
-    if (post.url) {
-      // Determine link text based on whether it's a custom article or Product Hunt post
-      const linkText = post.isCustom
-        ? (lang === 'fa' ? 'مقاله کامل' : 'Read Full Article')
-        : (lang === 'fa' ? 'مشاهده در Product Hunt' : 'View on Product Hunt');
 
+    // Only show link for Product Hunt posts (not custom articles)
+    if (post.url && !post.isCustom) {
       modal.querySelector('.modal-footer').innerHTML = `
         <a href="${post.url}" target="_blank" rel="noopener noreferrer" class="modal-link">
-          ${linkText}
+          ${lang === 'fa' ? 'مشاهده در Product Hunt' : 'View on Product Hunt'}
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -259,9 +255,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log('Error loading Product Hunt posts:', error);
       }
 
-      // 3. Sort by date (newest first) and limit to 6
-      allPosts.sort((a, b) => new Date(b.created_at || b.date) - new Date(a.created_at || a.date));
-      const displayPosts = allPosts.slice(0, 6);
+      // 3. Sort: custom articles first (by date), then Product Hunt posts (by date)
+      const customPosts = allPosts.filter(p => p.isCustom).sort((a, b) => new Date(b.date) - new Date(a.date));
+      const phPosts = allPosts.filter(p => !p.isCustom).sort((a, b) => new Date(b.created_at || b.date) - new Date(a.created_at || a.date));
+
+      // Combine: all custom posts first, then Product Hunt posts, limit to 6 total
+      const displayPosts = [...customPosts, ...phPosts].slice(0, 6);
 
       // 4. Display posts
       if (displayPosts.length > 0) {

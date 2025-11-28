@@ -534,15 +534,15 @@
                 </div>
             </div>
 
-            <div class="two-col">
-                <div class="form-group">
-                    <label for="articleUrl">Article URL</label>
-                    <input type="url" id="articleUrl" placeholder="https://example.com/article">
-                </div>
-                <div class="form-group">
-                    <label for="articleDate">Date</label>
-                    <input type="date" id="articleDate">
-                </div>
+            <div class="form-group">
+                <label for="articleDate">Date *</label>
+                <input type="date" id="articleDate" required>
+            </div>
+
+            <div class="form-group">
+                <label for="articleUrl">Article URL (optional - leave blank for handcrafted articles)</label>
+                <input type="url" id="articleUrl" placeholder="https://example.com/article">
+                <small style="display: block; margin-top: 0.5rem; color: var(--muted);">Only add a URL if you want to link to an external article</small>
             </div>
 
             <div class="form-group">

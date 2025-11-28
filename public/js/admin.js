@@ -679,8 +679,8 @@ async function addArticle() {
     const articleId = document.getElementById('articleId').value;
     const password = document.getElementById('articlePassword').value;
 
-    if (!titleEn || !titleFa || !summaryEn || !summaryFa || !url || !date) {
-        showStatus('articleStatus', 'Please fill in all required fields', true);
+    if (!titleEn || !titleFa || !summaryEn || !summaryFa || !date) {
+        showStatus('articleStatus', 'Please fill in all required fields (Title, Summary, Date)', true);
         return;
     }
 
