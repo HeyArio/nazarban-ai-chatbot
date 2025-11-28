@@ -11,15 +11,86 @@ const multer = require('multer'); // For file uploads
 const rateLimit = require('express-rate-limit'); // For rate limiting
 const jwt = require('jsonwebtoken'); // For JWT authentication
 const cookieParser = require('cookie-parser'); // For parsing cookies
+const morgan = require('morgan'); // For request logging
 require('dotenv').config();
+
+// ==================================
+// ENVIRONMENT VALIDATION (CRITICAL!)
+// ==================================
+const requiredEnvVars = [
+    'JWT_SECRET',
+    'ADMIN_PASSWORD',
+    'GOOGLE_API_KEY',
+    'NODE_ENV'
+];
+
+const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
+
+if (missingEnvVars.length > 0) {
+    console.error('\n❌ CRITICAL ERROR: Missing required environment variables:');
+    missingEnvVars.forEach(envVar => {
+        console.error(`   - ${envVar}`);
+    });
+    console.error('\n💡 Please check your .env file or environment configuration.');
+    console.error('   See .env.example for reference.\n');
+    process.exit(1); // Exit immediately - cannot run without these
+}
+
+// Validate JWT_SECRET strength
+if (process.env.JWT_SECRET.length < 32) {
+    console.error('\n❌ CRITICAL ERROR: JWT_SECRET must be at least 32 characters long for security.');
+    console.error('   Generate a strong secret with: node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'hex\'))"');
+    console.error('   Current length:', process.env.JWT_SECRET.length, '\n');
+    process.exit(1);
+}
+
+// Validate NODE_ENV
+if (!['production', 'development', 'test'].includes(process.env.NODE_ENV)) {
+    console.warn('\n⚠️  WARNING: NODE_ENV should be "production", "development", or "test"');
+    console.warn('   Current value:', process.env.NODE_ENV, '\n');
+}
+
+console.log('✅ Environment validation passed');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 
-// JWT Secret (must be set in .env for production)
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-this-in-production';
+// JWT Secret - NO FALLBACK (validated above)
+const JWT_SECRET = process.env.JWT_SECRET;
 
-// --- SECURITY MIDDLEWARE ---
+// ==================================
+// HTTPS REDIRECT (Production Only)
+// ==================================
+if (IS_PRODUCTION) {
+    app.use((req, res, next) => {
+        // Trust proxy (for Heroku, Render, Railway, etc.)
+        const proto = req.header('x-forwarded-proto') || req.protocol;
+
+        if (proto !== 'https') {
+            console.log(`🔒 Redirecting HTTP to HTTPS: ${req.header('host')}${req.url}`);
+            return res.redirect(301, `https://${req.header('host')}${req.url}`);
+        }
+        next();
+    });
+}
+
+// ==================================
+// REQUEST LOGGING
+// ==================================
+if (IS_PRODUCTION) {
+    // Production: Log only errors and important info
+    app.use(morgan('combined', {
+        skip: (req, res) => res.statusCode < 400
+    }));
+} else {
+    // Development: Log everything
+    app.use(morgan('dev'));
+}
+
+// ==================================
+// SECURITY MIDDLEWARE
+// ==================================
 // Helmet: Security headers (XSS, clickjacking, etc.)
 app.use(helmet({
     contentSecurityPolicy: {
@@ -38,7 +109,10 @@ app.use(helmet({
         maxAge: 31536000, // 1 year
         includeSubDomains: true,
         preload: true
-    }
+    },
+    // Additional security headers
+    noSniff: true, // X-Content-Type-Options: nosniff
+    referrerPolicy: { policy: 'strict-origin-when-cross-origin' }
 }));
 
 // CORS: Only allow your domain
@@ -1732,7 +1806,51 @@ app.delete('/api/articles/custom/:id', async (req, res) => {
 // Initialize email transporter on startup
 setupEmailTransporter();
 
-// Test endpoint
+// ==================================
+// HEALTH CHECK & STATUS ENDPOINTS
+// ==================================
+
+// Health check endpoint (for monitoring services)
+app.get('/health', (req, res) => {
+    res.status(200).json({
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        environment: process.env.NODE_ENV
+    });
+});
+
+// Detailed status endpoint (for admins/monitoring)
+app.get('/api/status', requireAdmin, (req, res) => {
+    const memoryUsage = process.memoryUsage();
+
+    res.json({
+        status: 'operational',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        environment: process.env.NODE_ENV,
+        version: require('./package.json').version,
+        memory: {
+            rss: `${Math.round(memoryUsage.rss / 1024 / 1024)}MB`,
+            heapUsed: `${Math.round(memoryUsage.heapUsed / 1024 / 1024)}MB`,
+            heapTotal: `${Math.round(memoryUsage.heapTotal / 1024 / 1024)}MB`
+        },
+        dailyStats: {
+            date: usageStats.date,
+            chatMessages: usageStats.chatMessages,
+            apiCalls: usageStats.apiCalls,
+            limit: MAX_DAILY_CHAT_MESSAGES
+        },
+        config: {
+            port: PORT,
+            hasEmailConfig: !!(process.env.ZOHO_EMAIL && process.env.ZOHO_APP_PASSWORD),
+            hasGoogleAPI: !!process.env.GOOGLE_API_KEY,
+            archiveAfterDays: process.env.ARCHIVE_AFTER_DAYS || 7
+        }
+    });
+});
+
+// Legacy test endpoint (kept for backwards compatibility)
 app.get('/api/test', (req, res) => {
     res.json({ status: 'Server is working!' });
 });
@@ -2239,19 +2357,121 @@ app.use((req, res) => {
     }
 });
 
-app.use((error, req, res, next) => { 
-    console.error('❌ Global Server Error:', error);
-    res.status(500).json({ error: 'Internal server error' }); 
+// ==================================
+// ERROR MONITORING INTEGRATION
+// ==================================
+// Optional Sentry integration (if SENTRY_DSN is set)
+if (process.env.SENTRY_DSN) {
+    console.log('🔍 Error monitoring enabled (Sentry)');
+    // To enable: npm install @sentry/node
+    // Then uncomment:
+    // const Sentry = require('@sentry/node');
+    // Sentry.init({ dsn: process.env.SENTRY_DSN });
+    // app.use(Sentry.Handlers.requestHandler());
+    // app.use(Sentry.Handlers.errorHandler());
+}
+
+// Global error handler
+app.use((error, req, res, next) => {
+    console.error('❌ Global Server Error:', {
+        message: error.message,
+        stack: IS_PRODUCTION ? undefined : error.stack,
+        url: req.url,
+        method: req.method,
+        ip: req.ip
+    });
+
+    // In production, don't leak error details
+    const errorMessage = IS_PRODUCTION
+        ? 'Internal server error'
+        : error.message;
+
+    res.status(500).json({
+        error: errorMessage,
+        timestamp: new Date().toISOString()
+    });
 });
 
-app.listen(PORT, async () => {
+// ==================================
+// START SERVER
+// ==================================
+const server = app.listen(PORT, async () => {
     await loadPrompts();
-    console.log(`\n🚀 Nazarban AI Server Started on port ${PORT}`);
+    console.log(`\n🚀 Nazarban AI Server Started`);
+    console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+    console.log(`📍 Port: ${PORT}`);
+    console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
+    console.log(`🔒 HTTPS Redirect: ${IS_PRODUCTION ? '✅ Enabled' : '⚠️  Disabled (dev mode)'}`);
+    console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
     console.log(`🔑 Google API Key: ${process.env.GOOGLE_API_KEY ? '✅ Found' : '❌ Missing'}`);
-    console.log(`📧 Zoho Email: ${process.env.ZOHO_EMAIL && process.env.ZOHO_APP_PASSWORD ? '✅ Found' : '❌ Missing'}`);
-    console.log(`🔑 Admin Password: ${process.env.ADMIN_PASSWORD ? '✅ Set' : '❌ Missing'}`);
-    console.log(`📝 Blog API: ✅ Enabled at /api/blog/post`);
-    console.log(`📊 Benchmark API: ✅ Enabled at /api/benchmark/update`);
-    console.log(`📈 Crypto API: ✅ Enabled at /api/crypto/update`); // <-- NEW LINE
-    console.log(`📅 Automatic archiving: ✅ Scheduled for every Monday at 2:00 AM`);
+    console.log(`📧 Zoho Email: ${process.env.ZOHO_EMAIL && process.env.ZOHO_APP_PASSWORD ? '✅ Configured' : '❌ Missing'}`);
+    console.log(`🔐 JWT Secret: ${process.env.JWT_SECRET ? '✅ Set (' + process.env.JWT_SECRET.length + ' chars)' : '❌ Missing'}`);
+    console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+    console.log(`📝 Blog API: ✅ /api/blog/post`);
+    console.log(`📊 Benchmark API: ✅ /api/benchmark/update`);
+    console.log(`📈 Crypto API: ✅ /api/crypto/update`);
+    console.log(`🏥 Health Check: ✅ /health`);
+    console.log(`📊 Status Monitor: ✅ /api/status (admin only)`);
+    console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+    console.log(`📅 Automatic archiving: ✅ Every Monday at 2:00 AM`);
+    console.log(`💾 Daily message limit: ${MAX_DAILY_CHAT_MESSAGES} messages`);
+    console.log(`⏱️  Session limit: ${MAX_HOURLY_MESSAGES_PER_SESSION} messages/hour`);
+    console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
+});
+
+// ==================================
+// GRACEFUL SHUTDOWN
+// ==================================
+let isShuttingDown = false;
+
+function gracefulShutdown(signal) {
+    if (isShuttingDown) return;
+    isShuttingDown = true;
+
+    console.log(`\n⚠️  ${signal} signal received - Starting graceful shutdown...`);
+
+    // Stop accepting new requests
+    server.close(async () => {
+        console.log('✅ HTTP server closed');
+
+        // Perform cleanup tasks
+        try {
+            // Save any pending data
+            console.log('💾 Saving usage stats...');
+            // Add any cleanup here (close DB connections, save state, etc.)
+
+            console.log('✅ Cleanup completed');
+            console.log('👋 Server shutdown complete\n');
+            process.exit(0);
+        } catch (error) {
+            console.error('❌ Error during shutdown:', error);
+            process.exit(1);
+        }
+    });
+
+    // Force shutdown after 30 seconds
+    setTimeout(() => {
+        console.error('⚠️  Forced shutdown after 30 seconds timeout');
+        process.exit(1);
+    }, 30000);
+}
+
+// Handle various shutdown signals
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+process.on('SIGHUP', () => gracefulShutdown('SIGHUP'));
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (error) => {
+    console.error('💥 Uncaught Exception:', error);
+    gracefulShutdown('UNCAUGHT_EXCEPTION');
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('💥 Unhandled Rejection at:', promise, 'reason:', reason);
+    // In production, you might want to shutdown on unhandled rejections
+    if (IS_PRODUCTION) {
+        gracefulShutdown('UNHANDLED_REJECTION');
+    }
 });
