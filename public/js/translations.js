@@ -362,6 +362,7 @@ window.translations = {
     blog_header_subtitle: "بینش‌های روزانه از نوآوری‌های برتر Product Hunt", // This key is no longer used, but we can leave it
     blog_loading: "در حال بارگذاری...",
     blog_updated_prefix: " آخرین به روز رسانی ",
+    blog_nazarban_insight: "بینش نظربان",
     crypto_ticker_desc: "رمزارزها و پروژه‌های بلاکچین مرتبط با هوش مصنوعی",
     
     // Benchmark Page (This is the full, correct section)
