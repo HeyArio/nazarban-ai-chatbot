@@ -677,15 +677,9 @@ async function addArticle() {
     const date = document.getElementById('articleDate').value;
     const image = document.getElementById('articleImage').value.trim();
     const articleId = document.getElementById('articleId').value;
-    const password = document.getElementById('articlePassword').value;
 
     if (!titleEn || !titleFa || !summaryEn || !summaryFa || !date) {
         showStatus('articleStatus', 'Please fill in all required fields (Title, Summary, Date)', true);
-        return;
-    }
-
-    if (!password) {
-        showStatus('articleStatus', 'Password is required', true);
         return;
     }
 
@@ -714,12 +708,13 @@ async function addArticle() {
         updatedArticles = [article, ...articles];
     }
 
-    // Save to server
+    // Save to server (JWT token sent automatically in cookie)
     try {
         const response = await fetch('/api/articles/custom', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ articles: updatedArticles, password })
+            credentials: 'same-origin', // Include cookies
+            body: JSON.stringify({ articles: updatedArticles })
         });
 
         const result = await response.json();
@@ -728,6 +723,12 @@ async function addArticle() {
             clearArticleForm();
             await loadArticles();
         } else {
+            // If unauthorized, redirect to login
+            if (response.status === 401) {
+                sessionStorage.removeItem('adminAuthenticated');
+                location.reload();
+                return;
+            }
             showStatus('articleStatus', result.message || 'Failed to save article', true);
         }
     } catch (error) {
@@ -751,9 +752,6 @@ function editArticle(index) {
 async function deleteArticle(index) {
     if (!confirm('Are you sure you want to delete this article?')) return;
 
-    const password = prompt('Enter admin password:');
-    if (!password) return;
-
     const article = articles[index];
     const updatedArticles = articles.filter(a => a.id !== article.id);
 
@@ -761,7 +759,8 @@ async function deleteArticle(index) {
         const response = await fetch('/api/articles/custom', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ articles: updatedArticles, password })
+            credentials: 'same-origin', // Include cookies
+            body: JSON.stringify({ articles: updatedArticles })
         });
 
         const result = await response.json();
@@ -769,6 +768,12 @@ async function deleteArticle(index) {
             showStatus('articleStatus', 'Article deleted successfully!', false);
             await loadArticles();
         } else {
+            // If unauthorized, redirect to login
+            if (response.status === 401) {
+                sessionStorage.removeItem('adminAuthenticated');
+                location.reload();
+                return;
+            }
             showStatus('articleStatus', result.message || 'Failed to delete article', true);
         }
     } catch (error) {
@@ -785,7 +790,6 @@ function clearArticleForm() {
     document.getElementById('articleUrl').value = '';
     document.getElementById('articleDate').value = '';
     document.getElementById('articleImage').value = '';
-    document.getElementById('articlePassword').value = '';
 }
 
 // Event listeners for articles
