@@ -118,6 +118,15 @@ app.use(helmet({
     referrerPolicy: { policy: 'strict-origin-when-cross-origin' }
 }));
 
+// Permissions-Policy (Feature-Policy) - Restrict browser features
+app.use((req, res, next) => {
+    res.setHeader(
+        'Permissions-Policy',
+        'geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), speaker=(self)'
+    );
+    next();
+});
+
 // CORS: Only allow your domain
 const allowedOrigins = [
     'https://nazarbanai.com',
