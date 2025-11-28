@@ -12,10 +12,35 @@ const loginPassword = document.getElementById('loginPassword');
 const loginBtn = document.getElementById('loginBtn');
 const loginStatus = document.getElementById('loginStatus');
 
-// Check if already authenticated
-const isAuthenticated = sessionStorage.getItem('adminAuthenticated');
-if (isAuthenticated === 'true') {
-    showAdminPanel();
+// SECURITY: Don't trust client-side auth flags
+// The server will validate JWT on every admin API request
+// We only check sessionStorage to avoid showing login screen unnecessarily
+const hasSessionFlag = sessionStorage.getItem('adminAuthenticated');
+if (hasSessionFlag === 'true') {
+    // Verify with server that we actually have a valid JWT cookie
+    verifyAuth();
+}
+
+async function verifyAuth() {
+    try {
+        // Try to access an admin endpoint to verify JWT is valid
+        const response = await fetch('/api/prompts', {
+            credentials: 'include' // Include cookies
+        });
+
+        if (response.ok) {
+            // JWT is valid, show admin panel
+            showAdminPanel();
+        } else {
+            // JWT expired or invalid, show login
+            sessionStorage.removeItem('adminAuthenticated');
+            loginScreen.style.display = 'flex';
+        }
+    } catch (error) {
+        // Network error or server down, show login
+        sessionStorage.removeItem('adminAuthenticated');
+        loginScreen.style.display = 'flex';
+    }
 }
 
 // Handle Enter key on login password field
