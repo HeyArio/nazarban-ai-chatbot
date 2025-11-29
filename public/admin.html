@@ -387,12 +387,12 @@
                 <div class="form-group">
                     <label>Features (English)</label>
                     <div class="features-builder" id="featuresEnBuilder"></div>
-                    <button class="add-feature-btn" onclick="addFeatureInput('En')">+ Add Feature</button>
+                    <button class="add-feature-btn" id="addFeatureEnBtn">+ Add Feature</button>
                 </div>
                 <div class="form-group">
                     <label>Features (Persian)</label>
                     <div class="features-builder" id="featuresFaBuilder"></div>
-                    <button class="add-feature-btn" onclick="addFeatureInput('Fa')">+ Add Feature</button>
+                    <button class="add-feature-btn" id="addFeatureFaBtn">+ Add Feature</button>
                 </div>
             </div>
 
@@ -459,7 +459,7 @@
             <div class="controls">
                 <input type="password" id="productPassword" placeholder="Admin Password" required style="flex: 1; max-width: 250px;">
                 <button id="saveProductBtn">Save Product</button>
-                <button class="secondary" onclick="clearProductForm()">Clear Form</button>
+                <button class="secondary" id="clearProductBtn">Clear Form</button>
                 <span class="status" id="productStatus"></span>
             </div>
 
@@ -498,7 +498,7 @@
             <div class="controls">
                 <input type="password" id="faqPassword" placeholder="Admin Password" required style="flex: 1; max-width: 250px;">
                 <button id="saveFaqBtn">Save FAQ</button>
-                <button class="secondary" onclick="clearFaqForm()">Clear Form</button>
+                <button class="secondary" id="clearFaqBtn">Clear Form</button>
                 <span class="status" id="faqStatus"></span>
             </div>
 
@@ -552,7 +552,7 @@
 
             <div class="controls">
                 <button id="addArticleBtn" class="primary">Save Article</button>
-                <button class="secondary" onclick="clearArticleForm()">Clear Form</button>
+                <button class="secondary" id="clearArticleBtn">Clear Form</button>
                 <span class="status" id="articleStatus"></span>
                 <small style="display: block; margin-top: 0.5rem; color: var(--muted);">✅ Secured with JWT authentication</small>
             </div>

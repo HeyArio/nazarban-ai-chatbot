@@ -217,13 +217,26 @@ function renderProductsList() {
                     </div>
                 </div>
                 <div class="item-actions">
-                    <button class="secondary" onclick="editProduct('${product.id}')">Edit</button>
-                    <button class="danger" onclick="deleteProduct('${product.id}')">Delete</button>
+                    <button class="secondary product-edit-btn" data-product-id="${product.id}">Edit</button>
+                    <button class="danger product-delete-btn" data-product-id="${product.id}">Delete</button>
                 </div>
             </div>
             <p style="color: var(--muted); font-size: 0.9rem;">${product.descriptionEn.substring(0, 150)}...</p>
         </div>
     `).join('');
+
+    // Add event listeners
+    container.querySelectorAll('.product-edit-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            editProduct(e.target.dataset.productId);
+        });
+    });
+
+    container.querySelectorAll('.product-delete-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            deleteProduct(e.target.dataset.productId);
+        });
+    });
 }
 
 function editProduct(id) {
@@ -501,9 +514,15 @@ function addFeatureInput(lang, value = '') {
     featureItem.className = 'feature-item';
     featureItem.innerHTML = `
         <input type="text" placeholder="Feature description" value="${value}">
-        <button class="danger" onclick="this.parentElement.remove()">Remove</button>
+        <button class="danger feature-remove-btn">Remove</button>
     `;
     builder.appendChild(featureItem);
+
+    // Add event listener to the remove button
+    const removeBtn = featureItem.querySelector('.feature-remove-btn');
+    removeBtn.addEventListener('click', () => {
+        featureItem.remove();
+    });
 }
 
 // ====================
@@ -539,13 +558,26 @@ function renderFaqsList() {
                     <div class="item-meta" style="direction: rtl;">${faq.questionFa}</div>
                 </div>
                 <div class="item-actions">
-                    <button class="secondary" onclick="editFaq('${faq.id}')">Edit</button>
-                    <button class="danger" onclick="deleteFaq('${faq.id}')">Delete</button>
+                    <button class="secondary faq-edit-btn" data-faq-id="${faq.id}">Edit</button>
+                    <button class="danger faq-delete-btn" data-faq-id="${faq.id}">Delete</button>
                 </div>
             </div>
             <p style="color: var(--muted); font-size: 0.9rem;">${faq.answerEn.substring(0, 150)}...</p>
         </div>
     `).join('');
+
+    // Add event listeners
+    container.querySelectorAll('.faq-edit-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            editFaq(e.target.dataset.faqId);
+        });
+    });
+
+    container.querySelectorAll('.faq-delete-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            deleteFaq(e.target.dataset.faqId);
+        });
+    });
 }
 
 function editFaq(id) {
@@ -682,14 +714,29 @@ function renderArticlesList() {
                     <div class="item-meta">Date: ${article.date}</div>
                 </div>
                 <div class="item-actions">
-                    <button class="secondary" onclick="editArticle('${article.id}')">Edit</button>
-                    <button class="danger" onclick="deleteArticle('${article.id}')">Delete</button>
+                    <button class="secondary article-edit-btn" data-article-id="${article.id}">Edit</button>
+                    <button class="danger article-delete-btn" data-article-id="${article.id}">Delete</button>
                 </div>
             </div>
             <p style="color: var(--muted); font-size: 0.9rem;">${article.summary.en.substring(0, 150)}...</p>
             ${article.url ? `<p style="color: var(--brand1); font-size: 0.85rem; margin-top: 0.5rem;"><a href="${article.url}" target="_blank">View Article</a></p>` : ''}
         `;
         articlesList.appendChild(div);
+    });
+
+    // Add event listeners using event delegation
+    articlesList.querySelectorAll('.article-edit-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const articleId = e.target.dataset.articleId;
+            editArticle(articleId);
+        });
+    });
+
+    articlesList.querySelectorAll('.article-delete-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const articleId = e.target.dataset.articleId;
+            deleteArticle(articleId);
+        });
     });
 }
 
@@ -1328,3 +1375,12 @@ function showStatus(elementId, message, isError) {
 }
 
 // Prompts are now loaded after successful login via showAdminPanel()
+
+// ====================
+// EVENT LISTENERS FOR CLEAR BUTTONS AND ADD FEATURE BUTTONS
+// ====================
+document.getElementById('clearProductBtn').addEventListener('click', clearProductForm);
+document.getElementById('clearFaqBtn').addEventListener('click', clearFaqForm);
+document.getElementById('clearArticleBtn').addEventListener('click', clearArticleForm);
+document.getElementById('addFeatureEnBtn').addEventListener('click', () => addFeatureInput('En'));
+document.getElementById('addFeatureFaBtn').addEventListener('click', () => addFeatureInput('Fa'));
