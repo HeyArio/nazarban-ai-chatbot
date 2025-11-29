@@ -682,8 +682,8 @@ function renderArticlesList() {
                     <div class="item-meta">Date: ${article.date}</div>
                 </div>
                 <div class="item-actions">
-                    <button class="secondary" onclick="editArticle(${index})">Edit</button>
-                    <button class="danger" onclick="deleteArticle(${index})">Delete</button>
+                    <button class="secondary" onclick="editArticle('${article.id}')">Edit</button>
+                    <button class="danger" onclick="deleteArticle('${article.id}')">Delete</button>
                 </div>
             </div>
             <p style="color: var(--muted); font-size: 0.9rem;">${article.summary.en.substring(0, 150)}...</p>
@@ -761,24 +761,32 @@ async function addArticle() {
     }
 }
 
-function editArticle(index) {
-    const article = articles[index];
+function editArticle(id) {
+    const article = articles.find(a => a.id === id);
+    if (!article) {
+        showStatus('articleStatus', 'Article not found', true);
+        return;
+    }
     document.getElementById('articleId').value = article.id;
     document.getElementById('articleTitleEn').value = article.title.en;
     document.getElementById('articleTitleFa').value = article.title.fa;
     document.getElementById('articleSummaryEn').value = article.summary.en;
     document.getElementById('articleSummaryFa').value = article.summary.fa;
-    document.getElementById('articleUrl').value = article.url;
+    document.getElementById('articleUrl').value = article.url || '';
     document.getElementById('articleDate').value = article.date;
-    document.getElementById('articleImage').value = article.image;
+    document.getElementById('articleImage').value = article.image || '';
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-async function deleteArticle(index) {
+async function deleteArticle(id) {
     if (!confirm('Are you sure you want to delete this article?')) return;
 
-    const article = articles[index];
-    const updatedArticles = articles.filter(a => a.id !== article.id);
+    const article = articles.find(a => a.id === id);
+    if (!article) {
+        showStatus('articleStatus', 'Article not found', true);
+        return;
+    }
+    const updatedArticles = articles.filter(a => a.id !== id);
 
     try {
         const response = await fetch('/api/articles/custom', {

@@ -56,8 +56,10 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 
-// Trust proxy (for Nginx, Cloudflare, etc.) - Required for rate limiting
-app.set('trust proxy', true);
+// Trust proxy - SECURITY: Only trust first proxy hop (nginx)
+// Set to 1 for nginx, 2 for cloudflare+nginx, or specific IP/subnet
+// NEVER use 'true' as it allows anyone to spoof IPs
+app.set('trust proxy', 1);
 
 // JWT Secret - NO FALLBACK (validated above)
 const JWT_SECRET = process.env.JWT_SECRET;
