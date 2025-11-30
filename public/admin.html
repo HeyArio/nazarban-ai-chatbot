@@ -436,13 +436,21 @@
 
             <div class="two-col">
                 <div class="form-group">
-                    <label for="productVideoUrl">Product Video URL (YouTube/Vimeo/Aparat)</label>
-                    <input type="url" id="productVideoUrl" placeholder="https://youtube.com/watch?v=... or https://vimeo.com/... or https://aparat.com/v/...">
+                    <label for="productVideoUrlEn">Product Video URL - English (YouTube/Vimeo/Aparat)</label>
+                    <input type="url" id="productVideoUrlEn" placeholder="https://youtube.com/watch?v=...">
                 </div>
+                <div class="form-group">
+                    <label for="productVideoUrlFa">Product Video URL - فارسی (YouTube/Vimeo/Aparat)</label>
+                    <input type="url" id="productVideoUrlFa" placeholder="https://aparat.com/v/...">
+                </div>
+            </div>
+
+            <div class="two-col">
                 <div class="form-group">
                     <label for="productCategory">Category</label>
                     <input type="text" id="productCategory" placeholder="e.g., Retail Analytics">
                 </div>
+                <div></div>
             </div>
 
             <div class="two-col">
@@ -569,17 +577,29 @@
             </p>
 
             <div class="form-group">
-                <label for="aboutVideoUrl">Video URL</label>
-                <input type="url" id="aboutVideoUrl" placeholder="https://www.youtube.com/watch?v=... or https://example.arvanvod.ir/...">
+                <label for="aboutVideoUrlEn">Video URL (English)</label>
+                <input type="url" id="aboutVideoUrlEn" placeholder="https://www.youtube.com/watch?v=... or https://example.arvanvod.ir/...">
                 <small style="display: block; margin-top: 0.5rem; color: var(--muted);">
-                    Supported formats:
-                    <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
-                        <li>YouTube: https://www.youtube.com/watch?v=VIDEO_ID or https://youtu.be/VIDEO_ID</li>
-                        <li>Vimeo: https://vimeo.com/VIDEO_ID</li>
-                        <li>Aparat: https://www.aparat.com/v/VIDEO_ID</li>
-                        <li>Arvan Cloud VOD: https://example.arvanvod.ir/path/video.mp4 or .m3u8</li>
-                    </ul>
+                    Video to show when user selects English language
                 </small>
+            </div>
+
+            <div class="form-group">
+                <label for="aboutVideoUrlFa">Video URL (فارسی)</label>
+                <input type="url" id="aboutVideoUrlFa" placeholder="https://www.aparat.com/v/... یا https://example.arvanvod.ir/...">
+                <small style="display: block; margin-top: 0.5rem; color: var(--muted);">
+                    ویدیویی که هنگام انتخاب زبان فارسی نمایش داده می‌شود
+                </small>
+            </div>
+
+            <div style="margin-top: 1rem; padding: 1rem; background: var(--panel); border: 1px solid var(--border); border-radius: 8px;">
+                <strong style="color: var(--ink);">Supported formats:</strong>
+                <ul style="margin: 0.5rem 0 0 1.5rem; padding: 0; color: var(--muted);">
+                    <li>YouTube: https://www.youtube.com/watch?v=VIDEO_ID or https://youtu.be/VIDEO_ID</li>
+                    <li>Vimeo: https://vimeo.com/VIDEO_ID</li>
+                    <li>Aparat: https://www.aparat.com/v/VIDEO_ID</li>
+                    <li>Arvan Cloud VOD: https://example.arvanvod.ir/path/video.mp4 or .m3u8</li>
+                </ul>
             </div>
 
             <div id="aboutVideoPreview" style="display: none; margin-top: 1.5rem;">
@@ -603,28 +623,34 @@
                 Manage clickable videos for the Services page headings. Supports YouTube, Vimeo, Aparat, and Arvan Cloud VOD.
             </p>
 
+            <h3 style="margin-top: 0; color: var(--ink);">1. AI Strategy & Data Readiness</h3>
             <div class="form-group">
-                <label for="strategyVideoUrl">AI Strategy & Data Readiness Video URL</label>
-                <input type="url" id="strategyVideoUrl" placeholder="https://www.youtube.com/watch?v=... or https://example.arvanvod.ir/...">
-                <small style="display: block; margin-top: 0.5rem; color: var(--muted);">
-                    Video for "1. AI Strategy & Data Readiness" section
-                </small>
+                <label for="strategyVideoUrlEn">Video URL (English)</label>
+                <input type="url" id="strategyVideoUrlEn" placeholder="https://www.youtube.com/watch?v=...">
+            </div>
+            <div class="form-group">
+                <label for="strategyVideoUrlFa">Video URL (فارسی)</label>
+                <input type="url" id="strategyVideoUrlFa" placeholder="https://www.aparat.com/v/...">
             </div>
 
+            <h3 style="margin-top: 2rem; color: var(--ink);">2. Custom AI & ML Development</h3>
             <div class="form-group">
-                <label for="developmentVideoUrl">Custom AI & ML Development Video URL</label>
-                <input type="url" id="developmentVideoUrl" placeholder="https://www.youtube.com/watch?v=... or https://example.arvanvod.ir/...">
-                <small style="display: block; margin-top: 0.5rem; color: var(--muted);">
-                    Video for "2. Custom AI & ML Development" section
-                </small>
+                <label for="developmentVideoUrlEn">Video URL (English)</label>
+                <input type="url" id="developmentVideoUrlEn" placeholder="https://www.youtube.com/watch?v=...">
+            </div>
+            <div class="form-group">
+                <label for="developmentVideoUrlFa">Video URL (فارسی)</label>
+                <input type="url" id="developmentVideoUrlFa" placeholder="https://www.aparat.com/v/...">
             </div>
 
+            <h3 style="margin-top: 2rem; color: var(--ink);">3. Workflow & Process Automation</h3>
             <div class="form-group">
-                <label for="automationVideoUrl">Workflow & Process Automation Video URL</label>
-                <input type="url" id="automationVideoUrl" placeholder="https://www.youtube.com/watch?v=... or https://example.arvanvod.ir/...">
-                <small style="display: block; margin-top: 0.5rem; color: var(--muted);">
-                    Video for "3. Workflow & Process Automation" section
-                </small>
+                <label for="automationVideoUrlEn">Video URL (English)</label>
+                <input type="url" id="automationVideoUrlEn" placeholder="https://www.youtube.com/watch?v=...">
+            </div>
+            <div class="form-group">
+                <label for="automationVideoUrlFa">Video URL (فارسی)</label>
+                <input type="url" id="automationVideoUrlFa" placeholder="https://www.aparat.com/v/...">
             </div>
 
             <div class="controls">

@@ -71,12 +71,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     return url && (url.includes('arvanvod.ir') || url.match(/\.(mp4|webm|ogg|m3u8)$/i));
   };
 
+  // Get current language
+  const getCurrentLanguage = () => {
+    return localStorage.getItem('preferredLanguage') || 'fa';
+  };
+
   // Open modal with video
   const openModal = (serviceId) => {
-    const videoUrl = servicesVideos[serviceId];
+    const videoData = servicesVideos[serviceId];
+
+    if (!videoData) {
+      console.log(`No video configured for service: ${serviceId}`);
+      return;
+    }
+
+    const lang = getCurrentLanguage();
+
+    // Support both old string format and new multilingual object format
+    let videoUrl;
+    if (typeof videoData === 'string') {
+      videoUrl = videoData;
+    } else if (videoData && typeof videoData === 'object') {
+      videoUrl = videoData[lang] || videoData.en || videoData.fa || '';
+    }
 
     if (!videoUrl) {
-      console.log(`No video configured for service: ${serviceId}`);
+      console.log(`No video URL for service: ${serviceId} in language: ${lang}`);
       return;
     }
 

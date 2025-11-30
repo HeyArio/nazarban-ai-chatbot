@@ -254,7 +254,21 @@ function editProduct(id) {
     document.getElementById('productFullDescFa').value = product.fullDescriptionFa || '';
     document.getElementById('productUrl').value = product.url || '';
     document.getElementById('productImageUrl').value = product.imageUrl || '';
-    document.getElementById('productVideoUrl').value = product.videoUrl || '';
+
+    // Support both old string format and new multilingual object format for video URL
+    if (product.videoUrl) {
+        if (typeof product.videoUrl === 'string') {
+            document.getElementById('productVideoUrlEn').value = product.videoUrl;
+            document.getElementById('productVideoUrlFa').value = product.videoUrl;
+        } else if (typeof product.videoUrl === 'object') {
+            document.getElementById('productVideoUrlEn').value = product.videoUrl.en || '';
+            document.getElementById('productVideoUrlFa').value = product.videoUrl.fa || '';
+        }
+    } else {
+        document.getElementById('productVideoUrlEn').value = '';
+        document.getElementById('productVideoUrlFa').value = '';
+    }
+
     document.getElementById('productCategory').value = product.category || '';
     document.getElementById('productStatus').value = product.status || 'live';
 
@@ -356,7 +370,10 @@ document.getElementById('saveProductBtn').addEventListener('click', async () => 
         featuresFa,
         url: document.getElementById('productUrl').value,
         imageUrl: document.getElementById('productImageUrl').value,
-        videoUrl: document.getElementById('productVideoUrl').value,
+        videoUrl: {
+            en: document.getElementById('productVideoUrlEn').value,
+            fa: document.getElementById('productVideoUrlFa').value
+        },
         category: document.getElementById('productCategory').value,
         status: document.getElementById('productStatus').value,
         password
@@ -394,7 +411,8 @@ function clearProductForm() {
     document.getElementById('productFullDescFa').value = '';
     document.getElementById('productUrl').value = '';
     document.getElementById('productImageUrl').value = '';
-    document.getElementById('productVideoUrl').value = '';
+    document.getElementById('productVideoUrlEn').value = '';
+    document.getElementById('productVideoUrlFa').value = '';
     document.getElementById('productCategory').value = '';
     document.getElementById('productStatus').value = 'live';
     document.getElementById('productPassword').value = '';
@@ -889,7 +907,14 @@ async function loadAboutVideo() {
         const data = await response.json();
 
         if (data.success && data.videoUrl) {
-            document.getElementById('aboutVideoUrl').value = data.videoUrl;
+            // Support both old string format and new multilingual object format
+            if (typeof data.videoUrl === 'string') {
+                document.getElementById('aboutVideoUrlEn').value = data.videoUrl;
+                document.getElementById('aboutVideoUrlFa').value = data.videoUrl;
+            } else if (data.videoUrl && typeof data.videoUrl === 'object') {
+                document.getElementById('aboutVideoUrlEn').value = data.videoUrl.en || '';
+                document.getElementById('aboutVideoUrlFa').value = data.videoUrl.fa || '';
+            }
         }
     } catch (error) {
         console.error('Error loading about video:', error);
@@ -898,7 +923,8 @@ async function loadAboutVideo() {
 
 // Save about video URL
 document.getElementById('saveAboutVideoBtn').addEventListener('click', async () => {
-    const videoUrl = document.getElementById('aboutVideoUrl').value.trim();
+    const videoUrlEn = document.getElementById('aboutVideoUrlEn').value.trim();
+    const videoUrlFa = document.getElementById('aboutVideoUrlFa').value.trim();
     const password = document.getElementById('aboutPassword').value;
 
     if (!password) {
@@ -910,13 +936,19 @@ document.getElementById('saveAboutVideoBtn').addEventListener('click', async () 
         const response = await fetch('/api/about/video', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ videoUrl, password })
+            body: JSON.stringify({
+                videoUrl: {
+                    en: videoUrlEn,
+                    fa: videoUrlFa
+                },
+                password
+            })
         });
 
         const data = await response.json();
 
         if (data.success) {
-            showStatus('aboutStatus', 'Video URL saved successfully', false);
+            showStatus('aboutStatus', 'Video URLs saved successfully', false);
             document.getElementById('aboutPassword').value = '';
         } else {
             showStatus('aboutStatus', data.error || 'Failed to save', true);
@@ -928,7 +960,7 @@ document.getElementById('saveAboutVideoBtn').addEventListener('click', async () 
 
 // Preview about video
 document.getElementById('previewAboutVideoBtn').addEventListener('click', () => {
-    const videoUrl = document.getElementById('aboutVideoUrl').value.trim();
+    const videoUrl = document.getElementById('aboutVideoUrlEn').value.trim() || document.getElementById('aboutVideoUrlFa').value.trim();
 
     if (!videoUrl) {
         showStatus('aboutStatus', 'Please enter a video URL first', true);
@@ -1022,9 +1054,24 @@ async function loadServicesVideos() {
         const data = await response.json();
 
         if (data.success && data.videos) {
-            document.getElementById('strategyVideoUrl').value = data.videos.strategy || '';
-            document.getElementById('developmentVideoUrl').value = data.videos.development || '';
-            document.getElementById('automationVideoUrl').value = data.videos.automation || '';
+            // Support both old string format and new multilingual object format
+            const setVideoInputs = (service, inputEnId, inputFaId) => {
+                const videoData = data.videos[service];
+                if (typeof videoData === 'string') {
+                    document.getElementById(inputEnId).value = videoData;
+                    document.getElementById(inputFaId).value = videoData;
+                } else if (videoData && typeof videoData === 'object') {
+                    document.getElementById(inputEnId).value = videoData.en || '';
+                    document.getElementById(inputFaId).value = videoData.fa || '';
+                } else {
+                    document.getElementById(inputEnId).value = '';
+                    document.getElementById(inputFaId).value = '';
+                }
+            };
+
+            setVideoInputs('strategy', 'strategyVideoUrlEn', 'strategyVideoUrlFa');
+            setVideoInputs('development', 'developmentVideoUrlEn', 'developmentVideoUrlFa');
+            setVideoInputs('automation', 'automationVideoUrlEn', 'automationVideoUrlFa');
         }
     } catch (error) {
         console.error('Error loading services videos:', error);
@@ -1033,9 +1080,12 @@ async function loadServicesVideos() {
 
 // Save services videos
 document.getElementById('saveServicesVideosBtn').addEventListener('click', async () => {
-    const strategyUrl = document.getElementById('strategyVideoUrl').value.trim();
-    const developmentUrl = document.getElementById('developmentVideoUrl').value.trim();
-    const automationUrl = document.getElementById('automationVideoUrl').value.trim();
+    const strategyUrlEn = document.getElementById('strategyVideoUrlEn').value.trim();
+    const strategyUrlFa = document.getElementById('strategyVideoUrlFa').value.trim();
+    const developmentUrlEn = document.getElementById('developmentVideoUrlEn').value.trim();
+    const developmentUrlFa = document.getElementById('developmentVideoUrlFa').value.trim();
+    const automationUrlEn = document.getElementById('automationVideoUrlEn').value.trim();
+    const automationUrlFa = document.getElementById('automationVideoUrlFa').value.trim();
     const password = document.getElementById('servicesPassword').value;
 
     if (!password) {
@@ -1049,9 +1099,9 @@ document.getElementById('saveServicesVideosBtn').addEventListener('click', async
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 videos: {
-                    strategy: strategyUrl,
-                    development: developmentUrl,
-                    automation: automationUrl
+                    strategy: { en: strategyUrlEn, fa: strategyUrlFa },
+                    development: { en: developmentUrlEn, fa: developmentUrlFa },
+                    automation: { en: automationUrlEn, fa: automationUrlFa }
                 },
                 password
             })

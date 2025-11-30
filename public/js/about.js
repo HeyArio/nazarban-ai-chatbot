@@ -65,7 +65,17 @@ document.addEventListener('DOMContentLoaded', async () => {
       const data = await response.json();
 
       if (data.success && data.videoUrl) {
-        const embedUrl = getEmbedUrl(data.videoUrl);
+        const lang = getCurrentLanguage();
+
+        // Support both old string format and new multilingual object format
+        let videoUrl;
+        if (typeof data.videoUrl === 'string') {
+          videoUrl = data.videoUrl;
+        } else if (data.videoUrl && typeof data.videoUrl === 'object') {
+          videoUrl = data.videoUrl[lang] || data.videoUrl.en || data.videoUrl.fa || '';
+        }
+
+        const embedUrl = getEmbedUrl(videoUrl);
 
         if (embedUrl) {
           displayVideo(embedUrl);

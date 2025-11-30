@@ -84,7 +84,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     const description = lang === 'fa' ? product.descriptionFa : product.descriptionEn;
     const fullDescription = lang === 'fa' ? product.fullDescriptionFa : product.fullDescriptionEn;
     const features = lang === 'fa' ? product.featuresFa : product.featuresEn;
-    const videoEmbedUrl = getEmbedUrl(product.videoUrl);
+
+    // Support both old string format and new multilingual object format for video URL
+    let videoUrl;
+    if (product.videoUrl) {
+      if (typeof product.videoUrl === 'string') {
+        videoUrl = product.videoUrl;
+      } else if (typeof product.videoUrl === 'object') {
+        videoUrl = product.videoUrl[lang] || product.videoUrl.en || product.videoUrl.fa || '';
+      }
+    }
+
+    const videoEmbedUrl = getEmbedUrl(videoUrl);
 
     // Update page title
     document.getElementById('page-title').textContent = `${name} - Nazarban AI`;

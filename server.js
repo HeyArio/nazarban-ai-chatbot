@@ -106,7 +106,7 @@ app.use(helmet({
             fontSrc: ["'self'", "https://fonts.gstatic.com"],
             imgSrc: ["'self'", "data:", "https:", "http:"],
             connectSrc: ["'self'", "https://www.google-analytics.com"],
-            frameSrc: ["'none'"],
+            frameSrc: ["'self'", "https://www.youtube.com", "https://player.vimeo.com", "https://www.aparat.com", "https://*.arvanvod.ir"],
             objectSrc: ["'none'"]
         }
     },
@@ -528,10 +528,25 @@ async function saveFaqs(faqs) {
 async function loadAboutVideo() {
     try {
         const data = await fs.readFile(aboutVideoPath, 'utf-8');
-        return JSON.parse(data);
+        const parsedData = JSON.parse(data);
+
+        // Migrate old format to new multilingual format if needed
+        if (parsedData.videoUrl && typeof parsedData.videoUrl === 'string') {
+            parsedData.videoUrl = {
+                en: parsedData.videoUrl,
+                fa: parsedData.videoUrl
+            };
+        }
+
+        return parsedData;
     } catch (error) {
         console.log('⚠️ No about video file found, creating new one');
-        const defaultData = { videoUrl: '' };
+        const defaultData = {
+            videoUrl: {
+                en: '',
+                fa: ''
+            }
+        };
         await fs.writeFile(aboutVideoPath, JSON.stringify(defaultData, null, 2));
         return defaultData;
     }
@@ -549,13 +564,26 @@ async function saveAboutVideo(videoData) {
 async function loadServicesVideos() {
     try {
         const data = await fs.readFile(servicesVideosPath, 'utf-8');
-        return JSON.parse(data);
+        const parsedData = JSON.parse(data);
+
+        // Migrate old format to new multilingual format if needed
+        const services = ['strategy', 'development', 'automation'];
+        services.forEach(service => {
+            if (parsedData[service] && typeof parsedData[service] === 'string') {
+                parsedData[service] = {
+                    en: parsedData[service],
+                    fa: parsedData[service]
+                };
+            }
+        });
+
+        return parsedData;
     } catch (error) {
         console.log('⚠️ No services videos file found, creating new one');
         const defaultData = {
-            strategy: '',
-            development: '',
-            automation: ''
+            strategy: { en: '', fa: '' },
+            development: { en: '', fa: '' },
+            automation: { en: '', fa: '' }
         };
         await fs.writeFile(servicesVideosPath, JSON.stringify(defaultData, null, 2));
         return defaultData;
@@ -1557,9 +1585,23 @@ app.post('/api/about/video', async (req, res) => {
             });
         }
 
-        // Save video URL (can be empty string to clear)
+        // Save video URL (support both old string format and new multilingual object format)
+        let videoUrlData;
+        if (typeof videoUrl === 'string') {
+            // Old format: convert to multilingual
+            videoUrlData = { en: videoUrl, fa: videoUrl };
+        } else if (videoUrl && typeof videoUrl === 'object') {
+            // New multilingual format
+            videoUrlData = {
+                en: videoUrl.en || '',
+                fa: videoUrl.fa || ''
+            };
+        } else {
+            videoUrlData = { en: '', fa: '' };
+        }
+
         const videoData = {
-            videoUrl: videoUrl || '',
+            videoUrl: videoUrlData,
             updatedAt: new Date().toISOString()
         };
 
@@ -1621,11 +1663,20 @@ app.post('/api/services/videos', async (req, res) => {
             });
         }
 
-        // Save videos data
+        // Save videos data (support both old string format and new multilingual object format)
+        const processVideoUrl = (url) => {
+            if (typeof url === 'string') {
+                return { en: url, fa: url };
+            } else if (url && typeof url === 'object') {
+                return { en: url.en || '', fa: url.fa || '' };
+            }
+            return { en: '', fa: '' };
+        };
+
         const videosData = {
-            strategy: videos.strategy || '',
-            development: videos.development || '',
-            automation: videos.automation || '',
+            strategy: processVideoUrl(videos.strategy),
+            development: processVideoUrl(videos.development),
+            automation: processVideoUrl(videos.automation),
             updatedAt: new Date().toISOString()
         };
 
