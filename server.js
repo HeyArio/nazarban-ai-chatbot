@@ -12,6 +12,7 @@ const rateLimit = require('express-rate-limit'); // For rate limiting
 const jwt = require('jsonwebtoken'); // For JWT authentication
 const cookieParser = require('cookie-parser'); // For parsing cookies
 const morgan = require('morgan'); // For request logging
+const sanitize = require('./utils/sanitize'); // Input sanitization for XSS protection
 require('dotenv').config();
 
 // ==================================
@@ -933,7 +934,13 @@ async function sendCustomerConfirmation(userEmail, language = 'fa') {
 // API: POST a new blog post (for n8n or manual use)
 app.post('/api/blog/post', async (req, res) => {
     try {
-        const { title, summaryEnglish, summaryFarsi, date, url, votes, password } = req.body;
+        let { title, summaryEnglish, summaryFarsi, date, url, votes, password } = req.body;
+
+        // Sanitize blog post data
+        title = sanitize.escapeHtml(sanitize.limitLength(title, 300));
+        summaryEnglish = sanitize.escapeHtml(sanitize.limitLength(summaryEnglish, 2000));
+        summaryFarsi = sanitize.escapeHtml(sanitize.limitLength(summaryFarsi, 2000));
+        url = url ? sanitize.sanitizeUrl(url) : '';
 
         // Simple password protection for the blog API
         if (password !== process.env.ADMIN_PASSWORD) {
@@ -1075,16 +1082,19 @@ app.post('/api/blog/archive', async (req, res) => {
 // API: Receive benchmark data from n8n
 app.post('/api/benchmark/update', async (req, res) => {
     try {
-        const benchmarkData = req.body;
-        
+        let benchmarkData = req.body;
+
         // Validate that we received data
         if (!benchmarkData || Object.keys(benchmarkData).length === 0) {
-            return res.status(400).json({ 
-                success: false, 
-                message: 'No benchmark data provided' 
+            return res.status(400).json({
+                success: false,
+                message: 'No benchmark data provided'
             });
         }
-        
+
+        // Sanitize benchmark data to prevent XSS
+        benchmarkData = sanitize.sanitizeObject(benchmarkData);
+
         // Save the benchmark data
         await saveBenchmarkData(benchmarkData);
         
@@ -1137,16 +1147,19 @@ app.get('/api/benchmark/data', async (req, res) => {
 app.post('/api/crypto/update', async (req, res) => {
     try {
         // We expect n8n to send the entire array of coins as the body
-        const cryptoData = req.body; 
-        
+        let cryptoData = req.body;
+
         // Validate that we received an array
         if (!Array.isArray(cryptoData) || cryptoData.length === 0) {
-            return res.status(400).json({ 
-                success: false, 
-                message: 'No crypto data provided or data is not an array' 
+            return res.status(400).json({
+                success: false,
+                message: 'No crypto data provided or data is not an array'
             });
         }
-        
+
+        // Sanitize crypto data to prevent XSS
+        cryptoData = sanitize.sanitizeObject(cryptoData);
+
         // Save the new crypto data (this will overwrite the old file)
         await saveCryptoData(cryptoData);
         
@@ -1246,6 +1259,9 @@ app.use((error, req, res, next) => {
 // API: Create/Update a product (JWT protected)
 app.post('/api/products', requireAdmin, async (req, res) => {
     try {
+        // Sanitize all product data
+        const sanitizedData = sanitize.sanitizeObject(req.body);
+
         const {
             id,
             nameEn,
@@ -1263,7 +1279,7 @@ app.post('/api/products', requireAdmin, async (req, res) => {
             videoUrl,
             status,
             category
-        } = req.body;
+        } = sanitizedData;
 
         // Validate required fields
         if (!nameEn || !nameFa || !descriptionEn || !descriptionFa) {
@@ -1414,7 +1430,7 @@ app.delete('/api/products/:id', async (req, res) => {
 // API: Create/Update an FAQ (Admin only)
 app.post('/api/faqs', async (req, res) => {
     try {
-        const {
+        let {
             id,
             questionEn,
             questionFa,
@@ -1422,6 +1438,12 @@ app.post('/api/faqs', async (req, res) => {
             answerFa,
             password
         } = req.body;
+
+        // Sanitize FAQ data (not password for auth check)
+        questionEn = sanitize.escapeHtml(sanitize.limitLength(questionEn, 500));
+        questionFa = sanitize.escapeHtml(sanitize.limitLength(questionFa, 500));
+        answerEn = sanitize.escapeHtml(sanitize.limitLength(answerEn, 2000));
+        answerFa = sanitize.escapeHtml(sanitize.limitLength(answerFa, 2000));
 
         // Simple password protection
         if (password !== process.env.ADMIN_PASSWORD) {
@@ -1575,7 +1597,7 @@ app.get('/api/about/video', async (req, res) => {
 // API: POST/Update about video URL (Admin only)
 app.post('/api/about/video', async (req, res) => {
     try {
-        const { videoUrl, password } = req.body;
+        let { videoUrl, password } = req.body;
 
         // Simple password protection
         if (password !== process.env.ADMIN_PASSWORD) {
@@ -1584,6 +1606,9 @@ app.post('/api/about/video', async (req, res) => {
                 error: 'Unauthorized: Invalid password'
             });
         }
+
+        // Sanitize video URL data
+        videoUrl = sanitize.sanitizeObject(videoUrl);
 
         // Save video URL (support both old string format and new multilingual object format)
         let videoUrlData;
@@ -1645,7 +1670,7 @@ app.get('/api/services/videos', async (req, res) => {
 // API: POST/Update services videos (Admin only)
 app.post('/api/services/videos', async (req, res) => {
     try {
-        const { videos, password } = req.body;
+        let { videos, password } = req.body;
 
         // Simple password protection
         if (password !== process.env.ADMIN_PASSWORD) {
@@ -1654,6 +1679,9 @@ app.post('/api/services/videos', async (req, res) => {
                 error: 'Unauthorized: Invalid password'
             });
         }
+
+        // Sanitize videos data
+        videos = sanitize.sanitizeObject(videos);
 
         // Validate that videos is an object
         if (!videos || typeof videos !== 'object') {
@@ -1713,11 +1741,14 @@ app.get('/api/content/services', async (req, res) => {
 
 app.post('/api/content/services', async (req, res) => {
     try {
-        const { content, password } = req.body;
+        let { content, password } = req.body;
 
         if (password !== process.env.ADMIN_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
+
+        // Sanitize content
+        content = sanitize.sanitizeObject(content);
 
         await saveServicesContent(content);
         res.json({ success: true, message: 'Services content saved successfully' });
@@ -1740,11 +1771,14 @@ app.get('/api/content/about', async (req, res) => {
 
 app.post('/api/content/about', async (req, res) => {
     try {
-        const { content, password } = req.body;
+        let { content, password } = req.body;
 
         if (password !== process.env.ADMIN_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
+
+        // Sanitize content
+        content = sanitize.sanitizeObject(content);
 
         await saveAboutContent(content);
         res.json({ success: true, message: 'About content saved successfully' });
@@ -1767,11 +1801,14 @@ app.get('/api/content/whitepaper', async (req, res) => {
 
 app.post('/api/content/whitepaper', async (req, res) => {
     try {
-        const { content, password } = req.body;
+        let { content, password } = req.body;
 
         if (password !== process.env.ADMIN_PASSWORD) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
+
+        // Sanitize content
+        content = sanitize.sanitizeObject(content);
 
         await saveWhitepaperContent(content);
         res.json({ success: true, message: 'Whitepaper content saved successfully' });
@@ -1797,7 +1834,7 @@ app.get('/api/articles/custom', async (req, res) => {
 // API: POST/Update custom articles (JWT protected)
 app.post('/api/articles/custom', requireAdmin, async (req, res) => {
     try {
-        const { articles } = req.body;
+        let { articles } = req.body;
 
         // Validate that articles is an array
         if (!Array.isArray(articles)) {
@@ -1806,6 +1843,9 @@ app.post('/api/articles/custom', requireAdmin, async (req, res) => {
                 message: 'Articles must be an array'
             });
         }
+
+        // Sanitize all article data
+        articles = sanitize.sanitizeObject(articles);
 
         // Save articles
         await saveCustomArticles(articles);
@@ -1923,7 +1963,14 @@ app.get('/api/test', (req, res) => {
 // Contact form submission endpoint
 app.post('/api/contact', async (req, res) => {
     try {
-        const { fullName, organization, email, phone, service } = req.body;
+        let { fullName, organization, email, phone, service } = req.body;
+
+        // Sanitize inputs
+        fullName = sanitize.escapeHtml(sanitize.limitLength(fullName, 100));
+        organization = sanitize.escapeHtml(sanitize.limitLength(organization, 100));
+        email = sanitize.sanitizeEmail(email);
+        phone = sanitize.escapeHtml(sanitize.limitLength(phone, 20));
+        service = sanitize.escapeHtml(service);
 
         if (!fullName || !email || !phone) {
             return res.status(400).json({ success: false, message: 'Missing required fields' });
@@ -2004,7 +2051,12 @@ app.post('/api/contact', async (req, res) => {
 // Email collection endpoint (from popup) - sends proposal to both parties
 app.post('/api/collect-email', async (req, res) => {
     try {
-        const { email, source, conversationHistory = [], language = 'fa' } = req.body;
+        let { email, source, conversationHistory = [], language = 'fa' } = req.body;
+
+        // Sanitize inputs
+        email = sanitize.sanitizeEmail(email);
+        source = sanitize.escapeHtml(source);
+        conversationHistory = sanitize.sanitizeObject(conversationHistory);
 
         if (!email || !email.includes('@')) {
             return res.status(400).json({ success: false, message: 'Invalid email' });
@@ -2262,7 +2314,12 @@ app.post('/api/admin/logout', (req, res) => {
 // Main chat endpoint
 app.post('/api/chat', chatLimiter, async (req, res) => {
     try {
-        const { message, conversationHistory = [], conversationStage = 'initial', userEmail, language = 'fa', honeypot } = req.body;
+        let { message, conversationHistory = [], conversationStage = 'initial', userEmail, language = 'fa', honeypot } = req.body;
+
+        // Sanitize inputs to prevent XSS attacks
+        message = sanitize.escapeHtml(sanitize.limitLength(message, 500));
+        userEmail = userEmail ? sanitize.sanitizeEmail(userEmail) : null;
+        conversationHistory = sanitize.sanitizeObject(conversationHistory);
 
         // Bot detection - honeypot field
         if (honeypot) {
