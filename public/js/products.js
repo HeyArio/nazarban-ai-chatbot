@@ -26,6 +26,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     card.dataset.productId = product.id;
     card.style.cursor = 'pointer';
 
+    // Make entire card clickable
+    card.addEventListener('click', (e) => {
+      // Don't navigate if clicking on a link or button
+      if (e.target.tagName === 'A' || e.target.closest('a')) {
+        return;
+      }
+      window.location.href = `product-detail.html?id=${product.id}`;
+    });
+
     const name = lang === 'fa' ? product.nameFa : product.nameEn;
     const tagline = lang === 'fa' ? product.taglineFa : product.taglineEn;
     const description = lang === 'fa' ? product.descriptionFa : product.descriptionEn;
