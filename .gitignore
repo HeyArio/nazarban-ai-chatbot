@@ -82,3 +82,9 @@ Desktop.ini
 "blogPosts.json" 
 "cryptoData.json" 
 "collectedEmails.json" 
+
+benchmarkData.json
+blogPosts.json
+cryptoData.json
+collectedEmails.json
+archivedPosts.json
