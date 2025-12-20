@@ -153,6 +153,7 @@ body {
   display: flex;
   flex-direction: column;
   text-align: left;
+  overflow-x: hidden;
 }
 
 /* ===================================================================
@@ -992,10 +993,9 @@ html[dir="rtl"] .suggestion-pill {
 .video-container {
   position: relative;
   width: 100%;
-  max-width: 1100px;
+  max-width: 100%;
   margin: 0 auto;
   aspect-ratio: 16 / 9;
-  min-height: 400px;
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
@@ -1017,7 +1017,12 @@ html[dir="rtl"] .suggestion-pill {
 /* Ensure video maintains rectangle on smaller screens */
 @media (max-width: 768px) {
   .video-container {
-    min-height: 300px;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius-md);
+  }
+
+  #aboutVideoSection h3 {
+    font-size: 1.5rem;
   }
 }
 
